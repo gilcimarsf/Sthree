@@ -1,8 +1,8 @@
 <script lang="ts">
 import * as THREE from 'three';
 import Canvas from '$lib/components/Canvas.svelte';
-import * as St from 'Sthree';
-import { useGLTF, Gltf, useGltf, onFrame } from 'Sthree';
+import * as St from 'sthree-js';
+import {  useGltf, onFrame } from 'sthree-js';
 import type { GLTF } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { onMount } from "svelte";
 

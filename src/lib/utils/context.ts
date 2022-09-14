@@ -1,6 +1,6 @@
 import { getContext, setContext, onDestroy } from 'svelte';
 import type  {ContextScenes} from '../core/manager.js';
-import type {Camera , Object3d} from 'Sthree/core/objects.js'
+import type {Camera , Object3d} from 'sthree-js/core/objects.js'
 
 const SCENES = {};
 const PARENT = {};

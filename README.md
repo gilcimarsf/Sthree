@@ -5,7 +5,7 @@ A Three.js component library project inspired by the svelte-cubed project
 ## Getting Started
 
 ```bash
-npm install sthree
+npm install sthree-js
 ```
 
 ## development 

@@ -15,7 +15,7 @@ const config = {
 			allowed: ['PATCH', 'DELETE']
 		},
 		alias: {
-			'Sthree': 'src/lib',
+			'sthree-js': 'src/lib',
 		},
 	}
 };
