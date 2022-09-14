@@ -1,0 +1,39 @@
+import { createEventDispatcher } from 'svelte';
+
+export class test {
+array : string[];
+    
+    constructor(array : string[]) {
+        this.array = array;
+    }
+
+}
+
+export class Camera {
+    target : THREE.PerspectiveCamera;
+    constructor(target: THREE.PerspectiveCamera ) {
+            this.target = target;            
+        }
+    resize (W : number, H : number) {
+       this.target.aspect= W /H ;
+    }
+ }
+
+ export class Object3d {
+    target : THREE.Mesh | THREE.Object3D | THREE.Group;
+    isInterative : boolean = false;
+    name : string;
+    key : string;
+    intersected: boolean;
+    wasIntersected : boolean = false;
+    distance : number;
+    callback? : ()=> void;
+    constructor (target: THREE.Mesh | THREE.Object3D | THREE.Group ) {
+            this.target = target;
+            this.name =  target.name;
+            this.intersected = false;
+            this.distance = 0;
+            this.key = '';
+    }
+}
+
