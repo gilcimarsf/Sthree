@@ -2,7 +2,7 @@ import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader.js';
 import { Object3d } from '../core/objects.js';
-
+import { loadingManager } from '../utils/loadingManager.js';
 
 let character = null;
 let myObject = null;
@@ -29,13 +29,19 @@ export async function useGltf (urlModel : any){
 
 //carregamento draco.
 const loadModel = async (urlModel: any ) => {
+  const manager = loadingManager();
+  
   const dracoLoader = new DRACOLoader();
-  const loader = new GLTFLoader()
+  const loader = new GLTFLoader(manager)
   dracoLoader.setDecoderPath('https://www.gstatic.com/draco/v1/decoders/');
   dracoLoader.setDecoderConfig({ type: 'js' });
   loader.setDRACOLoader(dracoLoader);
-  const gltf = await loader.loadAsync(urlModel);
+  const gltf = await loader.loadAsync(urlModel,LoadProgress );
+ 
   return gltf;
 }
 
+function LoadProgress ( progressEvent ) {
+  //console.log("fui totalmente carregado no sistema...." + progressEvent.file );
+}
 

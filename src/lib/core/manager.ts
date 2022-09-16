@@ -9,6 +9,7 @@ export class ContextScenes {
     object : THREE.Object3D [] ;
     orbitControl : OrbitControls | undefined; 
     renderer : THREE.WebGLRenderer | undefined;
+    manager :THREE.LoadingManager | undefined;;
         constructor() {
             this.scene = new THREE.Scene ();
             this.camera = undefined;
@@ -16,6 +17,7 @@ export class ContextScenes {
             this.renderer = undefined;
             this.object3d = [];
             this.object = [];
+            this.manager = undefined;
         }
     update = ( w: number , h : number)=> {
     this.camera?.resize (w,h);

@@ -4,6 +4,7 @@ import { onDestroy, onMount } from 'svelte';
 import { set_scenes } from '../utils/context.js';
 import { ContextScenes } from '../core/manager.js';
 import {RaycasterManager} from '../core/raycaster.js'
+import { loadingManager } from '../utils/loadingManager.js';
 
 $: outerWidth = 0
 $: innerWidth = 0
@@ -33,6 +34,7 @@ init();
 // onMount/createScene
 function init() {
     contextScenes.scene.background = new THREE.Color( 0xf0f0f0 );
+    contextScenes.manager = loadingManager();
     raycasterManager = new RaycasterManager();
 }
 
