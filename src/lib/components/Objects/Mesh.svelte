@@ -1,9 +1,9 @@
 <script lang="ts">
     import * as THREE from 'three';
     import * as defaults from '../../utils/defaults.js';
-    import { setupMesh } from '../../utils/context.js';
+    import { setupSimplesMesh } from '../../utils/context.js';
     import { transform  } from '../../utils/utils';
-    import { Object3d } from '../../core/objects.js';
+    import type { Object3d } from '../../core/objects.js';
     import { createEventDispatcher } from 'svelte';
     
     export let geometry :THREE.BufferGeometry = defaults.geometry;
@@ -15,49 +15,58 @@
 	export let receiveShadow = false;
 	export let frustumCulled = true;
 	export let renderOrder = 0;
+	let myObject : Object3d | undefined = undefined;
+	export let isInterative = false; 
 	
+	const dispatch = createEventDispatcher();
+	const { self, contextScenes, raycaster } = setupSimplesMesh(new THREE.Mesh(geometry, material));
 	
-	let myObject = new Object3d ( new THREE.Mesh(geometry, material));
-    const { self, contextScenes } = setupMesh(myObject);
-    
-    const dispatch = createEventDispatcher();
-    
-	self.target.addEventListener('mouseover', (event) => {
-		console.log(event);
-		dispatch('mouseover', event);
-	});            
-	self.target.addEventListener('mouseout', (event) => {
-		console.log(event);
-		dispatch('mouseout', event);
-	});
-	self.target.addEventListener('mousedown', (event) => {
-		console.log(event);
-		dispatch('mousedown', event);
-	});
-	self.target.addEventListener('mouseup', (event) => {
-		console.log(event);
-		dispatch('mouseup', event);
-	});
-	self.target.addEventListener('click', (event) => {
-		console.log(event);
-		dispatch('click', event);
-	});
-    
-    $: {
-		if (self.target.geometry && geometry !== self.target.geometry) {
-			self.target.geometry.dispose();
+	$: {
+		if (self.geometry && geometry !== self.geometry) {
+			self.geometry.dispose();
 		}
 
-		self.target.geometry = geometry;
-		self.target.material = material;
-		self.target.castShadow = castShadow;
-		self.target.receiveShadow = receiveShadow;
-		self.target.frustumCulled = frustumCulled;
-		self.target.renderOrder = renderOrder;
+		self.geometry = geometry;
+		self.material = material;
+		self.castShadow = castShadow;
+		self.receiveShadow = receiveShadow;
+		self.frustumCulled = frustumCulled;
+		self.renderOrder = renderOrder;
 
-		transform(self.target, position, rotation, scale);
+		transform(self, position, rotation, scale);
 		contextScenes.invalidate();
 	}
+	
+	
+	$: if(self) {
+		if (isInterative) {
+			myObject = raycaster.add(self);
+			}
+	}
+	
+	$: if(myObject) {
+    myObject.target.addEventListener('mouseover', (event) => {
+	//console.log(event);
+	dispatch('mouseover', event);
+	});            
+	myObject.target.addEventListener('mouseout', (event) => {
+		//console.log(event);
+		dispatch('mouseout', event);
+	});
+	myObject.target.addEventListener('mousedown', (event) => {
+		//console.log(event);
+		dispatch('mousedown', event);
+	});
+	myObject.target.addEventListener('mouseup', (event) => {
+		//console.log(event);
+		dispatch('mouseup', event);
+	});
+	myObject.target.addEventListener('click', (event) => {
+		//console.log(event);
+		dispatch('click', event);
+	});
+}	
+    
     
     
 </script>

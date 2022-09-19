@@ -38,6 +38,13 @@ onMount(async() => {
 	 model = gltf.scene; 	
 });
 
+/*
+    {#if model}
+    <St.Primitive object={model} scale ={.3} on:mouseover ={play} isInterative={true} />
+    <St.Mesh geometry = {myBox}  scale ={8} isInterative = {true}/>
+    {/if}
+
+*/
 
 $: {
 }
@@ -46,8 +53,6 @@ $: {
 
 <St.Canvas>
     <St.PerspectiveCamera/>
-    {#if model}
-    <St.Primitive object={model} scale ={.3} on:mouseover ={play} />
-    {/if}
+	
 	<St.DirectionalLight/>
 </St.Canvas>

@@ -1,9 +1,11 @@
 import { getContext, setContext, onDestroy } from 'svelte';
 import type  {ContextScenes} from '../core/manager.js';
 import type {Camera , Object3d} from 'sthree-js/core/objects.js'
-
+import type {RaycasterManager} from '../core/raycaster.js'
 const SCENES = {};
 const PARENT = {};
+const LOADMANAGER = {};
+const RAYCASTER ={}
 
 export function set_scenes( scenes : ContextScenes) {
 	setContext(SCENES, scenes);
@@ -34,11 +36,22 @@ export function setupMesh(self : Object3d ) {
 
 export function setupSimplesMesh(self) {
     let contextScenes :ContextScenes  = getContext (SCENES) 
+    let raycaster :RaycasterManager  = getContext (RAYCASTER) 
     const parent:THREE.Scene =  contextScenes.scene;
     if (self){
         setContext (PARENT, self)
         parent.add (self);
         contextScenes.object = [...contextScenes.object,self ];
     }
-    return  {self, parent , contextScenes};
+    return  {self, parent , contextScenes, raycaster };
+}
+
+export function setloadManager( LoadingManager : THREE.LoadingManager) {
+	setContext(LOADMANAGER, LoadingManager);
+	return LoadingManager;
+}
+
+export function setRaycaster( raycaster : RaycasterManager) {
+	setContext(RAYCASTER, raycaster);
+	return raycaster;
 }

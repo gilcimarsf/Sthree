@@ -1,10 +1,11 @@
 <script lang="ts">
 import * as THREE from 'three';
 import { onDestroy, onMount } from 'svelte';
-import { set_scenes } from '../utils/context.js';
+import { set_scenes, setRaycaster } from '../utils/context.js';
 import { ContextScenes } from '../core/manager.js';
 import {RaycasterManager} from '../core/raycaster.js'
 import { loadingManager } from '../utils/loadingManager.js';
+import { browser } from '$app/env';
 
 $: outerWidth = 0
 $: innerWidth = 0
@@ -17,7 +18,6 @@ let camera : THREE.PerspectiveCamera ;
 let raycasterManager : RaycasterManager;
 let renderer : THREE.WebGLRenderer;
 
-
 let INTERSECTED : THREE.Intersection;
 let theta = 0;
 
@@ -26,18 +26,18 @@ const radius = 100;
 
 let SCENES = new ContextScenes ();
 const contextScenes = set_scenes(SCENES);
-
 let frame : number = 0;
+
+let manager = loadingManager();
+
 
 init();
 
 // onMount/createScene
 function init() {
     contextScenes.scene.background = new THREE.Color( 0xf0f0f0 );
-    contextScenes.manager = loadingManager();
-    raycasterManager = new RaycasterManager();
-}
-
+    raycasterManager = setRaycaster(new RaycasterManager());  
+  }
 
 
 //onMount / animate
@@ -73,7 +73,7 @@ function render() {
     contextScenes.camera.target.updateMatrixWorld();
 
     // find intersections
-    raycasterManager.update (pointer, contextScenes.camera.target, contextScenes.object3d);
+    raycasterManager.update (pointer, contextScenes.camera.target);
     }
 }
 
@@ -116,6 +116,9 @@ const animate = () => {
   render();
 };
 
+function teste (){
+console.log ("fui chamada eba!!!!");
+}
 
 
 
@@ -129,10 +132,13 @@ onMount(() => {
 });
 
 
+
+
+
 </script>
 
 <svelte:window bind:innerWidth bind:outerWidth bind:innerHeight bind:outerHeight />
-<canvas bind:this={el} on:mousemove={onPointerMove}  class="background"></canvas>
+<canvas bind:this={el} on:mousemove={onPointerMove}  class="background" ></canvas>
 <slot/>
 <style>
 	.background {

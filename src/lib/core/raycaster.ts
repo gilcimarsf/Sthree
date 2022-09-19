@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import type {Camera , Object3d} from 'sthree-js/core/objects.js'
+import {Camera , Object3d} from 'sthree-js/core/objects.js'
 
 
 
@@ -30,7 +30,7 @@ export class RaycasterManager {
     pointer : THREE.Vector2;
     canvas :HTMLElement | null ;
     camera : THREE.Camera | null ;
-    object3d : Object3d[] | null ;
+    object3d : Object3d[];
     renderer : THREE.WebGLRenderer| null ; 
     
     //currentObjectRaycaster: Object3d | undefined;
@@ -40,7 +40,7 @@ export class RaycasterManager {
         this.pointer = new THREE.Vector2 (0,0);
         this.canvas = null;
         this.camera = null;
-        this.object3d = null;
+        this.object3d = [];
         this.renderer = null;
         
     }
@@ -77,23 +77,30 @@ export class RaycasterManager {
             this.canvas.removeEventListener('touchend', this.onTouchEnd);
         }
     };
-       
-    update = (pointer : THREE.Vector2, camera : THREE.Camera, object3d : Object3d[] ) =>{
+    
+    add = (object: THREE.Object3D)  => {
+        if (object) {
+            let newObject = new Object3d (object);
+            this.object3d.push(newObject);
+            return newObject;
+        }
+    }
+    
+    update = (pointer : THREE.Vector2, camera : THREE.Camera ) =>{
         this.pointer = pointer;
         this.camera = camera;
-        this.object3d = object3d;
-        
+                
         this.raycaster.setFromCamera (pointer , camera);
-        if  (object3d != undefined) {
-            object3d.forEach ((object : Object3d) => {
+        if  (this.object3d != undefined) {
+            this.object3d.forEach ((object : Object3d) => {
                 if (object.target) this.checkIntersection(object);
             });
         }
-        object3d.sort(function (a, b) {
+        this.object3d.sort(function (a, b) {
             return a.distance - b.distance;
         });
         
-        const newClosestObject = object3d.find((object) => object.intersected) ?? null;
+        const newClosestObject = this.object3d.find((object) => object.intersected) ?? null;
         if (newClosestObject != this.closestObject){
             if (this.closestObject) {
             const eventOutClosest = new RaycasterEvent('mouseout');
@@ -190,6 +197,6 @@ export class RaycasterManager {
     onTouchEnd = (touchEvent: TouchEvent)  => {
       //console.log("onTouchEnd");
     };   
-  
+      
 }
 
