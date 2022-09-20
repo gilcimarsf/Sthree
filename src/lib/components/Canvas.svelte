@@ -62,16 +62,16 @@ function onPointerMove( event ) {
 
 //onMount / animate
 function render() {
+ 
     theta += 0.1;
     if (  contextScenes.camera != undefined) {
-    
+     /*
     contextScenes.camera.target.position.x = radius * Math.sin( THREE.MathUtils.degToRad( theta ) );
     contextScenes.camera.target.position.y = radius * Math.sin( THREE.MathUtils.degToRad( theta ) );
     contextScenes.camera.target.position.z = radius * Math.cos( THREE.MathUtils.degToRad( theta ) );
     contextScenes.camera.target.lookAt( contextScenes.scene.position );
-
     contextScenes.camera.target.updateMatrixWorld();
-
+  */
     // find intersections
     raycasterManager.update (pointer, contextScenes.camera.target);
     }
@@ -103,6 +103,7 @@ const invalidate = () => {
 //onMount
 export const createScene = (el) => {
 renderer = new THREE.WebGLRenderer({ antialias: true, canvas: el });
+contextScenes.setRenderer (renderer);
 raycasterManager.onCanvas (el , renderer );
 }
 
@@ -121,10 +122,7 @@ console.log ("fui chamada eba!!!!");
 }
 
 
-
-
-
-onMount(() => {
+onMount(() => { 
   contextScenes.update (innerWidth , innerHeight);
   createScene(el)
   window.addEventListener( 'resize', onWindowResize );
@@ -132,14 +130,17 @@ onMount(() => {
 });
 
 
-
-
-
 </script>
 
 <svelte:window bind:innerWidth bind:outerWidth bind:innerHeight bind:outerHeight />
-<canvas bind:this={el} on:mousemove={onPointerMove}  class="background" ></canvas>
-<slot/>
+
+<div class="container" bind:this={container}>
+<canvas bind:this={el} on:mousemove={onPointerMove}  class="background"/>
+  {#if contextScenes.scene}
+  <slot/>
+  {/if}
+</div>
+
 <style>
 	.background {
 		content: '';

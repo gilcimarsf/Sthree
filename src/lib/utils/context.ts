@@ -55,3 +55,8 @@ export function setRaycaster( raycaster : RaycasterManager) {
 	setContext(RAYCASTER, raycaster);
 	return raycaster;
 }
+
+export function get_scenes() {
+	const contextScenes : ContextScenes  = getContext (SCENES) 
+	return {contextScenes};
+}
