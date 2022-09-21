@@ -7,13 +7,14 @@ import {RaycasterManager} from '../core/raycaster.js'
 import { loadingManager } from '../utils/loadingManager.js';
 import { browser } from '$app/env';
 
+
 $: outerWidth = 0
 $: innerWidth = 0
 $: outerHeight = 0
 $: innerHeight = 0
 
 let el : HTMLElement;
-let container;
+let container :HTMLElement;
 let camera : THREE.PerspectiveCamera ;
 let raycasterManager : RaycasterManager;
 let renderer : THREE.WebGLRenderer;
@@ -24,12 +25,30 @@ let theta = 0;
 const pointer = new THREE.Vector2();
 const radius = 100;
 
-let SCENES = new ContextScenes ();
+const run = (fn) => fn();
+const invalidate = () => {
+  	if (contextScenes.frame ) return;
+  	
+    	frame = requestAnimationFrame(() => {
+    		contextScenes.frame = undefined;
+  			contextScenes.before_render.forEach(run);
+  			if (  contextScenes.camera != undefined) {
+          console.log ("fui chamado");
+        renderer.render(contextScenes.scene,  contextScenes.camera.target);
+        //rotacionarTudo();
+        render();
+        }
+  		});
+    
+	};
+
+
+
+
+let SCENES = new ContextScenes (invalidate);
 const contextScenes = set_scenes(SCENES);
 let frame : number = 0;
-
 let manager = loadingManager();
-
 
 init();
 
@@ -42,14 +61,13 @@ function init() {
 
 //onMount / animate
 function onWindowResize() {
-    
+  
     if (  contextScenes.camera != undefined) {
     contextScenes.camera.target.aspect = innerWidth / innerHeight;
     contextScenes.camera.target.updateProjectionMatrix();
     }
     renderer.setSize( innerWidth, innerHeight );
-
-}
+  }
 
 //
 function onPointerMove( event ) {
@@ -57,48 +75,25 @@ function onPointerMove( event ) {
     pointer.y = - ( event.clientY /innerHeight ) * 2 + 1;
 }
 
-
-
-
-//onMount / animate
-function render() {
- 
-    theta += 0.1;
+function rotacionarTudo () {
+  theta += 0.1;
     if (  contextScenes.camera != undefined) {
-     /*
+     
     contextScenes.camera.target.position.x = radius * Math.sin( THREE.MathUtils.degToRad( theta ) );
     contextScenes.camera.target.position.y = radius * Math.sin( THREE.MathUtils.degToRad( theta ) );
     contextScenes.camera.target.position.z = radius * Math.cos( THREE.MathUtils.degToRad( theta ) );
     contextScenes.camera.target.lookAt( contextScenes.scene.position );
     contextScenes.camera.target.updateMatrixWorld();
-  */
+  }
+}
+
+//PASSA PARA before_render
+function render() {
+    if (  contextScenes.camera != undefined) {
     // find intersections
     raycasterManager.update (pointer, contextScenes.camera.target);
     }
 }
-
-const before_render = [];
-const run = (fn) => fn();
-
-
-
-/*
-const invalidate = () => {
-		if (frame) return;
-    console.log ("fui chamado");
-		frame = requestAnimationFrame(() => {
-			frame = null;
-			before_render.forEach(run);
-			if (  contextScenes.camera != undefined) {
-			renderer.render(contextScenes.scene,  contextScenes.camera.target);
-      }
-		});
-	};
-*/
-
-
-
-
 
 //onMount
 export const createScene = (el) => {
@@ -109,12 +104,19 @@ raycasterManager.onCanvas (el , renderer );
 
 //onMount 
 const animate = () => {
+//console.log ("teste");
+
   frame = requestAnimationFrame(animate);
+  //invalidate();
+    
+  /*
   if (  contextScenes.camera != undefined) {
   renderer.render (contextScenes.scene,  contextScenes.camera.target);
   }
   onWindowResize();
-  render();
+  
+  */
+  //
 };
 
 function teste (){
@@ -126,16 +128,26 @@ onMount(() => {
   contextScenes.update (innerWidth , innerHeight);
   createScene(el)
   window.addEventListener( 'resize', onWindowResize );
-  animate ();
+  onWindowResize();
+  animate();
+  invalidate();
+  
 });
+
+
+$: if (renderer) {
+ invalidate();
+}
+
+
 
 
 </script>
 
-<svelte:window bind:innerWidth bind:outerWidth bind:innerHeight bind:outerHeight />
+<svelte:window bind:innerWidth bind:outerWidth bind:innerHeight bind:outerHeight  />
 
 <div class="container" bind:this={container}>
-<canvas bind:this={el} on:mousemove={onPointerMove}  class="background"/>
+<canvas bind:this={el} on:mousemove={onPointerMove}  on:resize={onWindowResize} class="background"/>
   {#if contextScenes.scene}
   <slot/>
   {/if}

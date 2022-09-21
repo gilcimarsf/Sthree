@@ -10,9 +10,12 @@ export class ContextScenes {
     orbitControl : ControlCamera | undefined; 
     renderer : THREE.WebGLRenderer | undefined;
     manager :THREE.LoadingManager | undefined;
-    
-        constructor() {
+    invalidate :() => void ;
+    before_render : Array<() => void> = [];
+    frame: number | undefined = 0 ;
+        constructor( invalidate : () => void ) {
             this.scene = new THREE.Scene ();
+            this.invalidate = invalidate;
             this.camera = undefined;
             this.orbitControl  = undefined;
             this.renderer = undefined;
@@ -31,7 +34,7 @@ export class ContextScenes {
             
         }
     }
-    
-    invalidate = ()=>{
+    addBeforeRender = (fn :() => void) =>{
+        this.before_render.push(fn);
     }
 }

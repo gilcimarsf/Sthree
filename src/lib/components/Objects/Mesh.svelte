@@ -5,6 +5,7 @@
     import { transform  } from '../../utils/utils';
     import type { Object3d } from '../../core/objects.js';
     import { createEventDispatcher } from 'svelte';
+  import { browser } from '$app/env';
     
     export let geometry :THREE.BufferGeometry = defaults.geometry;
     export let material = defaults.material;
@@ -21,23 +22,7 @@
 	const dispatch = createEventDispatcher();
 	const { self, contextScenes, raycaster } = setupSimplesMesh(new THREE.Mesh(geometry, material));
 	
-	$: {
-		if (self.geometry && geometry !== self.geometry) {
-			self.geometry.dispose();
-		}
-
-		self.geometry = geometry;
-		self.material = material;
-		self.castShadow = castShadow;
-		self.receiveShadow = receiveShadow;
-		self.frustumCulled = frustumCulled;
-		self.renderOrder = renderOrder;
-
-		transform(self, position, rotation, scale);
-		contextScenes.invalidate();
-	}
-	
-	
+		
 	$: if(self) {
 		if (isInterative) {
 			myObject = raycaster.add(self);
@@ -66,7 +51,23 @@
 		dispatch('click', event);
 	});
 }	
-    
+
+	$: {
+		if (self.geometry && geometry !== self.geometry) {
+			self.geometry.dispose();
+		}
+
+		self.geometry = geometry;
+		self.material = material;
+		self.castShadow = castShadow;
+		self.receiveShadow = receiveShadow;
+		self.frustumCulled = frustumCulled;
+		self.renderOrder = renderOrder;
+		transform(self, position, rotation, scale);
+		//contextScenes.invalidate();
+		
+	}
+	
     
     
 </script>

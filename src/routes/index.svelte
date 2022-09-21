@@ -6,6 +6,7 @@ import {  useGltf, onFrame } from 'sthree-js';
 import type { GLTF } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { onMount } from "svelte";
   import OrbitControls from 'sthree-js/components/Controls/OrbitControls.svelte';
+  import Environment from 'sthree-js/components/environments/Environment.svelte';
 
 let myBox = new THREE.BoxGeometry();
 let myMaterial = new THREE.MeshStandardMaterial({ color: 0xfffff })
@@ -54,6 +55,7 @@ $: {
 
 <St.Canvas>
     <St.PerspectiveCamera/>
+    <St.Environment filess={'royal_esplanade_1k.hdr'} path ={'textures/equirectangular/'}  />
     <St.OrbitControls/>
 	<St.Mesh geometry = {myBox}  scale ={.5} isInterative = {true}/>
 	<St.DirectionalLight/>

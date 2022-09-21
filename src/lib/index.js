@@ -9,6 +9,9 @@ export { default as Mesh } from './components/Objects/Mesh.svelte';
 export { default as Primitive } from './components/Objects/Primitive.svelte';
 export { useGltf } from './loaders/GLTF';
 
+//Enviroment
+export { default as Environment } from './components/environments/Environment.svelte';
+
 //Controls
 export { default as OrbitControls } from './components/Controls/OrbitControls.svelte';
 

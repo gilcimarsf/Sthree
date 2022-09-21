@@ -72,8 +72,8 @@ import { onFrame } from '../../utils/lifecycle.js';
 		controls.screenSpacePanning = screenSpacePanning;
 		controls.touches = touches;
 		controls.zoomSpeed = zoomSpeed;
-
 		controls.update();
+		
 	}
 	
  	

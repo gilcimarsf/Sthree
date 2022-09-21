@@ -23,7 +23,6 @@
 		self.position.set(position[0], position[1], position[2]);
 		self.target.position.set(target[0], target[1], target[2]);
 
-		//root.invalidate();
 	}
 	
     $: {
@@ -49,8 +48,6 @@
 		} else {
 			self.castShadow = false;
 		}
-
-		//root.invalidate();
 	}
        
     </script>

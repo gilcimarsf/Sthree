@@ -3,7 +3,6 @@ import * as THREE from 'three';
 import { setupCamera } from '../../utils/context.js';
 import { Camera} from '../../core/objects.js';
 
-
 export let fov = 45;
 export let near = 0.1;
 export let far = 2000;
@@ -32,7 +31,6 @@ const { self, contextScenes } = setupCamera(cameraObject);
 
 
 $: {
-
 	self.target.fov = fov;
 	self.target.near = near;
 	self.target.far = far;
