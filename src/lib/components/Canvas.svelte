@@ -8,6 +8,8 @@ import { loadingManager } from '../utils/loadingManager.js';
 import { browser } from '$app/env';
 
 
+  
+
 $: outerWidth = 0
 $: innerWidth = 0
 $: outerHeight = 0
@@ -30,10 +32,9 @@ const invalidate = () => {
   	if (contextScenes.frame ) return;
   	
     	frame = requestAnimationFrame(() => {
-    		contextScenes.frame = undefined;
+    		contextScenes.frame = null;
   			contextScenes.before_render.forEach(run);
-  			if (  contextScenes.camera != undefined) {
-          console.log ("fui chamado");
+  			if (  contextScenes.camera != null) {
         renderer.render(contextScenes.scene,  contextScenes.camera.target);
         //rotacionarTudo();
         render();
@@ -62,7 +63,7 @@ function init() {
 //onMount / animate
 function onWindowResize() {
   
-    if (  contextScenes.camera != undefined) {
+    if (  contextScenes.camera != null) {
     contextScenes.camera.target.aspect = innerWidth / innerHeight;
     contextScenes.camera.target.updateProjectionMatrix();
     }
@@ -77,7 +78,7 @@ function onPointerMove( event ) {
 
 function rotacionarTudo () {
   theta += 0.1;
-    if (  contextScenes.camera != undefined) {
+    if (  contextScenes.camera != null) {
      
     contextScenes.camera.target.position.x = radius * Math.sin( THREE.MathUtils.degToRad( theta ) );
     contextScenes.camera.target.position.y = radius * Math.sin( THREE.MathUtils.degToRad( theta ) );
@@ -89,7 +90,7 @@ function rotacionarTudo () {
 
 //PASSA PARA before_render
 function render() {
-    if (  contextScenes.camera != undefined) {
+    if (  contextScenes.camera != null) {
     // find intersections
     raycasterManager.update (pointer, contextScenes.camera.target);
     }
@@ -107,10 +108,10 @@ const animate = () => {
 //console.log ("teste");
 
   frame = requestAnimationFrame(animate);
-  //invalidate();
+  invalidate();
     
   /*
-  if (  contextScenes.camera != undefined) {
+  if (  contextScenes.camera != null) {
   renderer.render (contextScenes.scene,  contextScenes.camera.target);
   }
   onWindowResize();

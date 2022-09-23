@@ -1,17 +1,5 @@
 import type {
-  WebGLCubeRenderTarget,
-  EquirectangularReflectionMapping,
-  CubeTextureLoader,
-  Texture,
-  Scene,
-  Loader,
-  CubeCamera,
-  HalfFloatType,
-  CubeReflectionMapping,
-  CubeTexture,
-  sRGBEncoding,
-  LinearEncoding,
-  TextureEncoding,
+   TextureEncoding,
 } from 'three'
 import type {PresetsType } from '../utils/environment-assets'
 
@@ -21,7 +9,7 @@ export type Props = {
     far?: number
     resolution?: number
     background?: boolean | 'only'
-    map: Texture | null
+    map: THREE.Texture | null
     files?: string | string[]
     path?: string
     preset?: PresetsType

@@ -33,7 +33,7 @@ export class RaycasterManager {
     object3d : Object3d[];
     renderer : THREE.WebGLRenderer| null ; 
     
-    //currentObjectRaycaster: Object3d | undefined;
+    //currentObjectRaycaster: Object3d | null;
     constructor( ) {
         this.raycaster = new THREE.Raycaster();
         this.closestObject = null;
@@ -91,7 +91,7 @@ export class RaycasterManager {
         this.camera = camera;
                 
         this.raycaster.setFromCamera (pointer , camera);
-        if  (this.object3d != undefined) {
+        if  (this.object3d != null) {
             this.object3d.forEach ((object : Object3d) => {
                 if (object.target) this.checkIntersection(object);
             });

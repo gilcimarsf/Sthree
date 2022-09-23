@@ -1,48 +1,34 @@
-<script lang="ts"> 
+<script lang="ts">
+  import * as THREE from "three";
+  import type {
+   Texture,
+  } from "three";
 
-  import * as THREE from 'three';
-  import {
-    TextureLoader,
-    WebGLCubeRenderTarget,
-    EquirectangularReflectionMapping,
-    CubeTextureLoader,
-    Texture,
-    Scene,
-    Loader,
-    CubeCamera,
-    HalfFloatType,
-    CubeReflectionMapping,
-    CubeTexture,
-    sRGBEncoding,
-    LinearEncoding,
-} from 'three' ;
+  import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 
-import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
+  import { RGBELoader } from "three/examples/jsm/loaders/RGBELoader";
 
-import { RGBELoader } from "three/examples/jsm/loaders/RGBELoader";
-
-  import { get_scenes } from '../../utils/context.js';
-  import { onFrame } from '../../utils/lifecycle.js';
+  import { get_scenes } from "../../utils/context.js";
+  import { onFrame } from "../../utils/lifecycle.js";
   import { onMount } from "svelte";
-  import type {Props} from '../../types/enviromentTypes'
-  import type {  PresetsType } from '../../utils/environment-assets.js'
-  import { presetsObj } from '../../utils/environment-assets.js'
-  import { useTexture } from '../../loaders/useLoader.js'
-  
-  const {contextScenes} = get_scenes ();
-  const CUBEMAP_ROOT = 'https://market-assets.fra1.cdn.digitaloceanspaces.com/market-assets/hdris/';
-  
-  //Environment files="https://market-assets.fra1.cdn.digitaloceanspaces.com/market-assets/hdris/kiara/kiara_1_dawn_1k.hdr"
- /*   
-  export let map : THREE.Texture;
-  export let background : boolean | 'only' = false;
-  export let frames : number = 0;
-  export let near : number = 1;
-  export let far : number = 1000;
-  export let resolution : number = 256;
-  export let files : string | string[]  = ['/px.png', '/nx.png', '/py.png', '/ny.png', '/pz.png', '/nz.png'];
-  
-  export let preset : PresetsType | undefined = undefined;
+  import type { Props } from "../../types/enviromentTypes";
+  import type { PresetsType } from "../../utils/environment-assets.js";
+  import { presetsObj } from "../../utils/environment-assets.js";
+  import { GroundProjectedEnv  } from 'three/examples/jsm/objects/GroundProjectedEnv'
+
+
+  import { useTexture } from "../../loaders/useLoader.js";
+ 
+
+  const { contextScenes } = get_scenes();
+  const CUBEMAP_ROOT ="https://market-assets.fra1.cdn.digitaloceanspaces.com/market-assets/hdris/";
+
+  export let background: boolean | "only"  = false;
+  //export let map: Texture | null = null;
+  export let path: string = "";
+  //export let encoding: TextureEncoding | null = null;
+  export let files: string | string [] = ['/px.png', '/nx.png', '/py.png', '/ny.png', '/pz.png', '/nz.png'];
+  export let preset : PresetsType | null = null;
   export let ground :
      | boolean
     | {
@@ -51,12 +37,103 @@ import { RGBELoader } from "three/examples/jsm/loaders/RGBELoader";
         scale?: number
       } = false;
       
-*/      
-  export let path: string = '';
-  export let encoding : THREE.TextureEncoding | undefined  = undefined;
-  export let filess : string;
+  onMount(async () => {
+    
+    if (!Array.isArray(files)) { EnvironmentMap (path ,files ); }
+    if (Array.isArray(files)) { EnvironmentCube (path ,files ); }
+    if (preset) { defaultEnvironment ();}
+    if (ground) { EnvironmentGround(); }
+    
+    function defaultEnvironment (){
+      if (preset) {
+      if (!(preset in presetsObj)) throw new Error('Preset must be one of: ' + Object.keys(presetsObj).join(', '));
+        files = presetsObj[preset];
+        path = CUBEMAP_ROOT;
+      }
+      if (!Array.isArray(files)) { EnvironmentMap (path ,files ); }
+      if (Array.isArray(files)) { EnvironmentCube (path ,files ); }
+    }
+    
+    
+    function EnvironmentMap (path : string  , files : string ){
+     
+      new RGBELoader()
+      .setPath( path )
+      .load(files ,   function ( texture ) {
+      texture.mapping = THREE.EquirectangularReflectionMapping;
+      //contextScenes.scene.environment = texture;
+      contextScenes.scene.background = texture;
+      
+      if (background == 'only') {  contextScenes.scene.background = texture; }
+      else {
+        contextScenes.scene.background = texture;
+        contextScenes.scene.environment = texture;
+      }
+      contextScenes.invalidate();
+      })      
+    }
+    
+    function EnvironmentCube ( path : string  , files : string[]){
+      
+    const loader = new THREE.CubeTextureLoader();
+    loader.setPath(path);
+    const texture = loader.load(files);
+    if (background == 'only') {  contextScenes.scene.background = texture; }
+      else {
+        contextScenes.scene.background = texture;
+        contextScenes.scene.environment = texture;
+    }
+    contextScenes.invalidate();    
+    }  
+    
+    async function EnvironmentGround (){
+      console.log ("e nois ground");
+      
+      const hdrLoader = new RGBELoader();
+      //path = 'https://aito.auto/content/dam/aito/cn/model/m5/360-view-0415/files/assets/70321151/1/bg_1.jpg?t=ca07b363fd5dccd109d0f7e8f7400dcb';
+      //path = 'textures/equirectangular/royal_esplanade_1k.hdr'
+      files ='';
+      if (!Array.isArray(files)) { 
+        const envMap = await useloadHDR (path , files);
+        const env = new GroundProjectedEnv( envMap );
+        env.scale.setScalar( 100 );
+        contextScenes.scene.add(env);       
+      }
+    }
+    
+});
+  
+  async function useloadHDR (path : string  , files : string) {
+      const hdrLoader = new RGBELoader();
+      const envMap = await hdrLoader.loadAsync( path );
+      envMap.mapping = THREE.EquirectangularReflectionMapping;
+      return envMap ;
+    }
+    
+    
+  async function useLoadCube (path : string  , files : string[]){
+        const loader = new THREE.CubeTextureLoader();
+        loader.setPath(path);
+        const texture =await loader.loadAsync(files);
+  }
+  
 
-/*        
+  //Environment files="https://market-assets.fra1.cdn.digitaloceanspaces.com/market-assets/hdris/kiara/kiara_1_dawn_1k.hdr"
+  /*   
+  
+  
+  export let frames : number = 0;
+  export let near : number = 1;
+  export let far : number = 1000;
+  export let resolution : number = 256;
+  export let files : string | string[]  = ['/px.png', '/nx.png', '/py.png', '/ny.png', '/pz.png', '/nz.png'];
+  
+  export let preset : PresetsType | undefined = undefined;
+
+      
+*/
+
+  /*        
 function EnvironmentMap({ background = false, map }: Props) {
         if (contextScenes.scene) {
             const target = contextScenes.scene;
@@ -141,19 +218,13 @@ function EnvironmentMap({ background = false, map }: Props) {
       }
     }
     
-  */  
-    
+  */
 
-onFrame(() => {
-});
+  onFrame(() => {});
 
+  //onMount(async() => {
+  /*
 
- 
-
-      
-onMount(async() => {  
-
-/*
   {
     const loader = new THREE.CubeTextureLoader();
     const texture = loader.load([
@@ -165,9 +236,11 @@ onMount(async() => {
       'https://r105.threejsfundamentals.org/threejs/resources/images/cubemaps/computer-history-museum/neg-z.jpg',
     ]);
     contextScenes.scene.background = texture;
+    contextScenes.invalidate();
   }
 */
-   
+
+  /*{  
     new RGBELoader()
       .setPath( path )
       .load(filess ,   function ( texture ) {
@@ -177,10 +250,10 @@ onMount(async() => {
       contextScenes.invalidate();
       })
     
-    
-      
-   /*
-{ //Criar Objeto de Destino do Renderizador de Cubo 
+    }*/
+
+  /*{  
+ //Criar Objeto de Destino do Renderizador de Cubo 
 let cubeRenderTarget = new THREE.WebGLCubeRenderTarget(128, { 
 format: THREE.RGBAFormat, 
 generateMipmaps: true, 
@@ -196,26 +269,15 @@ minFilter: THREE.LinearMipmapLinearFilter
     envMap: cubeRenderTarget.texture 
   }) 
   
-  const sphereGeometry = new THREE.SphereGeometry(1, 1, 1);
+  const sphereGeometry = new THREE.SphereGeometry(10, 10, 10);
      
   let sphere = new THREE.Mesh(sphereGeometry , dynamicEnvMapMaterial) 
   contextScenes.scene.add(sphere);
      
-  function update (){
-    if (contextScenes.renderer) {
-      cubeCamera.update (contextScenes.renderer,contextScenes.scene) ;
-      console.log("Leru, Leru");
-    } 
-  }
-  
-  */
- 
-});
-    
-$: {
+   
+  contextScenes.addBeforeRender (()=> {cubeCamera.update (contextScenes.renderer,contextScenes.scene)});
+}*/
 
-}
-    
-    
-    </script>
-    
+  $: {
+  }
+</script>
