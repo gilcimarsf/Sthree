@@ -2,6 +2,7 @@ export { default as Canvas } from './components/Canvas.svelte';
 
 //CAMERAS
 export { default as PerspectiveCamera } from './components/Cameras/PerspectiveCamera.svelte';
+export { default as CubeCamera } from './components/Cameras/CubeCamera.svelte';
 
 //OBJECTS
 export { default as Boxes } from './components/Objects/boxes.svelte';

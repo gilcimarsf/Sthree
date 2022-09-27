@@ -6,9 +6,10 @@
     import type { Object3d } from '../../core/objects.js';
     import { createEventDispatcher } from 'svelte';
   import { browser } from '$app/env';
+ 
     
     export let geometry :THREE.BufferGeometry = defaults.geometry;
-    export let material = defaults.material;
+    export let material : THREE.Material= defaults.material;
 	export let position = defaults.position;
 	export let rotation = defaults.rotation;
 	export let scale = defaults.scale;
@@ -18,7 +19,7 @@
 	export let renderOrder = 0;
 	let myObject : Object3d | undefined = undefined;
 	export let isInterative = false; 
-	
+		
 	const dispatch = createEventDispatcher();
 	const { self, contextScenes, raycaster } = setupSimplesMesh(new THREE.Mesh(geometry, material));
 	
@@ -67,7 +68,6 @@
 		//contextScenes.invalidate();
 		
 	}
-	
-    
-    
+	    
 </script>
+

@@ -7,13 +7,18 @@ import type { GLTF } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { onMount } from "svelte";
   import OrbitControls from 'sthree-js/components/Controls/OrbitControls.svelte';
   import Environment from 'sthree-js/components/environments/Environment.svelte';
+  import CubeCamera from 'sthree-js/components/Cameras/CubeCamera.svelte';
 
-let myBox = new THREE.BoxGeometry();
+export let envMap : THREE.Texture | null = null;
+let myBox = new THREE.SphereGeometry();
+
 let myMaterial = new THREE.MeshStandardMaterial({ color: 0xfffff })
+$: chromeMaterial = new THREE.MeshLambertMaterial( { color: 0x555fff, envMap: envMap } );
 let model = null;
 let gltf  : GLTF = null;
 let mixer = null;
 const clock = new THREE.Clock()
+
 
 let texture : THREE.Texture;
 
@@ -66,11 +71,13 @@ onMount(async() => {
     <St.Environment filess={'royal_esplanade_1k.hdr'} path ={'textures/equirectangular/'}  />
 <St.Environment map={texture} />
 <St.Environment files={'royal_esplanade_1k.hdr'} path ={'textures/equirectangular/'}  />
+<St.Environment ground={true} path ={'textures/equirectangular/royal_esplanade_1k.hdr'}/>
 <St.Environment files={myfyle} />
 <St.Environment ground={true} />
 */
 
 $: {
+console.log(envMap)
 }
 
 let myfyle = [
@@ -82,12 +89,15 @@ let myfyle = [
       'https://r105.threejsfundamentals.org/threejs/resources/images/cubemaps/computer-history-museum/neg-z.jpg',
     ];
 
+
 </script>
 
 <St.Canvas>
     <St.PerspectiveCamera/>
-	<St.Environment ground={true} path ={'textures/equirectangular/royal_esplanade_1k.hdr'}/>
+	<St.Environment files={'royal_esplanade_1k.hdr'} path ={'textures/equirectangular/'}  />
     <St.OrbitControls/>
-	<St.Mesh geometry = {myBox}  scale ={.5} isInterative = {true} material ={myMaterial}/>
+	    <St.CubeCamera bind:envMap >
+			<St.Mesh geometry = {myBox}  scale ={.5} isInterative = {true} material ={chromeMaterial} />
+		</St.CubeCamera>
 	<St.DirectionalLight/>
 </St.Canvas>
