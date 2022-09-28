@@ -7,7 +7,6 @@
 	import * as defaults from '../../utils/defaults.js';
 	import { transform  } from '../../utils/utils.js';
 	import { setupSimplesMesh } from '../../utils/context.js';
-	import {RaycasterManager} from '../../core/raycaster.js'
 	import type { Object3d } from '../../core/objects.js';
 	import { createEventDispatcher } from 'svelte';
 	
@@ -59,30 +58,6 @@
 		
 	/** @type {THREE.Object3D} */
 	let previous: THREE.Object3D;
-	
-	
-
-/*
-	$: {
-		if (previous) {
-			self.remove(previous);
-		}
-
-		if (object) {
-			self.add(object);
-		}
-
-		previous = object;
-		contextScenes.invalidate();
-	}
-
-	$: {
-		transform(self, position, rotation, scale);
-		
-		contextScenes.invalidate();
-	}
-*/	
-	
 
 </script>
 {#if object}

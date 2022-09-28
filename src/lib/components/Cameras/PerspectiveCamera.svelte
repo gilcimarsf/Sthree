@@ -8,20 +8,18 @@ export let near = 0.1;
 export let far = 2000;
 export let zoom = 1;
 
-/** @type {{
- *   fullWidth: number;
- *   fullHeight: number;
- *   x: number;
- *   y: number;
- *   width: number;
- *   height: number;
- * }} */
-export let viewOffset = undefined;
-
+interface viewOffset {
+ fullWidth: number;
+ fullHeight: number;
+ x: number;
+ y: number;
+ width: number;
+ height: number;
+}
+ 
+export let viewOffset : viewOffset | undefined = undefined;
 export let position = [0, 0, 5];
-
 export let target = [0, 0, 0];
-
 const target_vector = new THREE.Vector3();
 
 

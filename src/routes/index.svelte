@@ -19,14 +19,7 @@ let gltf  : GLTF = null;
 let mixer = null;
 const clock = new THREE.Clock()
 
-
 let texture : THREE.Texture;
-
-
-
-
-
-
 
 function exemplo (event : any) {
 myMaterial.color.set(0xff0000);
@@ -77,7 +70,7 @@ onMount(async() => {
 */
 
 $: {
-console.log(envMap)
+
 }
 
 let myfyle = [
@@ -94,10 +87,8 @@ let myfyle = [
 
 <St.Canvas>
     <St.PerspectiveCamera/>
-	<St.Environment files={'royal_esplanade_1k.hdr'} path ={'textures/equirectangular/'}  />
+	<St.Environment files={'royal_esplanade_1k.hdr'} path ={'textures/equirectangular/'} bind:envMap />
     <St.OrbitControls/>
-	    <St.CubeCamera bind:envMap >
-			<St.Mesh geometry = {myBox}  scale ={.5} isInterative = {true} material ={chromeMaterial} />
-		</St.CubeCamera>
+	    <St.Mesh geometry = {myBox}  scale ={.5} isInterative = {true} material ={chromeMaterial} />
 	<St.DirectionalLight/>
 </St.Canvas>

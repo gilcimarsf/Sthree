@@ -6,9 +6,7 @@ import { ContextScenes } from '../core/manager.js';
 import {RaycasterManager} from '../core/raycaster.js'
 import { loadingManager } from '../utils/loadingManager.js';
 import { browser } from '$app/env';
-
-
-  
+ 
 
 $: outerWidth = 0
 $: innerWidth = 0
@@ -43,9 +41,6 @@ const invalidate = () => {
     
 	};
 
-
-
-
 let SCENES = new ContextScenes (invalidate);
 const contextScenes = set_scenes(SCENES);
 let frame : number = 0;
@@ -57,8 +52,7 @@ init();
 function init() {
     contextScenes.scene.background = new THREE.Color( 0xf0f0f0 );
     raycasterManager = setRaycaster(new RaycasterManager());  
-  }
-
+}
 
 //onMount / animate
 function onWindowResize() {
@@ -105,25 +99,9 @@ raycasterManager.onCanvas (el , renderer );
 
 //onMount 
 const animate = () => {
-//console.log ("teste");
-
   frame = requestAnimationFrame(animate);
   invalidate();
-    
-  /*
-  if (  contextScenes.camera != null) {
-  renderer.render (contextScenes.scene,  contextScenes.camera.target);
-  }
-  onWindowResize();
-  
-  */
-  //
 };
-
-function teste (){
-console.log ("fui chamada eba!!!!");
-}
-
 
 onMount(() => { 
   contextScenes.update (innerWidth , innerHeight);
@@ -131,18 +109,12 @@ onMount(() => {
   window.addEventListener( 'resize', onWindowResize );
   onWindowResize();
   animate();
-  invalidate();
-  
+  invalidate();  
 });
-
 
 $: if (renderer) {
  invalidate();
 }
-
-
-
-
 </script>
 
 <svelte:window bind:innerWidth bind:outerWidth bind:innerHeight bind:outerHeight  />

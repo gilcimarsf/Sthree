@@ -22,7 +22,6 @@ export class RaycasterEvent {
     this.cancelBubble = true;
     }
 }
-  
 
 export class RaycasterManager {
     raycaster: THREE.Raycaster;
