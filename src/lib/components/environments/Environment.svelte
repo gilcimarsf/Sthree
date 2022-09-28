@@ -83,8 +83,6 @@
     }  
     
     async function EnvironmentGround (){
-      console.log ("e nois ground");
-      
       const hdrLoader = new RGBELoader();
       //path = 'https://aito.auto/content/dam/aito/cn/model/m5/360-view-0415/files/assets/70321151/1/bg_1.jpg?t=ca07b363fd5dccd109d0f7e8f7400dcb';
       //path = 'textures/equirectangular/royal_esplanade_1k.hdr'
