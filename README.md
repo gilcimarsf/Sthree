@@ -93,7 +93,7 @@ A standard [THREE.DirectionalLight](https://threejs.org/docs/?q=DirectionalLight
 ```
 
 # Loader
-### DirectionalLight
+### useGLTF
 useGLTF an easy way to async load 3d models in gltf format 
 
 ```js
