@@ -1,9 +1,9 @@
 <script lang="ts">
     import * as THREE from 'three';
-    import * as defaults from '../../utils/defaults.js';
-    import { setupSimplesMesh } from '../../utils/context.js';
-    import { transform  } from '../../utils/utils';
-    import type { Object3d } from '../../core/objects.js';
+    import * as defaults from '$lib/utils/defaults.js';
+    import { setupSimplesMesh } from '$lib/utils/context';
+    import { transform  } from '$lib/utils/utils';
+    import type { Object3d } from '$lib/core/objects';
     import { createEventDispatcher } from 'svelte';
    
     export let geometry :THREE.BufferGeometry = defaults.geometry;

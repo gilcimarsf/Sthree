@@ -9,7 +9,6 @@ array : string[];
 
 }
 
-
 export class ControlCamera {
     Callback : (camera:THREE.Camera , canvas:HTMLElement) => void;
     constructor(Callback: (camera:THREE.Camera , canvas:HTMLElement) => void) {

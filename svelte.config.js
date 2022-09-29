@@ -16,7 +16,7 @@ const config = {
 		},
 		alias: {
 			'sthree-js': 'src/lib',
-		},
+		}
 	}
 };
 

@@ -2,10 +2,10 @@
 import * as THREE from 'three';
 import { onDestroy, onMount } from 'svelte';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
-import { get_scenes } from '../../utils/context.js';
-import { ControlCamera} from '../../core/objects.js';
+import { get_scenes } from '$lib/utils/context.js';
+import { ControlCamera} from '$lib/core/objects.js';
 import { createEventDispatcher } from 'svelte';
-import { onFrame } from '../../utils/lifecycle.js';
+import { onFrame } from '$lib/utils/lifecycle.js';
 
 
 	export let autoRotate = false;

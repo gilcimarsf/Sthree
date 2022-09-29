@@ -1,7 +1,7 @@
 <script lang="ts">
 import * as THREE from 'three';
-import { setupCamera } from '../../utils/context.js';
-import { Camera} from '../../core/objects.js';
+import { setupCamera } from '$lib/utils/context.js';
+import { Camera} from '$lib/core/objects.js';
 
 export let fov = 45;
 export let near = 0.1;

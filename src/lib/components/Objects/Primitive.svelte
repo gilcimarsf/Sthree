@@ -3,11 +3,11 @@
 </script>
 
 <script lang="ts">
-	import * as THREE from 'three';
-	import * as defaults from '../../utils/defaults.js';
-	import { transform  } from '../../utils/utils.js';
-	import { setupSimplesMesh } from '../../utils/context.js';
-	import type { Object3d } from '../../core/objects.js';
+	import type * as THREE from 'three';
+	import * as defaults from '$lib/utils/defaults.js';
+	import { transform  } from '$lib/utils/utils.js';
+	import { setupSimplesMesh } from '$lib/utils/context.js';
+	import type { Object3d } from '$lib/core/objects.js';
 	import { createEventDispatcher } from 'svelte';
 	
 	export let object : THREE.Object3D | THREE.Group;

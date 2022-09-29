@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import {Camera , Object3d} from 'sthree-js/core/objects.js'
+import {Camera , Object3d} from '$lib/core/objects'
 
 
 

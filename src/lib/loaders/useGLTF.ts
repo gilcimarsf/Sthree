@@ -1,8 +1,8 @@
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader.js';
-import { Object3d } from '../core/objects.js';
-import { loadingManager } from '../utils/loadingManager.js';
+import { Object3d } from '$lib/core/objects';
+import { loadingManager } from '$lib/utils/loadingManager.js';
 
 let character = null;
 let myObject = null;

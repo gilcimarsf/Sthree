@@ -11,7 +11,6 @@
   import type { PresetsType } from "../../utils/environment-assets.js";
   import { presetsObj } from "../../utils/environment-assets.js";
   import { GroundProjectedEnv  } from 'three/examples/jsm/objects/GroundProjectedEnv'
-  import { useTexture } from "../../loaders/useLoader.js";
   import CubeCamera from "../Cameras/CubeCamera.svelte";
  
  

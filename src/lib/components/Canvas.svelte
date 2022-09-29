@@ -1,11 +1,11 @@
 <script lang="ts">
 import * as THREE from 'three';
 import { onDestroy, onMount } from 'svelte';
-import { set_scenes, setRaycaster } from '../utils/context.js';
-import { ContextScenes } from '../core/manager.js';
-import {RaycasterManager} from '../core/raycaster.js'
-import { loadingManager } from '../utils/loadingManager.js';
-import { browser } from '$app/env';
+import { set_scenes, setRaycaster } from '$lib/utils/context.js';
+import { ContextScenes } from '$lib/core/manager.js';
+import {RaycasterManager} from '$lib/core/raycaster.js'
+import { loadingManager } from '$lib/utils/loadingManager.js';
+
  
 
 $: outerWidth = 0

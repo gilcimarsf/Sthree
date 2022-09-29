@@ -1,7 +1,7 @@
 import { getContext, setContext, onDestroy } from 'svelte';
-import type  {ContextScenes} from '../core/manager.js';
-import type {Camera , Object3d} from 'sthree-js/core/objects.js'
-import type {RaycasterManager} from '../core/raycaster.js'
+import type  {ContextScenes} from '$lib/core/manager.js';
+import type {Camera , Object3d} from '$lib/core/objects'
+import type {RaycasterManager} from '$lib/core/raycaster.js'
 const SCENES = {};
 const PARENT = {};
 const LOADMANAGER = {};

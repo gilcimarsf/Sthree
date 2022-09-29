@@ -1,6 +1,6 @@
 <script lang="ts">
     import * as THREE from 'three';
-    import { setupSimplesMesh } from '../../utils/context.js';
+    import { setupSimplesMesh } from '$lib/utils/context.js';
    
     
     export let color : string | number | THREE.Color = 0xffffff;

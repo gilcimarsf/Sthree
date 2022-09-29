@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 import type { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
-import type  {Camera, Object3d, ControlCamera} from './objects.js'
+import type  {Camera, Object3d, ControlCamera} from '$lib/core/objects' 
 
 import type {
     Scene,

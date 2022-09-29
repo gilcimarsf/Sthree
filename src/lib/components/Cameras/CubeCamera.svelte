@@ -1,6 +1,6 @@
 <script lang="ts">
 import * as THREE from "three";
-import { get_scenes } from "../../utils/context.js";
+import { get_scenes } from "$lib/utils/context";
 import { onMount } from "svelte";
 import type { Wrapping, TextureFilter, TextureDataType, TextureEncoding } from 'three/src/constants.js';
 import type { DepthTexture } from 'three/src/textures/DepthTexture.js';

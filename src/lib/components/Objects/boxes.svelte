@@ -1,7 +1,7 @@
 <script lang="ts">
   import * as THREE from 'three';
-  import { setupMesh } from '../../utils/context.js';
-  import { Object3d } from '../../core/objects.js';
+  import { setupMesh } from '$lib/utils/context.js';
+  import { Object3d } from '$lib/core/objects.js';
   
   const geometry = new THREE.BoxGeometry( 20, 20, 20 );
   
