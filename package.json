@@ -1,6 +1,6 @@
 {
 	"name": "sthree-js",
-	"version": "0.0.313",
+	"version": "0.0.32",
 	"scripts": {
 		"dev": "vite dev",
 		"build": "vite build",

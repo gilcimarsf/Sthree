@@ -1,14 +1,5 @@
 import { createEventDispatcher } from 'svelte';
 
-export class test {
-array : string[];
-    
-    constructor(array : string[]) {
-        this.array = array;
-    }
-
-}
-
 export class ControlCamera {
     Callback : (camera:THREE.Camera , canvas:HTMLElement) => void;
     constructor(Callback: (camera:THREE.Camera , canvas:HTMLElement) => void) {
