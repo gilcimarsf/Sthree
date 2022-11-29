@@ -11,9 +11,6 @@ const config = {
 		adapter: adapter(),
 
 		// Override http methods in the Todo forms
-		methodOverride: {
-			allowed: ['PATCH', 'DELETE']
-		},
 		alias: {
 			'sthree-js': 'src/lib',
 		}

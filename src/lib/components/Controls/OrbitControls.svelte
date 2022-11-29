@@ -75,6 +75,5 @@ import { onFrame } from '$lib/utils/lifecycle.js';
 		controls.update();
 		
 	}
-	
  	
 </script>

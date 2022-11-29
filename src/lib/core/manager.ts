@@ -22,7 +22,11 @@ export class ContextScenes {
     invalidate :() => void ;
     before_render : Array <() => void>;
     frame: number | null = 0 ;
-        constructor( invalidate : () => void ) {
+    frameloop: 'always' | 'demand' | 'never';
+    el: HTMLElement | null = null;
+    container: HTMLElement | null = null;
+    clock: THREE.Clock  = new THREE.Clock(); 
+        constructor( invalidate : () => void, frameloop: 'always' | 'demand' | 'never') {
             this.scene = new THREE.Scene ();
             this.invalidate = invalidate;
             this.camera = null;
@@ -31,8 +35,8 @@ export class ContextScenes {
             this.object3d = [];
             this.object = [];
             this.manager = null;
-            this.before_render = [];
-            
+            this.before_render = [];   
+            this.frameloop = frameloop;
         }
     update = ( w: number , h : number)=> {
     this.camera?.resize (w,h);
@@ -46,5 +50,14 @@ export class ContextScenes {
     }
     addBeforeRender = (fn : () => void) =>{
         this.before_render.push(fn);
+    }
+    setFrameloop = (frameloop: 'always' | 'demand' | 'never' = 'always') =>{
+    
+    this.clock.elapsedTime = 0
+    if (frameloop !== 'never') {
+        this.clock.start()
+        this.clock.elapsedTime = 0
+        }
+
     }
 }

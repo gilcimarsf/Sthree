@@ -25,25 +25,29 @@ let theta = 0;
 const pointer = new THREE.Vector2();
 const radius = 100;
 
+export let frameloop : 'always' | 'demand' | 'never' = 'demand';
+let frame : number | null = null;
+
 const run = (fn) => fn();
 const invalidate = () => {
-  	if (contextScenes.frame ) return;
-  	
-    	frame = requestAnimationFrame(() => {
-    		contextScenes.frame = null;
-  			contextScenes.before_render.forEach(run);
+  contextScenes.frame = frame;
+  if (frame) return;
+   	frame = requestAnimationFrame(() => {
+      //console.log (frame)
+    	contextScenes.before_render.forEach(run);
   			if (  contextScenes.camera != null) {
         renderer.render(contextScenes.scene,  contextScenes.camera.target);
-        //rotacionarTudo();
+        onWindowResize();
         render();
         }
+      frame = null;
   		});
     
 	};
 
-let SCENES = new ContextScenes (invalidate);
+let SCENES = new ContextScenes (invalidate , frameloop);
 const contextScenes = set_scenes(SCENES);
-let frame : number = 0;
+
 let manager = loadingManager();
 
 init();
@@ -91,7 +95,7 @@ function render() {
 }
 
 //onMount
-export const createScene = (el) => {
+export const createScene = (el : HTMLElement) => {
 renderer = new THREE.WebGLRenderer({ antialias: true, canvas: el });
 contextScenes.setRenderer (renderer);
 raycasterManager.onCanvas (el , renderer );
@@ -99,12 +103,20 @@ raycasterManager.onCanvas (el , renderer );
 
 //onMount 
 const animate = () => {
-  frame = requestAnimationFrame(animate);
-  invalidate();
+//console.log(contextScenes.frame);
+requestAnimationFrame(animate);
+  if (contextScenes.frameloop == "always") {
+  //frame = requestAnimationFrame(animate);
+   invalidate();
+  }
+  
 };
 
 onMount(() => { 
+  contextScenes.setFrameloop(frameloop);
   contextScenes.update (innerWidth , innerHeight);
+  contextScenes.el = el;
+  contextScenes.container = container;
   createScene(el)
   window.addEventListener( 'resize', onWindowResize );
   onWindowResize();
@@ -112,8 +124,10 @@ onMount(() => {
   invalidate();  
 });
 
+
+
 $: if (renderer) {
- invalidate();
+ //invalidate();
 }
 </script>
 
@@ -121,7 +135,7 @@ $: if (renderer) {
 
 <div class="container" bind:this={container}>
 <canvas bind:this={el} on:mousemove={onPointerMove}  on:resize={onWindowResize} class="background"/>
-  {#if contextScenes.scene}
+  {#if contextScenes.scene && contextScenes.el}
   <slot/>
   {/if}
 </div>
@@ -129,7 +143,7 @@ $: if (renderer) {
 <style>
 	.background {
 		content: '';
-		position: absolute;
+		position: fixed;
 		background: white;
 		width: 100%;
 		height: 100%;

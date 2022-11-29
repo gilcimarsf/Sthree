@@ -2,10 +2,14 @@ import { getContext, setContext, onDestroy } from 'svelte';
 import type  {ContextScenes} from '$lib/core/manager.js';
 import type {Camera , Object3d} from '$lib/core/objects'
 import type {RaycasterManager} from '$lib/core/raycaster.js'
+import type { ScrollControlsState } from '$lib/core/ScrollControls'
+
 const SCENES = {};
 const PARENT = {};
 const LOADMANAGER = {};
 const RAYCASTER ={}
+const SCROLL = {};
+
 
 export function set_scenes( scenes : ContextScenes) {
 	setContext(SCENES, scenes);
@@ -57,6 +61,18 @@ export function setRaycaster( raycaster : RaycasterManager) {
 }
 
 export function get_scenes() {
-	const contextScenes : ContextScenes  = getContext (SCENES) 
+	const contextScenes : ContextScenes  = getContext (SCENES); 
 	return {contextScenes};
 }
+
+export function set_scroll( scrollControls : ScrollControlsState) {
+	setContext(SCROLL, scrollControls);
+	return scrollControls;
+}
+
+
+export function get_scroll() {
+	const ScrollControls = getContext(SCROLL);
+	return ScrollControls;
+}
+
