@@ -1,6 +1,7 @@
 ![logo](sthree.jpg)
 # STHREE
-A Three.js component library project inspired by the svelte-cubed project
+A Three.js component library project inspired by the svelte-cubed project, 
+and other wonderful tools like React Three Fiber and react-three/drei
 
 ## Getting Started
 
@@ -39,7 +40,12 @@ import * as St from 'sthree-js';
   <ul>
   <li><a href="#Mesh">Mesh</a></li>
   <li><a href="#Primitive">Primitive</a></li>
- </ul>
+  </ul>
+  <li><a href="#Raycaster">Raycaster</a></li>
+  <ul>
+  <li><a href="#Raycaster">Raycaster</a></li>
+  </ul>
+ 
  </td>     
 </tr>
 </table>
@@ -49,13 +55,18 @@ import * as St from 'sthree-js';
 <tr>
  <td valign="top">
   <ul>
-  <li><a href="#Enviroment">Enviroment</a></li>
-   <ul>
-   <li><a href="#Environment">Environment</a></li>
-   </ul>
+    <li><a href="#Controls">Controls</a></li>
+     <ul>
+     <li><a href="#ScrollControls">ScrollControls</a></li>
+     </ul>
+  </ul> 
+  <ul>
+    <li><a href="#Enviroment">Enviroment</a></li>
+     <ul>
+     <li><a href="#Environment">Environment</a></li>
+     </ul>
   </ul> 
   </td>     
-</tr>
 </table>
 
 # Index Basic Features
@@ -119,11 +130,45 @@ an easy way to place objects, cameras, light, etc.
 ```js
 <St.Primitive object={model} scale ={1} on:mouseover ={play} isInterative={true} />
 ```
+# Raycaster
+### Raycaster
+A standard [THREE.Raycaster](https://threejs.org/docs/#api/en/core/Raycaster) 
+to activate the raycaster sister, simply activate it on the objects: isInterative = {true} and on:eventname
+
+```js
+<St.Primitive object={model} scale ={.3} on:mouseover ={play} isInterative={true} />
+```
 <br/>
 <br/>
 
 # Index Advanced Features
+# Controls
+### ScrollControls
+ScrollControls allow you to make scroll effects.
+it works with a container in front of the threejs screen. everything inside < ScrollControls > will be affected, including HTML components.
 
+```js
+ <St.Canvas>	
+        <St.ScrollControls> 
+            <div>
+                <button class="class" on:click={()=> press()} > button </button>
+            </div>
+            <St.PerspectiveCamera/>
+            <St.Mesh geometry = {myBox}  scale ={.5} isInterative = {true} material ={chromeMaterial}/>
+            <St.DirectionalLight/>
+        </St.ScrollControls>
+    </St.Canvas>	
+    
+
+```
+it is possible to access scroll data through the ScrollProps store, the current scroll, and range functions: range, curve and visible
+```js
+ import { ScrollProps } from 'sthree-js';
+ $: if ($ScrollProps) {
+        r1 = $ScrollProps.range(0/4, 1/4);
+ }
+ ```
+ 
 # Enviroment
 ### Enviroment
 Enviroment allows you to easily include an environment map or an equirectangular Texture such as a CubeTexture in the 3d scene, in addition to providing an integrated access to a CubeCamera that returns a texture already mapped from the current camera to be applied to your materials
@@ -139,14 +184,7 @@ The option to activate a GroundProjectedEnv is also available
 ```js
 <St.Environment ground={true} />
 ```
-# Raycaster
-### Raycaster
-A standard [THREE.Raycaster](https://threejs.org/docs/#api/en/core/Raycaster) 
-to activate the raycaster sister, simply activate it on the objects: isInterative = {true} and on:eventname
 
-```js
-<St.Primitive object={model} scale ={.3} on:mouseover ={play} isInterative={true} />
-```
 <br/>
 <br/>
 
