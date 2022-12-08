@@ -4,7 +4,7 @@ export class ControlCamera {
     Callback : (camera:THREE.Camera , canvas:HTMLElement) => void;
     constructor(Callback: (camera:THREE.Camera , canvas:HTMLElement) => void) {
             this.Callback = Callback;            
-        }
+        } 
     set (camera:THREE.Camera , canvas:HTMLElement) {
         if (camera && canvas) {
             this.Callback(camera, canvas);

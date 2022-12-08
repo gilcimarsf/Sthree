@@ -16,7 +16,7 @@ export class ContextScenes {
     camera : Camera | null ;
     object3d : Object3d[] ;
     object : Object3D [] ;
-    orbitControl : ControlCamera | null; 
+    orbitControl : ControlCamera | null;
     renderer : WebGLRenderer | null;
     manager : LoadingManager | null;
     invalidate :() => void ;
@@ -46,6 +46,11 @@ export class ContextScenes {
         if (this.orbitControl?.set && this.camera) {
             this.orbitControl.set(this.camera.target,this.renderer.domElement );
             
+        }
+    }
+    setControl = () => {
+        if (this.orbitControl?.set && this.camera && this.renderer) {
+            this.orbitControl.set(this.camera.target,this.renderer.domElement );
         }
     }
     addBeforeRender = (fn : () => void) =>{

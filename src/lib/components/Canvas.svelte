@@ -5,7 +5,6 @@ import { set_scenes, setRaycaster } from '$lib/utils/context.js';
 import { ContextScenes } from '$lib/core/manager.js';
 import {RaycasterManager} from '$lib/core/raycaster.js'
 import { loadingManager } from '$lib/utils/loadingManager.js';
-
  
 
 $: outerWidth = 0
@@ -34,10 +33,11 @@ const invalidate = () => {
   if (frame) return;
    	frame = requestAnimationFrame(() => {
       //console.log (frame)
+      //console.log ("invalidade")
+      onWindowResize();
     	contextScenes.before_render.forEach(run);
   			if (  contextScenes.camera != null) {
         renderer.render(contextScenes.scene,  contextScenes.camera.target);
-        onWindowResize();
         render();
         }
       frame = null;
@@ -64,6 +64,7 @@ function onWindowResize() {
     if (  contextScenes.camera != null) {
     contextScenes.camera.target.aspect = innerWidth / innerHeight;
     contextScenes.camera.target.updateProjectionMatrix();
+    invalidate();
     }
     renderer.setSize( innerWidth, innerHeight );
   }
@@ -91,8 +92,8 @@ function render() {
     if (  contextScenes.camera != null) {
     // find intersections
     raycasterManager.update (pointer, contextScenes.camera.target);
-    }
-}
+    }    
+  }
 
 //onMount
 export const createScene = (el : HTMLElement) => {

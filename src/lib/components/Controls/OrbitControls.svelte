@@ -39,15 +39,30 @@ import { onFrame } from '$lib/utils/lifecycle.js';
     //export let target = [0, 0, 0]; TODO
    
    
-   let controls : OrbitControls;
-    const {contextScenes} = get_scenes ();
+	let controls : OrbitControls;
+	
+	const {contextScenes} = get_scenes ();
+	let control = new ControlCamera (
+        function OrbitFunction ( camera:THREE.Camera , canvas:HTMLElement ) {
+		controls = new OrbitControls(camera, canvas);
+		return controls;	
+	})
+	contextScenes.orbitControl = control;
+	contextScenes.setControl();
+    contextScenes.invalidate();
+  
+    /*
     let control = new ControlCamera (
         function OrbitFunction ( camera:THREE.Camera , canvas:HTMLElement ) {
 		controls = new OrbitControls(camera, canvas);
-		})
+	})
+	*/
+	
 	contextScenes.orbitControl = control;
 	
+	
 	$: if (controls) {
+	
 		controls.autoRotate = autoRotate;
 		controls.autoRotateSpeed = autoRotateSpeed;
 		controls.dampingFactor = dampingFactor;
@@ -73,7 +88,11 @@ import { onFrame } from '$lib/utils/lifecycle.js';
 		controls.touches = touches;
 		controls.zoomSpeed = zoomSpeed;
 		controls.update();
-		
+		contextScenes.invalidate();
 	}
+	
+	onFrame(() => {
+		//controls.update();
+    });
  	
 </script>

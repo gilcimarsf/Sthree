@@ -50,6 +50,7 @@ $: {
 	self.target.lookAt(target_vector);
 
 	self.target.updateProjectionMatrix();
+	//contextScenes.invalidate();
 }
 
 

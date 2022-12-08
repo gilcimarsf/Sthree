@@ -12,7 +12,7 @@ const config = {
 
 		// Override http methods in the Todo forms
 		alias: {
-			'Sthree-js': 'src/lib',
+			'sthree-js': 'src/lib',
 		}
 	}
 };

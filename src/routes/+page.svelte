@@ -6,6 +6,7 @@
     import { onMount , afterUpdate } from "svelte";
     //stores
     import { ScrollProps } from '$lib/utils/stores';
+  import OrbitControls from '$lib/components/Controls/OrbitControls.svelte';
     
     // maneger stores 
     
@@ -87,9 +88,8 @@
           'https://r105.threejsfundamentals.org/threejs/resources/images/cubemaps/computer-history-museum/pos-z.jpg',
           'https://r105.threejsfundamentals.org/threejs/resources/images/cubemaps/computer-history-museum/neg-z.jpg',
         ];
-    
-    </script>
-    
+   /**
+       
     <St.Canvas>	
         <St.ScrollControls> 
             <div>
@@ -100,6 +100,18 @@
             <St.Mesh geometry = {myBox}  scale ={.5} isInterative = {true} material ={chromeMaterial} position = {[r1,0,0]}/>
             <St.DirectionalLight/>
         </St.ScrollControls>
+    </St.Canvas>
+   
+   */     
+       
+    </script>
+    
+    <St.Canvas frameloop = {'always'}>	
+            <St.PerspectiveCamera/>
+            <St.OrbitControls/>
+            <St.Environment files={'royal_esplanade_1k.hdr'} path ={'textures/equirectangular/'} bind:envMap />
+            <St.Mesh geometry = {myBox}  scale ={.5} isInterative = {true} material ={chromeMaterial} />
+            <St.DirectionalLight/>        
     </St.Canvas>	
     
     

@@ -61,7 +61,7 @@
 		self.frustumCulled = frustumCulled;
 		self.renderOrder = renderOrder;
 		transform(self, position, rotation, scale);
-		//contextScenes.invalidate();
+		contextScenes.invalidate();
 	}
 </script>
 
