@@ -8,6 +8,8 @@ export { default as CubeCamera } from './components/Cameras/CubeCamera.svelte';
 export { default as Boxes } from './components/Objects/boxes.svelte';
 export { default as Mesh } from './components/Objects/Mesh.svelte';
 export { default as Primitive } from './components/Objects/Primitive.svelte';
+export { default as Sprite } from './components/Objects/sprite.svelte';
+export { default as Group } from './components/Objects/Group.svelte';
 export { useGltf } from './loaders/useGLTF';
 
 //Enviroment

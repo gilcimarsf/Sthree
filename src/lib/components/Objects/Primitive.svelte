@@ -15,10 +15,19 @@
 	export let position = defaults.position;
 	export let rotation = defaults.rotation;
 	export let scale = defaults.scale;
+	export let group : THREE.Group | null = null;
+	
 	let myObject : Object3d | undefined = undefined;
 	const dispatch = createEventDispatcher();
 	
-	const { self, contextScenes, raycaster } = setupSimplesMesh(object);
+	const { self, contextScenes, raycaster, parent } = setupSimplesMesh(object);
+	
+	$: if (group){
+		let myObject = parent.getObjectById(object.id);
+		if (myObject) {
+			myObject.parent =group;
+		}
+	}
 	
 	$: if(self) {
 		if (isInterative) {

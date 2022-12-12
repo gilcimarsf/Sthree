@@ -16,11 +16,14 @@
 	export let frustumCulled = true;
 	export let renderOrder = 0;
 	let myObject : Object3d | undefined = undefined;
+	let myMesh = new THREE.Mesh(geometry, material);
 	export let isInterative = false; 
-		
+	export let group : THREE.Group | null = null;
+	
+	
 	const dispatch = createEventDispatcher();
-	const { self, contextScenes, raycaster } = setupSimplesMesh(new THREE.Mesh(geometry, material));
-		
+	const { self, contextScenes, raycaster, parent } = setupSimplesMesh(myMesh);
+	
 	$: if(self) {
 		if (isInterative) {
 			myObject = raycaster.add(self);
@@ -62,6 +65,13 @@
 		self.renderOrder = renderOrder;
 		transform(self, position, rotation, scale);
 		contextScenes.invalidate();
+	}
+	
+	$: if (group && self){
+		let myObject = parent.getObjectById(myMesh.id);
+		if (myObject) {
+			myObject.parent =group;
+		}
 	}
 </script>
 

@@ -9,7 +9,8 @@ const PARENT = {};
 const LOADMANAGER = {};
 const RAYCASTER ={}
 const SCROLL = {};
-
+const GROUPS = {};
+const GROUP = {};
 
 export function set_scenes( scenes : ContextScenes) {
 	setContext(SCENES, scenes);

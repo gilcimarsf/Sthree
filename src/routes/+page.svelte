@@ -6,7 +6,13 @@
     import { onMount , afterUpdate } from "svelte";
     //stores
     import { ScrollProps } from '$lib/utils/stores';
-  import OrbitControls from '$lib/components/Controls/OrbitControls.svelte';
+    import OrbitControls from '$lib/components/Controls/OrbitControls.svelte';
+    
+    //componentes testes
+  import Base_Splits from '$lib/Base/base_raycaster_sprite.svelte';
+  import Sprite from '$lib/components/Objects/sprite.svelte';
+  import Group from '$lib/components/Objects/Group.svelte';
+   
     
     // maneger stores 
     
@@ -25,13 +31,10 @@
     const clock = new THREE.Clock()
     
     let texture : THREE.Texture;
-    
+    let group : THREE.Group;
     
     function exemplo (event : any) {
-    myMaterial.color.set(0xff0000);
-    myMaterial.metalness = .1;
-    
-    
+   console.log ("Clicou");    
     document.body.style.cursor = 'pointer';
     }
     
@@ -65,8 +68,7 @@
         texture.wrapS = THREE.RepeatWrapping;
         texture.wrapT = THREE.RepeatWrapping;
         texture.repeat.set( 4, 4 );
-        
-    });
+      });
     
         
     function apertar () {
@@ -101,27 +103,50 @@
             <St.DirectionalLight/>
         </St.ScrollControls>
     </St.Canvas>
-   
-   */     
-       
-    </script>
     
-    <St.Canvas frameloop = {'always'}>	
-            <St.PerspectiveCamera/>
-            <St.OrbitControls/>
-            <St.Environment files={'royal_esplanade_1k.hdr'} path ={'textures/equirectangular/'} bind:envMap />
-            <St.Mesh geometry = {myBox}  scale ={.5} isInterative = {true} material ={chromeMaterial} />
-            <St.DirectionalLight/>        
-    </St.Canvas>	
-    
-    
-    <style>
-    .g{
+
+        .g{
     font-size:1em;
     padding:0.1em;
     color:red;
     height: 200px;  
     width: 300px;  
-    
     }
+    
+    <Base_Splits/>
+    <St.Mesh geometry = {myBox}  scale ={.5} isInterative = {true} material ={chromeMaterial} />
+    
+    
+>
+
+<Base_Splits/>
+
+    <St.Canvas frameloop = {'always'}>	
+        <St.PerspectiveCamera/>
+        <St.OrbitControls/>
+        <St.Environment files={'royal_esplanade_1k.hdr'} path ={'textures/equirectangular/'} bind:envMap />
+        <St.Sprite isInterative = {true} on:click={exemplo} position = {[1,0,-30]}/>
+        <St.DirectionalLight/>        
+    </St.Canvas>
+
+group = {myGroup}
+   */     
+   
+    </script>
+    
+
+    <St.Canvas frameloop = {'always'}>	
+        <St.PerspectiveCamera/>
+        <St.OrbitControls/>
+        <St.Environment files={'royal_esplanade_1k.hdr'} path ={'textures/equirectangular/'} bind:envMap />
+        <St.Group bind:group  position = {[0,0,0]} >
+           <St.Sprite isInterative = {true} on:click={exemplo} position = {[1,0,-30]} group= {group} />
+           <St.Mesh geometry = {myBox}  scale ={.5} isInterative = {true} material ={chromeMaterial} group= {group} />
+        </St.Group>
+        <St.DirectionalLight/>  
+       
+    </St.Canvas>
+
+    
+    <style>
     </style>
