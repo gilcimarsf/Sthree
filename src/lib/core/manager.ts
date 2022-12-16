@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 import type { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
 import type  {Camera, Object3d, ControlCamera} from '$lib/core/objects' 
-
+import type { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer.js';
 import type {
     Scene,
     Object3D,
@@ -18,6 +18,7 @@ export class ContextScenes {
     object : Object3D [] ;
     orbitControl : ControlCamera | null;
     renderer : WebGLRenderer | null;
+    composer : EffectComposer | null = null;
     manager : LoadingManager | null;
     invalidate :() => void ;
     before_render : Array <() => void>;
@@ -26,6 +27,9 @@ export class ContextScenes {
     el: HTMLElement | null = null;
     container: HTMLElement | null = null;
     clock: THREE.Clock  = new THREE.Clock(); 
+    devicePixelRatio: number =0;
+    w: number =0;
+    h: number =0;
         constructor( invalidate : () => void, frameloop: 'always' | 'demand' | 'never') {
             this.scene = new THREE.Scene ();
             this.invalidate = invalidate;
@@ -38,7 +42,10 @@ export class ContextScenes {
             this.before_render = [];   
             this.frameloop = frameloop;
         }
-    update = ( w: number , h : number)=> {
+    update = ( w: number , h : number, devicePixelRatio: number)=> {
+    this.w = w;
+    this.h = h;
+    this.devicePixelRatio = devicePixelRatio; 
     this.camera?.resize (w,h);
     }
     setRenderer = (renderer : WebGLRenderer)=>{

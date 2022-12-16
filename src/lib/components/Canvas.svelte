@@ -37,7 +37,12 @@ const invalidate = () => {
       onWindowResize();
     	contextScenes.before_render.forEach(run);
   			if (  contextScenes.camera != null) {
-        renderer.render(contextScenes.scene,  contextScenes.camera.target);
+    			if ( contextScenes.composer == null ) {
+          renderer.render(contextScenes.scene,  contextScenes.camera.target);
+          } else {
+            //renderer.render(contextScenes.scene,  contextScenes.camera.target);
+            contextScenes.composer.render();
+          }
         render();
         }
       frame = null;
@@ -67,6 +72,9 @@ function onWindowResize() {
     invalidate();
     }
     renderer.setSize( innerWidth, innerHeight );
+    if ( contextScenes.composer != null ) {
+      contextScenes.composer.setSize( innerWidth, innerHeight);
+    }
   }
 
 //
@@ -115,7 +123,7 @@ requestAnimationFrame(animate);
 
 onMount(() => { 
   contextScenes.setFrameloop(frameloop);
-  contextScenes.update (innerWidth , innerHeight);
+  contextScenes.update (innerWidth , innerHeight , window.devicePixelRatio);
   contextScenes.el = el;
   contextScenes.container = container;
   createScene(el)
@@ -132,7 +140,7 @@ $: if (renderer) {
 }
 </script>
 
-<svelte:window bind:innerWidth bind:outerWidth bind:innerHeight bind:outerHeight  />
+<svelte:window bind:innerWidth bind:outerWidth bind:innerHeight bind:outerHeight />
 
 <div class="container" bind:this={container}>
 <canvas bind:this={el} on:mousemove={onPointerMove}  on:resize={onWindowResize} class="background"/>

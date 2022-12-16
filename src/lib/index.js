@@ -30,3 +30,6 @@ export { default as ScrollControls } from './components/Web/ScrollControls.svelt
 
 //useScroll
 export { useScroll} from './components/Web/useScroll'
+
+//postprocesing
+export { default as EffectComposer} from './postprocessing/EffectComposer.svelte'

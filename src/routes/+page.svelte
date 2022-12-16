@@ -9,9 +9,38 @@
     import OrbitControls from '$lib/components/Controls/OrbitControls.svelte';
     
     //componentes testes
-  import Base_Splits from '$lib/Base/base_raycaster_sprite.svelte';
+  import Base_pos from '$lib/Base/base_pos.svelte';
   import Sprite from '$lib/components/Objects/sprite.svelte';
   import Group from '$lib/components/Objects/Group.svelte';
+  
+   
+   //postProcessing   
+    import { EffectComposer, Pass } from 'three/examples/jsm/postprocessing/EffectComposer.js';
+    import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js';
+    import { ShaderPass } from 'three/examples/jsm/postprocessing/ShaderPass.js';
+    import { LUTPass} from 'three/examples/jsm/postprocessing/LUTPass.js';
+    import { LUTCubeLoader } from 'three/examples/jsm/loaders/LUTCubeLoader.js';
+    import { LUT3dlLoader } from 'three/examples/jsm/loaders/LUT3dlLoader.js';
+    import { GammaCorrectionShader } from 'three/examples/jsm/shaders/GammaCorrectionShader.js';
+   
+    //Lut infos
+    const width = 512;
+    const height = 512;
+    const size = width * height;
+    //let lutMap = new LUT3dlLoader().load( 'luts/Bourbon 64.CUBE' , function ( result ) { lutMap = result});
+    //'Bourbon 64.CUBE'
+    const lutTexture = new THREE.DataTexture( new Uint8Array( 4 * size ), width, height );
+    const params = {
+    lut: lutTexture,
+    intensity: 1,
+    };
+   
+   
+    let pass : Pass [] = []; 
+    pass[1]= new ShaderPass( GammaCorrectionShader );
+   // pass[2] =new LUTPass(params);
+   
+   
    
     
     // maneger stores 
@@ -130,12 +159,9 @@
     </St.Canvas>
 
 group = {myGroup}
-   */     
-   
-    </script>
-    
 
-    <St.Canvas frameloop = {'always'}>	
+
+<St.Canvas frameloop = {'always'}>	
         <St.PerspectiveCamera/>
         <St.OrbitControls/>
         <St.Environment files={'royal_esplanade_1k.hdr'} path ={'textures/equirectangular/'} bind:envMap />
@@ -146,7 +172,29 @@ group = {myGroup}
         <St.DirectionalLight/>  
        
     </St.Canvas>
+    
+    
 
+ <Base_pos/>
+   */     
+   
+    </script>
+    
+    <St.Canvas frameloop = {'always'}>	
+        <St.EffectComposer addPass={pass}>
+        <St.PerspectiveCamera/>
+        <St.OrbitControls/>
+        <St.Environment files={'royal_esplanade_1k.hdr'} path ={'textures/equirectangular/'} bind:envMap />
+        <St.Group bind:group  position = {[0,0,0]} >
+           <St.Sprite isInterative = {true} on:click={exemplo} position = {[1,0,-30]} group= {group} />
+           <St.Mesh geometry = {myBox}  scale ={.5} isInterative = {true} material ={chromeMaterial} group= {group} />
+        </St.Group>
+        <St.DirectionalLight/>  
+        </St.EffectComposer>
+    </St.Canvas>
+   
+    
+    
     
     <style>
     </style>
