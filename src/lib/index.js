@@ -33,3 +33,6 @@ export { useScroll} from './components/Web/useScroll'
 
 //postprocesing
 export { default as EffectComposer} from './postprocessing/EffectComposer.svelte'
+
+//renderers
+export { default as View} from './components/renderers/view.svelte'

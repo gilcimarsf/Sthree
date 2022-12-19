@@ -10,6 +10,7 @@
     
     //componentes testes
   import Base_pos from '$lib/Base/base_pos.svelte';
+  import Base_Splits from '$lib/Base/base_Splits2.svelte';
   import Sprite from '$lib/components/Objects/sprite.svelte';
   import Group from '$lib/components/Objects/Group.svelte';
   
@@ -22,6 +23,7 @@
     import { LUTCubeLoader } from 'three/examples/jsm/loaders/LUTCubeLoader.js';
     import { LUT3dlLoader } from 'three/examples/jsm/loaders/LUT3dlLoader.js';
     import { GammaCorrectionShader } from 'three/examples/jsm/shaders/GammaCorrectionShader.js';
+  import View from '$lib/components/renderers/view.svelte';
    
     //Lut infos
     const width = 512;
@@ -148,7 +150,7 @@
     
 >
 
-<Base_Splits/>
+
 
     <St.Canvas frameloop = {'always'}>	
         <St.PerspectiveCamera/>
@@ -173,14 +175,21 @@ group = {myGroup}
        
     </St.Canvas>
     
+   
     
 
  <Base_pos/>
+ 
+ <Base_Splits/>
    */     
    
     </script>
     
+    
+    
     <St.Canvas frameloop = {'always'}>	
+        <St.View>
+        </St.View>
         <St.EffectComposer addPass={pass}>
         <St.PerspectiveCamera/>
         <St.OrbitControls/>
@@ -191,9 +200,8 @@ group = {myGroup}
         </St.Group>
         <St.DirectionalLight/>  
         </St.EffectComposer>
+        
     </St.Canvas>
-   
-    
     
     
     <style>

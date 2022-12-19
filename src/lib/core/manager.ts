@@ -13,6 +13,7 @@ import type {
 
 export class ContextScenes {
     scene :Scene;
+    scenes :Scene [];
     camera : Camera | null ;
     object3d : Object3d[] ;
     object : Object3D [] ;
