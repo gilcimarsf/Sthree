@@ -14,7 +14,7 @@
   import CubeCamera from "../Cameras/CubeCamera.svelte";
  
  
-  const { contextScenes } = get_scenes();
+  const { contextCanvas } = get_scenes();
   const CUBEMAP_ROOT ="https://market-assets.fra1.cdn.digitaloceanspaces.com/market-assets/hdris/";
 
   export let background: boolean | "only"  = false;
@@ -57,14 +57,14 @@
       .load(files ,   function ( texture ) {
       texture.mapping = THREE.EquirectangularReflectionMapping;
       //contextScenes.scene.environment = texture;
-      contextScenes.scene.background = texture;
+      contextCanvas.scene.background = texture;
       
-      if (background == 'only') {  contextScenes.scene.background = texture; }
+      if (background == 'only') {  contextCanvas.scene.background = texture; }
       else {
-        contextScenes.scene.background = texture;
-        contextScenes.scene.environment = texture;
+        contextCanvas.scene.background = texture;
+        contextCanvas.scene.environment = texture;
       }
-      contextScenes.invalidate();
+      contextCanvas.invalidate();
       })      
     }
     
@@ -73,12 +73,12 @@
     const loader = new THREE.CubeTextureLoader();
     loader.setPath(path);
     const texture = loader.load(files);
-    if (background == 'only') {  contextScenes.scene.background = texture; }
+    if (background == 'only') {  contextCanvas.scene.background = texture; }
       else {
-        contextScenes.scene.background = texture;
-        contextScenes.scene.environment = texture;
+        contextCanvas.scene.background = texture;
+        contextCanvas.scene.environment = texture;
     }
-    contextScenes.invalidate();    
+    contextCanvas.invalidate();    
     }  
     
     async function EnvironmentGround (){
@@ -90,7 +90,7 @@
         const envMap = await useloadHDR (path , files);
         const env = new GroundProjectedEnv( envMap );
         env.scale.setScalar( 100 );
-        contextScenes.scene.add(env);       
+        contextCanvas.scene.add(env);       
       }
     }
     

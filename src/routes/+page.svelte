@@ -181,17 +181,15 @@ group = {myGroup}
  <Base_pos/>
  
  <Base_Splits/>
-   */     
-   
-    </script>
-    
-    
-    
-    <St.Canvas frameloop = {'always'}>	
-        <St.View>
-        </St.View>
+ 
+
+  
+   <St.View>
+ </St.View>
+ 
+     <St.Canvas frameloop = {'always'}>	
         <St.EffectComposer addPass={pass}>
-        <St.PerspectiveCamera/>
+        <St.PerspectiveCamera/>   
         <St.OrbitControls/>
         <St.Environment files={'royal_esplanade_1k.hdr'} path ={'textures/equirectangular/'} bind:envMap />
         <St.Group bind:group  position = {[0,0,0]} >
@@ -199,10 +197,19 @@ group = {myGroup}
            <St.Mesh geometry = {myBox}  scale ={.5} isInterative = {true} material ={chromeMaterial} group= {group} />
         </St.Group>
         <St.DirectionalLight/>  
-        </St.EffectComposer>
-        
+         </St.EffectComposer>        
     </St.Canvas>
     
+   */     
+   
+    </script>
+    
+    <St.Canvas frameloop = {'always'}>	
+        <St.View>
+        </St.View>                 
+    </St.Canvas>
+    
+
     
     <style>
     </style>

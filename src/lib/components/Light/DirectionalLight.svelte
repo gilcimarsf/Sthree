@@ -13,7 +13,7 @@
     const light = new THREE.DirectionalLight( 0xffffff, 1 );
     light.position.set( 1, 1, 1 ).normalize();
 
-    const { self, contextScenes } = setupSimplesMesh(light);
+    const { self, contextCanvas } = setupSimplesMesh(light);
     
     
     $: {

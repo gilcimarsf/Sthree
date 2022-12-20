@@ -31,11 +31,11 @@ stencilBuffer: stencilBuffer, generateMipmaps: generateMipmaps,
 minFilter: minFilter, depthTexture:depthTexture,encoding:encoding } );
 
 const cubeCamera = new THREE.CubeCamera( near, far, cubeRenderTarget );
-const { contextScenes } = get_scenes();
+const { contextCanvas } = get_scenes();
 
 onMount(async () => {
-    contextScenes.scene.add( cubeCamera );
-    contextScenes.addBeforeRender (()=> {if (contextScenes.renderer) {cubeCamera.update (contextScenes.renderer, contextScenes.scene)}});
+    contextCanvas.scene.add( cubeCamera );
+    contextCanvas.addBeforeRender (()=> {if (contextCanvas.renderer) {cubeCamera.update (contextCanvas.renderer, contextCanvas.scene)}});
     envMap = cubeRenderTarget.texture ;
     })
 

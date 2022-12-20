@@ -9,11 +9,18 @@ import type {
     LoadingManager,
 } from "three";
 
+export class ContextRenderer {
+    scenes :Scene [] = [];
+    cameras : Camera[] = [];
+    orbitControl : ControlCamera[] = []; 
+    renderer : WebGLRenderer [] = [];
+    composer : EffectComposer [] = [];
+}
 
 
-export class ContextScenes {
+export class ContextCanvas {
     scene :Scene;
-    scenes :Scene [];
+    scenes :Scene [] = [];
     camera : Camera | null ;
     object3d : Object3d[] ;
     object : Object3D [] ;

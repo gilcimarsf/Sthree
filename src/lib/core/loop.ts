@@ -1,7 +1,7 @@
-import type  {ContextScenes} from '../core/manager';
+import type  {ContextCanvas} from '../core/manager';
 
 
-export function createLoop (roots : ContextScenes) {
+export function createLoop (roots : ContextCanvas) {
 let running = false;
 let repeat : number;
 let frame : number ;

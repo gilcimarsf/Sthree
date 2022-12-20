@@ -2,9 +2,9 @@
 import * as THREE from 'three';
 import { onDestroy, onMount } from 'svelte';
 import { set_scenes, setRaycaster } from '$lib/utils/context.js';
-import { ContextScenes } from '$lib/core/manager.js';
+import { ContextCanvas } from '$lib/core/manager.js';
 import {RaycasterManager} from '$lib/core/raycaster.js'
-import { loadingManager } from '$lib/utils/loadingManager.js';
+//import { loadingManager } from '$lib/utils/loadingManager.js';
  
 
 $: outerWidth = 0
@@ -29,51 +29,41 @@ let frame : number | null = null;
 
 const run = (fn) => fn();
 const invalidate = () => {
-  contextScenes.frame = frame;
+  contextCanvas.frame = frame;
   if (frame) return;
    	frame = requestAnimationFrame(() => {
-      //console.log (frame)
-      //console.log ("invalidade")
       onWindowResize();
-    	contextScenes.before_render.forEach(run);
-  			if (  contextScenes.camera != null) {
-    			if ( contextScenes.composer == null ) {
-          renderer.render(contextScenes.scene,  contextScenes.camera.target);
-          } else {
-            //renderer.render(contextScenes.scene,  contextScenes.camera.target);
-            contextScenes.composer.render();
-          }
-        render();
-        }
-      frame = null;
+    	contextCanvas.before_render.forEach(run);
+    	render();
+  		frame = null;
   		});
     
 	};
 
-let SCENES = new ContextScenes (invalidate , frameloop);
-const contextScenes = set_scenes(SCENES);
+let SCENES = new ContextCanvas (invalidate , frameloop);
+const contextCanvas = set_scenes(SCENES);
 
-let manager = loadingManager();
+//let manager = loadingManager();
 
 init();
 
 // onMount/createScene
 function init() {
-    contextScenes.scene.background = new THREE.Color( 0xf0f0f0 );
+  contextCanvas.scene.background = new THREE.Color( 0xf0f0f0 );
     raycasterManager = setRaycaster(new RaycasterManager());  
 }
 
 //onMount / animate
 function onWindowResize() {
   
-    if (  contextScenes.camera != null) {
-    contextScenes.camera.target.aspect = innerWidth / innerHeight;
-    contextScenes.camera.target.updateProjectionMatrix();
+    if (  contextCanvas.camera != null) {
+      contextCanvas.camera.target.aspect = innerWidth / innerHeight;
+      contextCanvas.camera.target.updateProjectionMatrix();
     invalidate();
     }
     renderer.setSize( innerWidth, innerHeight );
-    if ( contextScenes.composer != null ) {
-      contextScenes.composer.setSize( innerWidth, innerHeight);
+    if ( contextCanvas.composer != null ) {
+      contextCanvas.composer.setSize( innerWidth, innerHeight);
     }
   }
 
@@ -85,28 +75,64 @@ function onPointerMove( event ) {
 
 function rotacionarTudo () {
   theta += 0.1;
-    if (  contextScenes.camera != null) {
+    if (  contextCanvas.camera != null) {
      
-    contextScenes.camera.target.position.x = radius * Math.sin( THREE.MathUtils.degToRad( theta ) );
-    contextScenes.camera.target.position.y = radius * Math.sin( THREE.MathUtils.degToRad( theta ) );
-    contextScenes.camera.target.position.z = radius * Math.cos( THREE.MathUtils.degToRad( theta ) );
-    contextScenes.camera.target.lookAt( contextScenes.scene.position );
-    contextScenes.camera.target.updateMatrixWorld();
+    contextCanvas.camera.target.position.x = radius * Math.sin( THREE.MathUtils.degToRad( theta ) );
+    contextCanvas.camera.target.position.y = radius * Math.sin( THREE.MathUtils.degToRad( theta ) );
+    contextCanvas.camera.target.position.z = radius * Math.cos( THREE.MathUtils.degToRad( theta ) );
+    contextCanvas.camera.target.lookAt( contextCanvas.scene.position );
+    contextCanvas.camera.target.updateMatrixWorld();
   }
 }
 
 //PASSA PARA before_render
 function render() {
-    if (  contextScenes.camera != null) {
-    // find intersections
-    raycasterManager.update (pointer, contextScenes.camera.target);
-    }    
+  if (contextCanvas.scenes. length > 0) {
+    renderer.setClearColor( 0xffffff );
+    renderer.setScissorTest( false );
+    renderer.clear();
+    renderer.setClearColor( 0xe0e0e0 );
+    renderer.setScissorTest( true );
+    
+    contextCanvas.scenes.forEach( function ( myscene ) {
+    
+        if (renderer != null) {
+           // set the viewport
+          const element = myscene.userData.element;
+          const rect = element.getBoundingClientRect();
+          if ( rect.bottom < 0 || rect.top > renderer.domElement.clientHeight ||
+						 rect.right < 0 || rect.left > renderer.domElement.clientWidth ) {
+						return; // it's off screen
+					}
+          const width = rect.right - rect.left;
+      		const height = rect.bottom - rect.top;
+      		const left = rect.left;
+      		const bottom = renderer.domElement.clientHeight - rect.bottom;
+      		renderer.setViewport( left, bottom, width, height );
+      		renderer.setScissor( left, bottom, width, height );
+      		const cam = myscene.userData.camera;
+          renderer.render (myscene , cam);
+        }
+      })
+  } else {
+    if (  contextCanvas.camera != null) {
+      if ( contextCanvas.composer == null ) {
+          renderer.render(contextCanvas.scene,  contextCanvas.camera.target);
+          } else {
+            contextCanvas.composer.render();
+          }
+    }  
   }
+  
+  if(  contextCanvas.camera != null) {
+    raycasterManager.update (pointer, contextCanvas.camera.target);
+  }    
+}
 
 //onMount
 export const createScene = (el : HTMLElement) => {
 renderer = new THREE.WebGLRenderer({ antialias: true, canvas: el });
-contextScenes.setRenderer (renderer);
+contextCanvas.setRenderer (renderer);
 raycasterManager.onCanvas (el , renderer );
 }
 
@@ -114,7 +140,7 @@ raycasterManager.onCanvas (el , renderer );
 const animate = () => {
 //console.log(contextScenes.frame);
 requestAnimationFrame(animate);
-  if (contextScenes.frameloop == "always") {
+  if (contextCanvas.frameloop == "always") {
   //frame = requestAnimationFrame(animate);
    invalidate();
   }
@@ -122,10 +148,10 @@ requestAnimationFrame(animate);
 };
 
 onMount(() => { 
-  contextScenes.setFrameloop(frameloop);
-  contextScenes.update (innerWidth , innerHeight , window.devicePixelRatio);
-  contextScenes.el = el;
-  contextScenes.container = container;
+  contextCanvas.setFrameloop(frameloop);
+  contextCanvas.update (innerWidth , innerHeight , window.devicePixelRatio);
+  contextCanvas.el = el;
+  contextCanvas.container = container;
   createScene(el)
   window.addEventListener( 'resize', onWindowResize );
   onWindowResize();
@@ -144,7 +170,7 @@ $: if (renderer) {
 
 <div class="container" bind:this={container}>
 <canvas bind:this={el} on:mousemove={onPointerMove}  on:resize={onWindowResize} class="background"/>
-  {#if contextScenes.scene && contextScenes.el}
+  {#if contextCanvas.scene && contextCanvas.el}
   <slot/>
   {/if}
 </div>

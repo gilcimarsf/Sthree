@@ -20,7 +20,7 @@
 	let myObject : Object3d | undefined = undefined;
 	const dispatch = createEventDispatcher();
 	
-	const { self, contextScenes, raycaster, parent } = setupSimplesMesh(object);
+	const { self, contextCanvas, raycaster, parent } = setupSimplesMesh(object);
 	
 	$: if (group){
 		let myObject = parent.getObjectById(object.id);
@@ -38,7 +38,7 @@
 	
 	$: {
 		transform(self, position, rotation, scale);
-		contextScenes.invalidate();
+		contextCanvas.invalidate();
 	}
 	
     $: if(myObject) {

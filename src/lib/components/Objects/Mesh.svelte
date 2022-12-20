@@ -22,7 +22,7 @@
 	
 	
 	const dispatch = createEventDispatcher();
-	const { self, contextScenes, raycaster, parent } = setupSimplesMesh(myMesh);
+	const { self, contextCanvas, raycaster, parent } = setupSimplesMesh(myMesh);
 	
 	$: if(self) {
 		if (isInterative) {
@@ -64,7 +64,7 @@
 		self.frustumCulled = frustumCulled;
 		self.renderOrder = renderOrder;
 		transform(self, position, rotation, scale);
-		contextScenes.invalidate();
+		contextCanvas.invalidate();
 	}
 	
 	$: if (group && self){

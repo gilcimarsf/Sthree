@@ -22,7 +22,7 @@
     object.scale.z = Math.random() + 0.5;
     
     let myObject = new Object3d ( object);
-    const { self, contextScenes } = setupMesh(myObject);
+    const { self, contextCanvas } = setupMesh(myObject);
       
     self.target.addEventListener('mouseover', (event) => {
       console.log(event);

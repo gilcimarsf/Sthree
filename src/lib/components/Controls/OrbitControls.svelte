@@ -41,15 +41,15 @@ import { onFrame } from '$lib/utils/lifecycle.js';
    
 	let controls : OrbitControls;
 	
-	const {contextScenes} = get_scenes ();
+	const {contextCanvas} = get_scenes ();
 	let control = new ControlCamera (
         function OrbitFunction ( camera:THREE.Camera , canvas:HTMLElement ) {
 		controls = new OrbitControls(camera, canvas);
 		return controls;	
 	})
-	contextScenes.orbitControl = control;
-	contextScenes.setControl();
-    contextScenes.invalidate();
+	contextCanvas.orbitControl = control;
+	contextCanvas.setControl();
+    contextCanvas.invalidate();
   
     /*
     let control = new ControlCamera (
@@ -58,7 +58,7 @@ import { onFrame } from '$lib/utils/lifecycle.js';
 	})
 	*/
 	
-	contextScenes.orbitControl = control;
+	contextCanvas.orbitControl = control;
 	
 	
 	$: if (controls) {
@@ -88,7 +88,7 @@ import { onFrame } from '$lib/utils/lifecycle.js';
 		controls.touches = touches;
 		controls.zoomSpeed = zoomSpeed;
 		controls.update();
-		contextScenes.invalidate();
+		contextCanvas.invalidate();
 	}
 	
 	onFrame(() => {

@@ -6,7 +6,7 @@ import { get_scenes } from "../utils/context";
 import { EffectComposer, Pass } from 'three/examples/jsm/postprocessing/EffectComposer.js';
 import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js';
     
-const { contextScenes } = get_scenes();  
+const { contextCanvas } = get_scenes();  
 let composer : EffectComposer 
 export let addPass : Pass[] = []; 
 
@@ -20,13 +20,13 @@ function init() {
     		encoding: THREE.sRGBEncoding
     });
     
-    if(contextScenes.renderer != null) {
-        composer = new EffectComposer( contextScenes.renderer, target );
-        composer.setPixelRatio( contextScenes.devicePixelRatio );
-        composer.setSize( contextScenes.w, contextScenes.h );
+    if(contextCanvas.renderer != null) {
+        composer = new EffectComposer( contextCanvas.renderer, target );
+        composer.setPixelRatio( contextCanvas.devicePixelRatio );
+        composer.setSize( contextCanvas.w, contextCanvas.h );
         
-        if (contextScenes.camera != null) {
-            composer.addPass( new RenderPass( contextScenes.scene, contextScenes.camera.target ) );
+        if (contextCanvas.camera != null) {
+            composer.addPass( new RenderPass( contextCanvas.scene, contextCanvas.camera.target ) );
         }
         /*
         composer.addPass( new ShaderPass( GammaCorrectionShader ) );
@@ -44,7 +44,7 @@ function init() {
 }
 
 $: if (composer) {
-contextScenes.composer = composer;
+    contextCanvas.composer = composer;
 
 }
 

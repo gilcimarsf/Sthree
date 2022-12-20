@@ -25,7 +25,7 @@ const target_vector = new THREE.Vector3();
 
 let camera = new THREE.PerspectiveCamera( );
 let cameraObject = new Camera ( camera);
-const { self, contextScenes } = setupCamera(cameraObject);
+const { self, contextCanvas } = setupCamera(cameraObject);
 
 
 $: {
@@ -50,7 +50,7 @@ $: {
 	self.target.lookAt(target_vector);
 
 	self.target.updateProjectionMatrix();
-	//contextScenes.invalidate();
+	//contextCanvas.invalidate();
 }
 
 

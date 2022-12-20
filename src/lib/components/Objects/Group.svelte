@@ -13,12 +13,12 @@ export let scale = defaults.scale;
 export let renderOrder = 0;
 export let group : THREE.Group = new THREE.Group();
 let onSlot : boolean  = false ;
-const { self, contextScenes, raycaster, parent } = setupSimplesMesh (group);
+const { self, contextCanvas, raycaster, parent } = setupSimplesMesh (group);
 
 $: if(self){
     self.renderOrder = renderOrder;
     transform(self, position, rotation, scale);
-    contextScenes.invalidate();
+    contextCanvas.invalidate();
     onSlot = true;
 }
 

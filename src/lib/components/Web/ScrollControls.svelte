@@ -9,7 +9,7 @@ import { useScroll }  from '$lib/components/Web/useScroll'
 import { scroll, ScrollProps} from "$lib/utils/stores";
 import {onFrame } from "$lib/utils/lifecycle"
 
-const { contextScenes } = get_scenes();
+const { contextCanvas } = get_scenes();
 let el : HTMLElement;
 let fill : HTMLDivElement;
 let fixed : HTMLDivElement;
@@ -31,10 +31,10 @@ let last = 0
 
 
 onFrame(() => {
-  $ScrollProps.offset = THREE.MathUtils.damp((last = $ScrollProps.offset), $scroll, damping, contextScenes.clock.getDelta());
+  $ScrollProps.offset = THREE.MathUtils.damp((last = $ScrollProps.offset), $scroll, damping, contextCanvas.clock.getDelta());
 
   if (Math.abs(last - $ScrollProps.offset) > eps) {
-    contextScenes.invalidate();
+    contextCanvas.invalidate();
   }
 });
 
@@ -74,11 +74,11 @@ onMount( () => {
   fill.style.pointerEvents = 'none';
   el.appendChild(fill);
   
-    if (contextScenes.el && contextScenes.container){
-    containerLeght = contextScenes.el.clientHeight;
+    if (contextCanvas.el && contextCanvas.container){
+    containerLeght = contextCanvas.el.clientHeight;
     scrollLength = el[horizontal ? 'scrollWidth' : 'scrollHeight'];
     scrollThreshold = scrollLength  - containerLeght;
-    contextScenes.invalidate();
+    contextCanvas.invalidate();
    
   }
   el.addEventListener('scroll', UpdateScroll, { passive: true })  

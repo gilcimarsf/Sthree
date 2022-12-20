@@ -21,7 +21,7 @@ let myObject : Object3d | undefined = undefined;
 const dispatch = createEventDispatcher();
 
 	
-	const { self, contextScenes, raycaster, parent } = 	setupSimplesMesh (sprite);
+	const { self, contextCanvas, raycaster, parent } = 	setupSimplesMesh (sprite);
 	
 	$: if (group){
 		let myObject = parent.getObjectById(sprite.id);
@@ -62,6 +62,6 @@ const dispatch = createEventDispatcher();
 	$: {
 		self.center = center;
 		transform(self, position, rotation, scale);
-		contextScenes.invalidate();
+		contextCanvas.invalidate();
 	}
 </script>
