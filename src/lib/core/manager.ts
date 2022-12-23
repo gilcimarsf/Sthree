@@ -1,8 +1,9 @@
 import * as THREE from 'three';
 import type { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
 import type  {Camera, Object3d, ControlCamera} from '$lib/core/objects' 
-import type { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer.js';
+import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer.js';
 import type {RaycasterManager} from '$lib/core/raycaster.js'
+
 import type {
     Scene,
     Object3D,
@@ -10,15 +11,46 @@ import type {
     LoadingManager,
 } from "three";
 
+export class Composer {
+    composer : EffectComposer | null =null;   
+    target :THREE.WebGLRenderTarget | null =null; 
+    //el :HTMLElement | null =null; 
+    Callback : () => void ;
+    constructor(Callback: () => void) {
+        this.Callback = Callback;            
+    }        
+    initComposer (renderer : THREE.WebGLRenderer | null,  key: string, innerWidth: number , innerHeight: number )  {
+        //this.el = el;
+        if  (renderer != null) {
+        this.target = new THREE.WebGLRenderTarget( innerWidth , innerHeight, 
+            {
+                minFilter: THREE.LinearFilter,
+                magFilter: THREE.LinearFilter,
+                format: THREE.RGBAFormat,
+                encoding: THREE.sRGBEncoding
+        });
+        this.composer = new EffectComposer( renderer, this.target );  
+        this.composer.setPixelRatio( innerWidth / innerHeight );
+        this.composer.setSize( innerWidth, innerHeight );
+        this.Callback();
+        }
+     }   
+ }
+ 
+ 
 export class ElementScene {
     scene = new THREE.Scene ();
     el: HTMLElement | null = null;
     camera : Camera | null = null ;
     orbitControl : ControlCamera | null = null ; 
     renderer : WebGLRenderer | null = null ;
-    composer : EffectComposer | null = null ;
+    composer : Composer | null = null ;
+    onComposer : boolean = false;
     raycaster: RaycasterManager | null = null ;
     position : THREE.Vector2 = new THREE.Vector2(10000,10000);
+    w : number =0;
+    h : number =0;
+    devicePixelRatio:number =0;
     id : string;    
         constructor(id : string) { 
         this.id = id;
@@ -29,6 +61,14 @@ export class ElementScene {
             this.orbitControl.Callback (this.camera.target,this.el)
         } 
     }
+    
+    update = ( w: number , h : number)=> {
+        this.w = w;
+        this.h = h;
+        this.devicePixelRatio = w /h ;
+        this.camera?.resize (w,h);
+    }
+    
 }
 
 type mapArrayScenes = {
@@ -47,6 +87,7 @@ export class ContextCanvas {
     orbitControl : ControlCamera | null;
     renderer : WebGLRenderer | null;
     composer : EffectComposer | null = null;
+    onComposer : boolean = false;
     manager : LoadingManager | null;
     invalidate :() => void ;
     before_render : Array <() => void>;
@@ -107,3 +148,6 @@ export class ContextCanvas {
     addElementScene = () =>{
     }
 }
+
+
+

@@ -28,9 +28,6 @@ let camera = new THREE.PerspectiveCamera() ;
 let cameraObject = new Camera (camera);
 const { self, contextCanvas} = setupCamera(id , cameraObject);
 
-$: {
-	self.target.position.z = 20;
-}
 
 $: {
 	self.target.fov = fov;

@@ -58,12 +58,15 @@ function init() {
 function onWindowResize() {
   
   for (let [id , value] of contextCanvas.arrayScenes ){
+  /*
     if(value.composer != null) {
-       value.composer.setSize( contextCanvas.w, contextCanvas.h );
-    }
+    //REVER ISSO  
+      //value.composer.setSize( contextCanvas.w, contextCanvas.h );
+    }*/
     if (value.camera != null && value.el != null) {
-      value.camera.resize (value.el.clientWidth,value.el.clientHeight);      
-    }
+      //value.camera.resize (value.el.clientWidth,value.el.clientHeight);
+      value.update (value.el.clientWidth,value.el.clientHeight);
+      }
   }
 
   // atualiza todas as cameras incluindo as dos views
@@ -117,44 +120,48 @@ function onPointerMoveScissor( rect: DOMRect , value : ElementScene ) {
 
 //PASSA PARA before_render
 function render() { 
-   
-  renderer.setClearColor( 0xffffff );
-  renderer.setScissorTest( false );
-  renderer.clear();
-  renderer.setClearColor( 0xe0e0e0 );
-  renderer.setScissorTest( true );
-  
-  for (let [id , value] of contextCanvas.arrayScenes ){
-    if (renderer != null && value.el !=null && value.camera !=null) {
-      // set the viewport
-      const element = value.el
-      const rect = element.getBoundingClientRect();
-      
-      if ( rect.bottom < 0 || rect.top > renderer.domElement.clientHeight ||
-          rect.right < 0 || rect.left > renderer.domElement.clientWidth ) {
-        return; // it's off screen
+  if ( contextCanvas.onComposer ) {  
+  console.log ("Aqui");  
+  }else { 
+    renderer.setClearColor( 0xffffff );
+    renderer.setScissorTest( false );
+    renderer.clear();
+    renderer.setClearColor( 0xe0e0e0 );
+    renderer.setScissorTest( true );
+    
+    for (let [id , value] of contextCanvas.arrayScenes ){
+      if (renderer != null && value.el !=null && value.camera !=null) {
+        // set the viewport
+        const element = value.el
+        const rect = element.getBoundingClientRect();
+        
+        if ( rect.bottom < 0 || rect.top > renderer.domElement.clientHeight ||
+            rect.right < 0 || rect.left > renderer.domElement.clientWidth ) {
+          return; // it's off screen
+        }
+        const width = rect.right - rect.left;
+        const height = rect.bottom - rect.top;
+        const left = rect.left;
+        const bottom = renderer.domElement.clientHeight - rect.bottom;
+        renderer.setViewport( left, bottom, width, height );
+        renderer.setScissor( left, bottom, width, height );
+        const cam = value.camera;
+        if ( value.composer == null ) {
+        renderer.render (value.scene , value.camera.target);
+        } else {
+        //REVER ISSO  
+         // value.composer.render();
+        }
+        
+        if (value.raycaster != null ) {
+          //let rectPoint = onPointerMoveScissor ( pointer , rect, value );
+          value.raycaster.update (value.position, value.camera.target);
+          //console.log(value.position);
+          //console.log (pointer)
+        }      
       }
-      const width = rect.right - rect.left;
-      const height = rect.bottom - rect.top;
-      const left = rect.left;
-      const bottom = renderer.domElement.clientHeight - rect.bottom;
-      renderer.setViewport( left, bottom, width, height );
-      renderer.setScissor( left, bottom, width, height );
-      const cam = value.camera;
-      if ( value.composer == null ) {
-      renderer.render (value.scene , value.camera.target);
-      } else {
-        value.composer.render();
-      }
-      
-      if (value.raycaster != null ) {
-        //let rectPoint = onPointerMoveScissor ( pointer , rect, value );
-        value.raycaster.update (value.position, value.camera.target);
-        //console.log(value.position);
-        //console.log (pointer)
-      }      
-    }
-  }  
+    }  
+  }
 
   /*
   if (contextCanvas.scenes. length > 0) {
@@ -203,7 +210,16 @@ function render() {
 export const createScene = (el : HTMLElement) => {
 renderer = new THREE.WebGLRenderer({ antialias: true, canvas: el });
 contextCanvas.setRenderer (renderer);
-//raycasterManager.onCanvas (el , renderer );
+//raycasterManager.onCanvas (el , renderer );  
+}
+
+export const endMount = () => {
+  for (let [id , value] of contextCanvas.arrayScenes ){
+      if (value.composer != null) {
+        contextCanvas.onComposer = true;
+      }
+  }
+  console.log (contextCanvas.onComposer);
 }
 
 //onMount 
@@ -227,6 +243,7 @@ onMount(() => {
   onWindowResize();
   animate();
   invalidate();  
+  endMount();
  });
 
 

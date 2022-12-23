@@ -41,16 +41,13 @@
    
     let pass : Pass [] = []; 
     pass[1]= new ShaderPass( GammaCorrectionShader );
-   // pass[2] =new LUTPass(params);
+    pass[2] =new LUTPass(params);
    
-   
-   
+      
     
     // maneger stores 
-    
     let ScrollControl : any;
-    
-    
+        
     export let envMap : THREE.Texture | null = null;
     let myBox = new THREE.SphereGeometry();
     let scroll;
@@ -89,8 +86,7 @@
         }
     });
     
-    
-    
+        
     onMount(async() => {
          gltf = await useGltf ('/models/gltf/Fox.glb');
          model = gltf.scene; 	
@@ -218,18 +214,46 @@ group = {myGroup}
     
 <St.Canvas frameloop = {'always'}>	
      <St.View isInterative = {true} id={'view1'} top ={'0%'} left ={'0%'} > 
-        <St.Group bind:group  position = {[5,2,0]} id={'view1'} >
+        <St.EffectComposer addPass={pass} id= {'view1'}>
+        <St.Group bind:group  position = {[0,0,0]} id={'view1'} >
         <St.Mesh isInterative = {true} on:click={exemplo} group={group} id= {'view1'} geometry = {myBox}  position = {[1,1,0]} scale ={3}  material ={chromeMaterial}/>
         <St.Mesh isInterative = {true} on:click={exemplo} group={group} id= {'view1'} geometry = {myBox}  position = {[-1,-1,0]} scale ={1} material ={chromeMaterial}/>
         <St.DirectionalLight id={'view1'} />
         </St.Group>
         <St.OrbitControls id= {'view1'}/>
+    </St.EffectComposer> 
     </St.View> 
-    <St.View id = {'view2'} top ={'50%'} left ={'0%'}> 
-        <St.PerspectiveCamera id= {'view2'} fov = {25} /> 
-        <St.OrbitControls id= {'view2'}/>
+    
+    <St.View isInterative = {true} id={'view2'} top ={'50%'} left ={'0%'} > 
+        <St.PerspectiveCamera id= {'view2'}/>   
+        <St.Group bind:group  position = {[0,0,0]} id={'view2'} >
+        <St.Mesh isInterative = {true} on:click={exemplo} group={group} id= {'view2'} geometry = {myBox}  position = {[1,1,0]} scale ={3}  material ={chromeMaterial}/>
         <St.Mesh isInterative = {true} on:click={exemplo} group={group} id= {'view2'} geometry = {myBox}  position = {[-1,-1,0]} scale ={1} material ={chromeMaterial}/>
+        <St.DirectionalLight id={'view2'} />
+        </St.Group>
+        <St.OrbitControls id= {'view2'}/>
     </St.View> 
+    
+    <St.View isInterative = {true} id={'view3'} top ={'0%'} left ={'50%'} > 
+        <St.PerspectiveCamera id= {'view3'}/>   
+        <St.Group bind:group  position = {[0,0,0]} id={'view3'} >
+        <St.Mesh isInterative = {true} on:click={exemplo} group={group} id= {'view3'} geometry = {myBox}  position = {[1,1,0]} scale ={3}  material ={chromeMaterial}/>
+        <St.Mesh isInterative = {true} on:click={exemplo} group={group} id= {'view3'} geometry = {myBox}  position = {[-1,-1,0]} scale ={1} material ={chromeMaterial}/>
+        <St.DirectionalLight id={'view3'} />
+        </St.Group>
+        <St.OrbitControls id= {'view3'}/>
+    </St.View> 
+   
+    <St.View isInterative = {true} id={'view4'} top ={'50%'} left ={'50%'} > 
+        <St.PerspectiveCamera id= {'view4'}/>   
+        <St.Group bind:group  position = {[0,0,0]} id={'view4'} >
+        <St.Mesh isInterative = {true} on:click={exemplo} group={group} id= {'view4'} geometry = {myBox}  position = {[1,1,0]} scale ={3}  material ={chromeMaterial}/>
+        <St.Mesh isInterative = {true} on:click={exemplo} group={group} id= {'view4'} geometry = {myBox}  position = {[-1,-1,0]} scale ={1} material ={chromeMaterial}/>
+        <St.DirectionalLight id={'view4'} />
+        </St.Group>
+        <St.OrbitControls id= {'view4'}/>
+    </St.View> 
+   
      
 </St.Canvas>
     

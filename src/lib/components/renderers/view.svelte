@@ -20,10 +20,11 @@ let elementeScene = new ElementScene (id)
 let sceneElement :HTMLElement;
 let renderer :THREE.WebGLRenderer;
 export let isInterative = false; 
-let pointer = new THREE.Vector2();
 
 export let top: string = "0";
 export let left : string  = "0";
+export let width: string = "50%";
+export let height : string  = "50%";
 
 //Scene
 elementeScene.scene = new THREE.Scene();
@@ -44,49 +45,9 @@ let camera = new THREE.PerspectiveCamera();
 camera.position.z = 20;
 let cameraObject = new Camera (camera);
 
-if (elementeScene.camera == null) {
-    elementeScene.camera = cameraObject;
-    elementeScene.scene.add (camera);
-}
-
-
-
-//OrbitControl
-/*
-let controls : OrbitControls;
-let callbackControl = new ControlCamera (
-    function OrbitFunction ( camera:THREE.Camera , canvas:HTMLElement ) {
-    controls = new OrbitControls(camera, canvas);
-    return controls;	
-})
-elementeScene.orbitControl = callbackControl;
-*/
-
 $:{      
 }
   
-/*
-function onPointerMove( event ) {
-    const rect = sceneElement.getBoundingClientRect();
-    pointer.x = (  event.clientX- rect.x ) / contextCanvas.el?.clientWidth   * 2 - 1;
-    pointer.y = - ( event.clientY - rect.y )/ contextCanvas.el?.clientHeight  * 2 + 1;
-}
-*/
-
-/*
-function onPointerMove( event ) {
-    pointer.x = ( event.clientX / innerWidth ) * 2 - 1;
-    pointer.y = - ( event.clientY /innerHeight ) * -2 + 1;
-}
-//fazendo nada
-function onPointerMove( event ) {
-    const rect = sceneElement.getBoundingClientRect();
-    pointer.x = ( event.clientX / innerWidth ) * 2 - 1;
-    pointer.y = - ( event.clientY /innerHeight ) * 2 + 1;
-}
-
-*/
-
 let canvasClientX : number ;
 let canvasClientY : number ;
 
@@ -96,48 +57,74 @@ function onPointerMoveWindow( event ) {
 }
 
 function onPointerMove( event ) {
-    if ( elementeScene.el !=null && elementeScene.camera  !=null) {
-        pointer = new THREE.Vector2(10000,10000);
-        const element = elementeScene.el
-        const rect = element.getBoundingClientRect();
-        let canvaswidth = element.clientWidth;
-        let canvasHeight = element.clientHeight;
-        let posX = ( canvasClientX - rect.left ) * canvaswidth / rect.width;
-        let posY = ( canvasClientY - rect.top ) * canvasHeight / rect.height;
-        
-        pointer.x = (posX  /rect.width ) * 2 - 1;
-        pointer.y = (posY /rect.height ) * -2 + 1;
-        elementeScene.position = pointer;
-        //console.log (pointer);
+    for (let [id , value] of contextCanvas.arrayScenes ){
+         if ( value.el !=null && value.camera  !=null) {
+            let pointer = new THREE.Vector2();
+            pointer = new THREE.Vector2(10000,10000);
+            const element = value.el
+            const rect = element.getBoundingClientRect();
+            let canvaswidth = element.clientWidth;
+            let canvasHeight = element.clientHeight;
+            let posX = ( canvasClientX - rect.left ) * canvaswidth / rect.width;
+            let posY = ( canvasClientY - rect.top ) * canvasHeight / rect.height;
+            
+            pointer.x = (posX  /rect.width ) * 2 - 1;
+            pointer.y = (posY /rect.height ) * -2 + 1;
+            value.position = pointer;
+            //console.log (pointer);
+        }
     }
 }
 
-
-
+/*
+function onPointerMove( event ) {
+    for (let [id , value] of contextCanvas.arrayScenes ){
+        if ( elementeScene.el !=null && elementeScene.camera  !=null) {
+            pointer = new THREE.Vector2(10000,10000);
+            const element = elementeScene.el
+            const rect = element.getBoundingClientRect();
+            let canvaswidth = element.clientWidth;
+            let canvasHeight = element.clientHeight;
+            let posX = ( canvasClientX - rect.left ) * canvaswidth / rect.width;
+            let posY = ( canvasClientY - rect.top ) * canvasHeight / rect.height;
+            
+            pointer.x = (posX  /rect.width ) * 2 - 1;
+            pointer.y = (posY /rect.height ) * -2 + 1;
+            elementeScene.position = pointer;
+            //console.log (pointer);
+        }
+    }
+}
+*/
 
 
 function init () {  
-    //HTMLElement
-    self.el = sceneElement;
+
+    if (elementeScene.camera == null) {
+    elementeScene.camera = cameraObject;
+    elementeScene.scene.add (camera);
+    }
     
-    //Renderer
-    //renderer = new THREE.WebGLRenderer({ antialias: true});
-    //self.renderer = renderer;
+    self.el = sceneElement;
     self.renderer = contextCanvas.renderer;
     
     if (isInterative  && self.renderer){
         raycasterManager = new RaycasterManager(); 
         raycasterManager.onCanvas (self.el , self.renderer );
-        //raycasterManager.pointer = pointer;
         elementeScene.raycaster = raycasterManager;   
     }
     
     if (elementeScene.orbitControl != null) {
     self.setControl();
     }
+        
+    // Composer////////////////////////////////
+    if (elementeScene.composer && sceneElement != null) {
+        elementeScene.composer.initComposer(elementeScene.renderer, id, contextCanvas.w, contextCanvas.h);
+        console.log (elementeScene.composer);
+    }
     
-    
-    // Composer
+    /*
     const target = new THREE.WebGLRenderTarget( contextCanvas.w , contextCanvas.h, 
     {   minFilter: THREE.LinearFilter,
         magFilter: THREE.LinearFilter,
@@ -165,58 +152,14 @@ function init () {
             self.composer.addPass(pass[i]);
             }
         }
-    }    
+    }  */  
 }
 
 
 
 
 
-function onWindowResize() {
 
-}
-
-
-
-/*
-//const scene = new THREE.Scene();
-//const { self, contextCanvas } = setupScenes(scene);  
-
-function init () {
-if (self && contextCanvas.renderer) {
-    self.userData.element = sceneElement;
-    //camera
-    const camera = new THREE.PerspectiveCamera( 50, 1, 1, 10 );
-    camera.position.z = 2;
-    self.userData.camera = camera;
-    //Control
-    const controls = new OrbitControls( self.userData.camera, self.userData.element );
-    controls.minDistance = 2;
-    controls.maxDistance = 5;
-    controls.enablePan = false;
-    controls.enableZoom = false;
-    self.userData.controls = controls;
-    
-    //mesh
-    const material = new THREE.MeshStandardMaterial( {
-    color new THREE.Color().setHSL( Math.random(), 1, 0.75 ),
-    roughness: 0.5,
-    metalness: 0,
-    flatShading: true
-    });
-    const geometry =  new THREE.SphereGeometry( 1, 1, 1 );
-    self.add( new THREE.Mesh( geometry, material ) );
-    //light
-    self.add( new THREE.HemisphereLight( 0xaaaaaa, 0x444444 ) );
-    const light = new THREE.DirectionalLight( 0xffffff, 0.5 );
-    light.position.set( 1, 1, 1 );
-    self.add( light );
- 
-    }    
-}*/
-
-$: {    
-}
 
 onMount(() => {  
     init ();
@@ -227,7 +170,7 @@ onMount(() => {
 
 <svelte:window on:mousemove={onPointerMoveWindow}/>
 
-<div class="sceneElement" bind:this={sceneElement} style='--top:{top}; --left:{left}' on:mousemove={onPointerMove} on:resize={onWindowResize}>
+<div class="sceneElement" bind:this={sceneElement} style='--top:{top}; --left:{left}; --width:{width}; --height:{height};' on:mousemove={onPointerMove} >
 <slot>
 </slot>
 </div>
@@ -236,8 +179,8 @@ onMount(() => {
 	.sceneElement {
 		content: '';
 		position: fixed;
-		width: 40%;
-		height: 40%;
+		width: var(--width);
+		height: var(--height);
 		top: var(--top);
 		left: var(--left);
 	}
