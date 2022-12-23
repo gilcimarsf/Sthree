@@ -24,6 +24,7 @@
     import { LUT3dlLoader } from 'three/examples/jsm/loaders/LUT3dlLoader.js';
     import { GammaCorrectionShader } from 'three/examples/jsm/shaders/GammaCorrectionShader.js';
   import View from '$lib/components/renderers/view.svelte';
+  import Boxes from '$lib/components/Objects/boxes.svelte';
    
     //Lut infos
     const width = 512;
@@ -66,7 +67,7 @@
     
     function exemplo (event : any) {
    console.log ("Clicou");    
-    document.body.style.cursor = 'pointer';
+    //document.body.style.cursor = 'pointer';
     }
     
     function play (event : any) {
@@ -175,9 +176,6 @@ group = {myGroup}
        
     </St.Canvas>
     
-   
-    
-
  <Base_pos/>
  
  <Base_Splits/>
@@ -200,14 +198,38 @@ group = {myGroup}
          </St.EffectComposer>        
     </St.Canvas>
     
+    <St.Canvas frameloop = {'always'}>	
+    <St.ScrollControls> 
+    <St.View> 
+    </St.View>     
+    </St.ScrollControls>   
+        <St.View id = {'gil'}> 
+    </St.View>   
+</St.Canvas>
+<St.PerspectiveCamera id= {'view1'}/>   
+  <St.Boxes id = {'view2'} isInterative = {true} on:click={exemplo}/>
+  
+
+    
    */     
    
+
     </script>
     
-    <St.Canvas frameloop = {'always'}>	
-        <St.View>
-        </St.View>                 
-    </St.Canvas>
+<St.Canvas frameloop = {'always'}>	
+     <St.View isInterative = {true} id={'view1'} top ={'0%'} left ={'0%'} > 
+        <St.Group bind:group  position = {[5,2,0]} id ={'view1'} >
+        <St.Mesh isInterative = {true} on:click={exemplo} group={group} id= {'view1'} geometry = {myBox}  position = {[1,1,0]} scale ={3}  material ={chromeMaterial}/>
+        <St.Mesh isInterative = {true} on:click={exemplo} group={group} id= {'view1'} geometry = {myBox}  position = {[-1,-1,0]} scale ={1} material ={chromeMaterial}/>
+        </St.Group>
+        <St.OrbitControls id= {'view1'}/>
+    </St.View> 
+    <St.View id = {'view2'} top ={'50%'} left ={'0%'}> 
+        <St.PerspectiveCamera id= {'view2'} fov = {25} /> 
+        <St.OrbitControls id= {'view2'}/>
+    </St.View> 
+     
+</St.Canvas>
     
 
     

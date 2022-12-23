@@ -5,7 +5,7 @@ import { set_scenes, setRaycaster } from '$lib/utils/context.js';
 import { ContextCanvas } from '$lib/core/manager.js';
 import {RaycasterManager} from '$lib/core/raycaster.js'
 //import { loadingManager } from '$lib/utils/loadingManager.js';
- 
+import type { ElementScene } from '$lib/core/manager.js';
 
 $: outerWidth = 0
 $: innerWidth = 0
@@ -26,6 +26,7 @@ const radius = 100;
 
 export let frameloop : 'always' | 'demand' | 'never' = 'demand';
 let frame : number | null = null;
+
 
 const run = (fn) => fn();
 const invalidate = () => {
@@ -50,12 +51,25 @@ init();
 // onMount/createScene
 function init() {
   contextCanvas.scene.background = new THREE.Color( 0xf0f0f0 );
-    raycasterManager = setRaycaster(new RaycasterManager());  
+    //raycasterManager = setRaycaster(new RaycasterManager());  
 }
 
 //onMount / animate
 function onWindowResize() {
   
+  for (let [id , value] of contextCanvas.arrayScenes ){
+    if(value.composer != null) {
+       value.composer.setSize( contextCanvas.w, contextCanvas.h );
+    }
+    if (value.camera != null && value.el != null) {
+      value.camera.resize (value.el.clientWidth,value.el.clientHeight);      
+    }
+  }
+
+  // atualiza todas as cameras incluindo as dos views
+  contextCanvas.update (innerWidth , innerHeight , window.devicePixelRatio);
+  
+  //provavel tenha deletar tudo ai em baixo.
     if (  contextCanvas.camera != null) {
       contextCanvas.camera.target.aspect = innerWidth / innerHeight;
       contextCanvas.camera.target.updateProjectionMatrix();
@@ -67,26 +81,82 @@ function onWindowResize() {
     }
   }
 
-//
+
 function onPointerMove( event ) {
     pointer.x = ( event.clientX / innerWidth ) * 2 - 1;
     pointer.y = - ( event.clientY /innerHeight ) * 2 + 1;
+    contextCanvas.canvasClientX = event.clientX;
+    contextCanvas.canvasClientX = event.clientY;    
 }
 
-function rotacionarTudo () {
-  theta += 0.1;
-    if (  contextCanvas.camera != null) {
-     
-    contextCanvas.camera.target.position.x = radius * Math.sin( THREE.MathUtils.degToRad( theta ) );
-    contextCanvas.camera.target.position.y = radius * Math.sin( THREE.MathUtils.degToRad( theta ) );
-    contextCanvas.camera.target.position.z = radius * Math.cos( THREE.MathUtils.degToRad( theta ) );
-    contextCanvas.camera.target.lookAt( contextCanvas.scene.position );
-    contextCanvas.camera.target.updateMatrixWorld();
+
+/*
+function onPointerMove( event ) {
+  for (let [id , value] of contextCanvas.arrayScenes ){
+      if (renderer != null && value.el !=null && value.camera !=null) {
+      let myPointer = new THREE.Vector2(10000,10000);
+      const element = value.el
+      const rect = element.getBoundingClientRect();
+      let canvaswidth = element.clientWidth;
+      let canvasHeight = element.clientHeight;
+      let posX = ( event.clientX - rect.left ) * canvaswidth / rect.width;
+      let posY = - ( event.clientY - rect.top ) * canvasHeight / rect.height;
+            
+      myPointer.x = (posX  /rect.width ) * 2 - 1;
+      myPointer.y = (posY /rect.height ) * -2 + 1;
+      value.position = myPointer;
+      }
   }
 }
+/*
+function onPointerMoveScissor( rect: DOMRect , value : ElementScene ) {
+    pointer.x = ( event.clientX / innerWidth ) * 2 - 1;
+    pointer.y = - ( event.clientY /innerHeight ) * 2 + 1;
+}*/
+
 
 //PASSA PARA before_render
-function render() {
+function render() { 
+   
+  renderer.setClearColor( 0xffffff );
+  renderer.setScissorTest( false );
+  renderer.clear();
+  renderer.setClearColor( 0xe0e0e0 );
+  renderer.setScissorTest( true );
+  
+  for (let [id , value] of contextCanvas.arrayScenes ){
+    if (renderer != null && value.el !=null && value.camera !=null) {
+      // set the viewport
+      const element = value.el
+      const rect = element.getBoundingClientRect();
+      
+      if ( rect.bottom < 0 || rect.top > renderer.domElement.clientHeight ||
+          rect.right < 0 || rect.left > renderer.domElement.clientWidth ) {
+        return; // it's off screen
+      }
+      const width = rect.right - rect.left;
+      const height = rect.bottom - rect.top;
+      const left = rect.left;
+      const bottom = renderer.domElement.clientHeight - rect.bottom;
+      renderer.setViewport( left, bottom, width, height );
+      renderer.setScissor( left, bottom, width, height );
+      const cam = value.camera;
+      if ( value.composer == null ) {
+      renderer.render (value.scene , value.camera.target);
+      } else {
+        value.composer.render();
+      }
+      
+      if (value.raycaster != null ) {
+        //let rectPoint = onPointerMoveScissor ( pointer , rect, value );
+        value.raycaster.update (value.position, value.camera.target);
+        //console.log(value.position);
+        //console.log (pointer)
+      }      
+    }
+  }  
+
+  /*
   if (contextCanvas.scenes. length > 0) {
     renderer.setClearColor( 0xffffff );
     renderer.setScissorTest( false );
@@ -123,9 +193,9 @@ function render() {
           }
     }  
   }
-  
+  */
   if(  contextCanvas.camera != null) {
-    raycasterManager.update (pointer, contextCanvas.camera.target);
+    //raycasterManager.update (pointer, contextCanvas.camera.target);
   }    
 }
 
@@ -133,7 +203,7 @@ function render() {
 export const createScene = (el : HTMLElement) => {
 renderer = new THREE.WebGLRenderer({ antialias: true, canvas: el });
 contextCanvas.setRenderer (renderer);
-raycasterManager.onCanvas (el , renderer );
+//raycasterManager.onCanvas (el , renderer );
 }
 
 //onMount 
@@ -157,7 +227,7 @@ onMount(() => {
   onWindowResize();
   animate();
   invalidate();  
-});
+ });
 
 
 

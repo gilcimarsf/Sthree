@@ -2,11 +2,12 @@
 import * as THREE from 'three';
 import { onDestroy, onMount } from 'svelte';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
-import { get_scenes } from '$lib/utils/context.js';
+import { getElementScene } from '$lib/utils/context.js';
 import { ControlCamera} from '$lib/core/objects.js';
 import { createEventDispatcher } from 'svelte';
 import { onFrame } from '$lib/utils/lifecycle.js';
 
+export let id : string  = "default";
 
 	export let autoRotate = false;
 	export let autoRotateSpeed = 2;
@@ -41,26 +42,26 @@ import { onFrame } from '$lib/utils/lifecycle.js';
    
 	let controls : OrbitControls;
 	
-	const {contextCanvas} = get_scenes ();
+	const {elementScene, contextCanvas} = getElementScene (id);
+	
 	let control = new ControlCamera (
         function OrbitFunction ( camera:THREE.Camera , canvas:HTMLElement ) {
 		controls = new OrbitControls(camera, canvas);
 		return controls;	
 	})
-	contextCanvas.orbitControl = control;
-	contextCanvas.setControl();
+	
+	if (elementScene) {
+	elementScene.orbitControl = control;
+	elementScene.setControl();
     contextCanvas.invalidate();
-  
+   	}
     /*
     let control = new ControlCamera (
         function OrbitFunction ( camera:THREE.Camera , canvas:HTMLElement ) {
 		controls = new OrbitControls(camera, canvas);
 	})
 	*/
-	
-	contextCanvas.orbitControl = control;
-	
-	
+		
 	$: if (controls) {
 	
 		controls.autoRotate = autoRotate;

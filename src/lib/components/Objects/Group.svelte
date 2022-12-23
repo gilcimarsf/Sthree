@@ -7,13 +7,16 @@ import { setupSimplesMesh } from '$lib/utils/context.js';
 import type { Object3d } from '$lib/core/objects.js';
 import { createEventDispatcher } from 'svelte';
 
+
+export let id : string  = "default";
 export let position = defaults.position;
 export let rotation = defaults.rotation;
 export let scale = defaults.scale;
 export let renderOrder = 0;
 export let group : THREE.Group = new THREE.Group();
 let onSlot : boolean  = false ;
-const { self, contextCanvas, raycaster, parent } = setupSimplesMesh (group);
+
+const { self, contextCanvas, raycaster, parent } = setupSimplesMesh (id , group);
 
 $: if(self){
     self.renderOrder = renderOrder;

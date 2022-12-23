@@ -20,8 +20,27 @@ export class Camera {
         }
     resize (W : number, H : number) {
        this.target.aspect= W /H ;
+       this.target.updateProjectionMatrix();
     }
  }
+
+
+
+//não usando.
+//não usando.
+//não usando.
+ export class Renderer {
+    target : THREE.PerspectiveCamera;
+    constructor(target: THREE.PerspectiveCamera ) {
+            this.target = target;            
+        }
+    resize (W : number, H : number) {
+       this.target.aspect= W /H ;
+    }
+ }
+
+
+
 
  export class Object3d {
     target : THREE.Mesh | THREE.Object3D | THREE.Group;

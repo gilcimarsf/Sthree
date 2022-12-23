@@ -3,6 +3,7 @@ import * as THREE from 'three';
 import { setupCamera } from '$lib/utils/context.js';
 import { Camera} from '$lib/core/objects.js';
 
+export let id : string  = "default";
 export let fov = 45;
 export let near = 0.1;
 export let far = 2000;
@@ -18,22 +19,24 @@ interface viewOffset {
 }
  
 export let viewOffset : viewOffset | undefined = undefined;
-export let position = [0, 0, 5];
+export let position = [0, 0, 10];
 export let target = [0, 0, 0];
 const target_vector = new THREE.Vector3();
 
 
-let camera = new THREE.PerspectiveCamera( );
-let cameraObject = new Camera ( camera);
-const { self, contextCanvas } = setupCamera(cameraObject);
+let camera = new THREE.PerspectiveCamera() ;
+let cameraObject = new Camera (camera);
+const { self, contextCanvas} = setupCamera(id , cameraObject);
 
+$: {
+	self.target.position.z = 20;
+}
 
 $: {
 	self.target.fov = fov;
 	self.target.near = near;
 	self.target.far = far;
 	self.target.zoom = zoom;
-	self.target.position.z = 3;		
 	
 	if (viewOffset) {
 		self.target.setViewOffset(
@@ -51,6 +54,7 @@ $: {
 
 	self.target.updateProjectionMatrix();
 	//contextCanvas.invalidate();
+	
 }
 
 

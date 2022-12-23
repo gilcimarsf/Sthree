@@ -86,9 +86,11 @@ export class RaycasterManager {
     }
     
     update = (pointer : THREE.Vector2, camera : THREE.Camera ) =>{
+        //console.log (pointer)
         this.pointer = pointer;
         this.camera = camera;
-                
+        let direcition = this.camera.getWorldDirection;
+        this.raycaster.setFromCamera (pointer , camera);
         this.raycaster.setFromCamera (pointer , camera);
         if  (this.object3d != null) {
             this.object3d.forEach ((object : Object3d) => {

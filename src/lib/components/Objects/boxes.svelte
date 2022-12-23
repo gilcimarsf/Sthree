@@ -4,8 +4,8 @@
   import { Object3d } from '$lib/core/objects.js';
   
   const geometry = new THREE.BoxGeometry( 20, 20, 20 );
+  export let id : string  = "default";
   
-
   for ( let i = 0; i < 100; i ++ ) {
     const object = new THREE.Mesh( geometry, new THREE.MeshLambertMaterial( { color: Math.random() * 0xffffff } ) );
 
@@ -22,7 +22,7 @@
     object.scale.z = Math.random() + 0.5;
     
     let myObject = new Object3d ( object);
-    const { self, contextCanvas } = setupMesh(myObject);
+    const { self, contextCanvas } = setupMesh( id , myObject);
       
     self.target.addEventListener('mouseover', (event) => {
       console.log(event);
@@ -55,5 +55,7 @@
     self.target.addEventListener('click', (event) => {
       console.log(event);
     });
+    
+    
 }    
 </script>
