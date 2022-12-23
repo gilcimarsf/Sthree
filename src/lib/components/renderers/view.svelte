@@ -25,28 +25,15 @@ let pointer = new THREE.Vector2();
 export let top: string = "0";
 export let left : string  = "0";
 
-
-
 //Scene
 elementeScene.scene = new THREE.Scene();
 
 
-//adicionar extras.
- //mesh
- const material = new THREE.MeshStandardMaterial( {
-    color: new THREE.Color().setHSL( Math.random(), 1, 0.75 ),
-    roughness: 0.5,
-    metalness: 0,
-    flatShading: true
-    });
-    const geometry =  new THREE.SphereGeometry( 1, 1, 1 );
-    let mesh = new THREE.Mesh( geometry, material )
-    elementeScene.scene.add(mesh );
-    //light
+//light
     elementeScene.scene.add( new THREE.HemisphereLight( 0xaaaaaa, 0x444444 ) );
     const light = new THREE.DirectionalLight( 0xffffff, 0.5 );
     light.position.set( 1, 1, 1 );
-    elementeScene.scene.add( light );
+    //elementeScene.scene.add( light );
 
 //INCLUDE ContextCanvas
 const { self, contextCanvas } = setupElementScene(id, elementeScene); 

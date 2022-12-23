@@ -37,23 +37,23 @@
 	$: if(myObject) {
 			
 	    myObject.target.addEventListener('mouseover', (event) => {
-		console.log(event);
+		//console.log(event);
 		dispatch('mouseover', event);
 		});            
 		myObject.target.addEventListener('mouseout', (event) => {
-			console.log(event);
+			//console.log(event);
 			dispatch('mouseout', event);
 		});
 		myObject.target.addEventListener('mousedown', (event) => {
-			console.log(event);
+			//console.log(event);
 			dispatch('mousedown', event);
 		});
 		myObject.target.addEventListener('mouseup', (event) => {
-			console.log(event);
+			//console.log(event);
 			dispatch('mouseup', event);
 		});
 		myObject.target.addEventListener('click', (event) => {
-			console.log(event);
+			//console.log(event);
 			dispatch('click', event);
 		});
 	}	

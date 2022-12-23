@@ -2,7 +2,7 @@
     import * as THREE from 'three';
     import { setupSimplesMesh } from '$lib/utils/context.js';
    
-    
+	export let id : string  = "default";
     export let color : string | number | THREE.Color = 0xffffff;
 	export let intensity = 1;
     export let position = [0, 1, 0];
@@ -10,11 +10,8 @@
     export let shadow : boolean |THREE.DirectionalLightShadow = true;
    
     
-    const light = new THREE.DirectionalLight( 0xffffff, 1 );
-    light.position.set( 1, 1, 1 ).normalize();
-
-    const { self, contextCanvas } = setupSimplesMesh(light);
-    
+    const light = new THREE.DirectionalLight( 0xffffff, 1);
+    const { self, contextCanvas, elementScene } = setupSimplesMesh(id , light);
     
     $: {
 		self.color.set(color);

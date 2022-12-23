@@ -16,7 +16,7 @@ export let renderOrder = 0;
 export let group : THREE.Group = new THREE.Group();
 let onSlot : boolean  = false ;
 
-const { self, contextCanvas, raycaster, parent } = setupSimplesMesh (id , group);
+const { self, contextCanvas } = setupSimplesMesh (id , group);
 
 $: if(self){
     self.renderOrder = renderOrder;

@@ -218,15 +218,17 @@ group = {myGroup}
     
 <St.Canvas frameloop = {'always'}>	
      <St.View isInterative = {true} id={'view1'} top ={'0%'} left ={'0%'} > 
-        <St.Group bind:group  position = {[5,2,0]} id ={'view1'} >
+        <St.Group bind:group  position = {[5,2,0]} id={'view1'} >
         <St.Mesh isInterative = {true} on:click={exemplo} group={group} id= {'view1'} geometry = {myBox}  position = {[1,1,0]} scale ={3}  material ={chromeMaterial}/>
         <St.Mesh isInterative = {true} on:click={exemplo} group={group} id= {'view1'} geometry = {myBox}  position = {[-1,-1,0]} scale ={1} material ={chromeMaterial}/>
+        <St.DirectionalLight id={'view1'} />
         </St.Group>
         <St.OrbitControls id= {'view1'}/>
     </St.View> 
     <St.View id = {'view2'} top ={'50%'} left ={'0%'}> 
         <St.PerspectiveCamera id= {'view2'} fov = {25} /> 
         <St.OrbitControls id= {'view2'}/>
+        <St.Mesh isInterative = {true} on:click={exemplo} group={group} id= {'view2'} geometry = {myBox}  position = {[-1,-1,0]} scale ={1} material ={chromeMaterial}/>
     </St.View> 
      
 </St.Canvas>
