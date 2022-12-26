@@ -16,35 +16,22 @@
   
    
    //postProcessing   
-    import { EffectComposer, Pass } from 'three/examples/jsm/postprocessing/EffectComposer.js';
+    import type { EffectComposer, Pass } from 'three/examples/jsm/postprocessing/EffectComposer.js';
     import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js';
     import { ShaderPass } from 'three/examples/jsm/postprocessing/ShaderPass.js';
     import { LUTPass} from 'three/examples/jsm/postprocessing/LUTPass.js';
     import { LUTCubeLoader } from 'three/examples/jsm/loaders/LUTCubeLoader.js';
     import { LUT3dlLoader } from 'three/examples/jsm/loaders/LUT3dlLoader.js';
     import { GammaCorrectionShader } from 'three/examples/jsm/shaders/GammaCorrectionShader.js';
-  import View from '$lib/components/renderers/view.svelte';
-  import Boxes from '$lib/components/Objects/boxes.svelte';
+    import View from '$lib/components/renderers/view.svelte';
+    import Boxes from '$lib/components/Objects/boxes.svelte';
    
-    //Lut infos
-    const width = 512;
-    const height = 512;
-    const size = width * height;
-    //let lutMap = new LUT3dlLoader().load( 'luts/Bourbon 64.CUBE' , function ( result ) { lutMap = result});
-    //'Bourbon 64.CUBE'
-    const lutTexture = new THREE.DataTexture( new Uint8Array( 4 * size ), width, height );
-    const params = {
-    lut: lutTexture,
-    intensity: 1,
-    };
-   
+       
+    
    
     let pass : Pass [] = []; 
     pass[1]= new ShaderPass( GammaCorrectionShader );
-    pass[2] =new LUTPass(params);
    
-      
-    
     // maneger stores 
     let ScrollControl : any;
         

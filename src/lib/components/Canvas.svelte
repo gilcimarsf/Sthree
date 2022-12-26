@@ -3,7 +3,7 @@ import * as THREE from 'three';
 import { onDestroy, onMount } from 'svelte';
 import { set_scenes, setRaycaster } from '$lib/utils/context.js';
 import { ContextCanvas } from '$lib/core/manager.js';
-import {RaycasterManager} from '$lib/core/raycaster.js'
+import type {RaycasterManager} from '$lib/core/raycaster.js'
 //import { loadingManager } from '$lib/utils/loadingManager.js';
 import type { ElementScene } from '$lib/core/manager.js';
 
@@ -58,15 +58,13 @@ function init() {
 function onWindowResize() {
   
   for (let [id , value] of contextCanvas.arrayScenes ){
-  /*
-    if(value.composer != null) {
-    //REVER ISSO  
-      //value.composer.setSize( contextCanvas.w, contextCanvas.h );
-    }*/
+  
+    if(value.composer != null && value.composer != null && value.el != null) {
+      //value.composer.setSiz(e value.w, value.h );
+    }
     if (value.camera != null && value.el != null) {
-      //value.camera.resize (value.el.clientWidth,value.el.clientHeight);
       value.update (value.el.clientWidth,value.el.clientHeight);
-      }
+    }
   }
 
   // atualiza todas as cameras incluindo as dos views
@@ -117,9 +115,11 @@ function onPointerMoveScissor( rect: DOMRect , value : ElementScene ) {
     pointer.y = - ( event.clientY /innerHeight ) * 2 + 1;
 }*/
 
+const delta = 0.01;
 
 //PASSA PARA before_render
 function render() { 
+  const time = Date.now() * 0.0004;
   if ( contextCanvas.onComposer ) {  
   console.log ("Aqui");  
   }else { 
@@ -146,21 +146,18 @@ function render() {
         renderer.setViewport( left, bottom, width, height );
         renderer.setScissor( left, bottom, width, height );
         const cam = value.camera;
+        
         if ( value.composer == null ) {
         renderer.render (value.scene , value.camera.target);
         } else {
-        //REVER ISSO  
-         // value.composer.render();
-        }
-        
+        value.composer.render(delta);
+        }        
         if (value.raycaster != null ) {
-          //let rectPoint = onPointerMoveScissor ( pointer , rect, value );
           value.raycaster.update (value.position, value.camera.target);
-          //console.log(value.position);
-          //console.log (pointer)
-        }      
+        }    
+        
       }
-    }  
+    }
   }
 
   /*
@@ -213,15 +210,6 @@ contextCanvas.setRenderer (renderer);
 //raycasterManager.onCanvas (el , renderer );  
 }
 
-export const endMount = () => {
-  for (let [id , value] of contextCanvas.arrayScenes ){
-      if (value.composer != null) {
-        contextCanvas.onComposer = true;
-      }
-  }
-  console.log (contextCanvas.onComposer);
-}
-
 //onMount 
 const animate = () => {
 //console.log(contextScenes.frame);
@@ -243,14 +231,9 @@ onMount(() => {
   onWindowResize();
   animate();
   invalidate();  
-  endMount();
+
  });
 
-
-
-$: if (renderer) {
- //invalidate();
-}
 </script>
 
 <svelte:window bind:innerWidth bind:outerWidth bind:innerHeight bind:outerHeight />

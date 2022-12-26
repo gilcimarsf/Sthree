@@ -5,72 +5,62 @@ import * as THREE from 'three';
 import { get_scenes } from "../utils/context";
 import { EffectComposer, Pass } from 'three/examples/jsm/postprocessing/EffectComposer.js';
 import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js';
-import { Composer } from '$lib/core/manager.js';
 
-export let id : string  = "default";
+//ADICIONAIS PARA TESTES
+import { ShaderPass } from 'three/examples/jsm/postprocessing/ShaderPass.js';
+import { GammaCorrectionShader } from 'three/examples/jsm/shaders/GammaCorrectionShader.js';
+
 const { contextCanvas } = get_scenes();  
-let composer : EffectComposer;
+$: elementScene = contextCanvas.arrayScenes.get(id); 
+export let id : string  = "default";
+let composer : EffectComposer 
+
 export let addPass : Pass[] = []; 
 
-$: elementScene = contextCanvas.arrayScenes.get(id);
+function init() { 
 
-
-/*
-
-*/
-    
-function init() {       
-    
-    if (elementScene) {
-        elementScene.composer = new Composer(()=>{ onAddPass ()});
-        elementScene.onComposer = true; 
-    }
-}
-
-function onAddPass() {  
-console.log ("estou sendo chamado via callbak...")
-  
-if(elementScene != null && elementScene.renderer != null) {        
-        /*
-        composer = new EffectComposer( elementScene.renderer, target );
-        composer.setPixelRatio( elementScene.devicePixelRatio );
-        composer.setSize( elementScene.w, elementScene.h );
-        
-        if (contextCanvas.camera != null) {
-            composer.addPass( new RenderPass( contextCanvas.scene, contextCanvas.camera.target ) );
+   if(elementScene != null ) {
+         if ( elementScene.renderer != null) {
+            
+            composer = new EffectComposer( elementScene.renderer );
+            composer.setPixelRatio( elementScene.w / elementScene.h );
+            composer.setSize( elementScene.w,  elementScene.h );
         }
-                
-        for (let i = 0; i < addPass.length; i++) {
-            if (addPass[i] == undefined) {}
-            else {
-            console.log(addPass[i]);
-            composer.addPass(addPass[i]);
-            }
-        }*/
-           
     }
 }
-
-
-addEventListener('useComposer', (event) => {
-console.log (event)
-}); 
 
 $: if (elementScene) {
+    elementScene.composer = composer;
+    elementScene.onComposer = true;
 }
-
-$: if (composer) {
-    contextCanvas.composer = composer;
-}
-
-afterUpdate(() => {
-    init();
-});
+$: if (elementScene && elementScene.camera ) {
+    console.log(elementScene.composer);
+    console.log(elementScene.w , elementScene.h);
+    const target = new THREE.WebGLRenderTarget( elementScene.w , elementScene.h, 
+    	{
+            minFilter: THREE.LinearFilter,
+            magFilter: THREE.LinearFilter,
+            format: THREE.RGBAFormat,
+    		encoding: THREE.sRGBEncoding
+    });
     
+   elementScene.composer?.reset (target);
+   const renderBackground = new RenderPass( elementScene.scene, elementScene.camera.target ) ;
+   composer.addPass( renderBackground);
+   composer.addPass( new ShaderPass( GammaCorrectionShader ) )
+   
+   for (let i = 0; i < addPass.length; i++) {
+        if (addPass[i] == undefined) {}
+        else {
+        composer.addPass(addPass[i]);
+        }
+    }
+}
+
 onMount(() => {
     init();
-});
-    
-    
-</script>    
+})
+
+</script>   
+
 <slot></slot>

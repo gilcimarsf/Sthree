@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 import type { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
 import type  {Camera, Object3d, ControlCamera} from '$lib/core/objects' 
-import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer.js';
+import type{ EffectComposer, Pass} from 'three/examples/jsm/postprocessing/EffectComposer.js';
 import type {RaycasterManager} from '$lib/core/raycaster.js'
 
 import type {
@@ -11,32 +11,6 @@ import type {
     LoadingManager,
 } from "three";
 
-export class Composer {
-    composer : EffectComposer | null =null;   
-    target :THREE.WebGLRenderTarget | null =null; 
-    //el :HTMLElement | null =null; 
-    Callback : () => void ;
-    constructor(Callback: () => void) {
-        this.Callback = Callback;            
-    }        
-    initComposer (renderer : THREE.WebGLRenderer | null,  key: string, innerWidth: number , innerHeight: number )  {
-        //this.el = el;
-        if  (renderer != null) {
-        this.target = new THREE.WebGLRenderTarget( innerWidth , innerHeight, 
-            {
-                minFilter: THREE.LinearFilter,
-                magFilter: THREE.LinearFilter,
-                format: THREE.RGBAFormat,
-                encoding: THREE.sRGBEncoding
-        });
-        this.composer = new EffectComposer( renderer, this.target );  
-        this.composer.setPixelRatio( innerWidth / innerHeight );
-        this.composer.setSize( innerWidth, innerHeight );
-        this.Callback();
-        }
-     }   
- }
- 
  
 export class ElementScene {
     scene = new THREE.Scene ();
@@ -44,7 +18,7 @@ export class ElementScene {
     camera : Camera | null = null ;
     orbitControl : ControlCamera | null = null ; 
     renderer : WebGLRenderer | null = null ;
-    composer : Composer | null = null ;
+    composer : EffectComposer| null =null; 
     onComposer : boolean = false;
     raycaster: RaycasterManager | null = null ;
     position : THREE.Vector2 = new THREE.Vector2(10000,10000);
@@ -71,8 +45,7 @@ export class ElementScene {
     
 }
 
-type mapArrayScenes = {
-    
+type mapArrayScenes = {    
 }
 
 export class ContextCanvas {
