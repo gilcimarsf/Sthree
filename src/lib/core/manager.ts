@@ -35,18 +35,17 @@ export class ElementScene {
     setControl = () => {
         if (this.orbitControl && this.camera && this.renderer && this.el )  {
             this.orbitControl.Callback (this.camera.target,this.el)
-            console.log("fui chamado Gil!!!");
         } 
     }
     
     update = ( w: number , h : number)=> {
-        this.w = w;
+         this.w = w;
         this.h = h;
         this.devicePixelRatio = w /h ;
         this.camera?.resize (w,h);
         if (this.composer != null) {
             this.composer.setSize (w , h);
-        }
+        }      
     }
     
 }

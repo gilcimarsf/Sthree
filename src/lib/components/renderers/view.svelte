@@ -26,12 +26,12 @@ $: outerWidth = 0
 $: innerWidth = 0
 $: outerHeight = 0
 $: innerHeight = 0
+$: clientWidth = 0
+$: clientHeight = 0
 
 const scene = sceneContext (id , new THREE.Scene())
 let  {elementScene, contextCanvas} =  setElementScene (id ,new ElementScene (id, scene ));
 elementScene.renderer = contextCanvas.renderer;
-console.log (contextCanvas.renderer);
-
 
 function onPointerMoveWindow( event ) {
     canvasClientX = event.clientX;
@@ -77,7 +77,6 @@ function onPointerMove( event ) {
 
 function init () {  
     elementScene.el = elElement;
-    elementScene.update (innerWidth ,innerHeight );
     
     if (elementScene.camera == null) {
     //Camera
@@ -99,9 +98,16 @@ function init () {
     }
          
 }
+$: if (clientWidth) {
+//elementScene.w = clientWidth;
+}
+$: if (clientHeight) {
+//elementScene.h  = clientHeight;
+}
+
 
 function onWindowResize() {
-     elementScene.composer?.setSize (innerWidth ,innerHeight ); 
+   
 }
 
 onMount(() => {  
@@ -116,7 +122,7 @@ onMount(() => {
 
 <svelte:window on:mousemove={onPointerMoveWindow} bind:innerWidth bind:outerWidth bind:innerHeight bind:outerHeight on:resize={onWindowResize}/>
 
-<div class="elElement" bind:this={elElement} style='--top:{top}; --left:{left}; --width:{width}; --height:{height}; --position:{position};' on:mousemove={onPointerMove}  >
+<div class="elElement" bind:this={elElement} style='--top:{top}; --left:{left}; --width:{width}; --height:{height}; --position:{position};' on:mousemove={onPointerMove} bind:clientWidth bind:clientHeight>
 <slot>
 </slot>
 </div>

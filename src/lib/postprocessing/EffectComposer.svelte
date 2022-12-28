@@ -2,40 +2,39 @@
 import { onDestroy, onMount , afterUpdate } from 'svelte';
 import type { Script } from 'svelte/types/compiler/interfaces';
 import * as THREE from 'three';
-import { get_scenes } from "../utils/context";
+import { get_scenes, getElementScene } from "../utils/context";
 import { EffectComposer, Pass } from 'three/examples/jsm/postprocessing/EffectComposer.js';
 import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js';
 
 //ADICIONAIS PARA TESTES
 import { ShaderPass } from 'three/examples/jsm/postprocessing/ShaderPass.js';
 import { GammaCorrectionShader } from 'three/examples/jsm/shaders/GammaCorrectionShader.js';
-
-const { contextCanvas } = get_scenes();  
-$: elementScene = contextCanvas.arrayScenes.get(id); 
-export let id : string  = "default";
 let composer : EffectComposer 
-
 export let addPass : Pass[] = []; 
+export let id : string  = "default";
+
+const {elementScene, contextCanvas} = getElementScene (id);
+
 
 function init() { 
-
    if(elementScene != null ) {
-         if ( elementScene.renderer != null) {
-            
+        if ( elementScene.renderer != null) {
             composer = new EffectComposer( elementScene.renderer );
-            composer.setPixelRatio( elementScene.w / elementScene.h );
-            composer.setSize( elementScene.w,  elementScene.h );
+            contextCanvas.onComposer = true;            
         }
     }
 }
 
 $: if (elementScene) {
-    elementScene.composer = composer;
+    elementScene.composer = composer;    
     elementScene.onComposer = true;
+    if (elementScene.composer) {
+    elementScene.composer.setPixelRatio( elementScene.w / elementScene.h );
+    elementScene.composer.setSize( elementScene.w,  elementScene.h );
+    console.log(elementScene.w, elementScene.h);
+}
 }
 $: if (elementScene && elementScene.camera ) {
-    console.log(elementScene.composer);
-    console.log(elementScene.w , elementScene.h);
     const target = new THREE.WebGLRenderTarget( elementScene.w , elementScene.h, 
     	{
             minFilter: THREE.LinearFilter,

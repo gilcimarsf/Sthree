@@ -265,8 +265,7 @@ group = {myGroup}
    
     </St.ScrollControls>     
 </St.Canvas>
-   */     
-</script>
+
 
 <St.Canvas frameloop = {'always'}>
     <St.ScrollControls>
@@ -318,6 +317,23 @@ group = {myGroup}
     </St.View> 
    
     </St.ScrollControls>     
+</St.Canvas>
+   */     
+</script>
+
+<St.Canvas frameloop = {'always'}>
+    
+    <h1>Gilcimar Bonitão</h1>
+        <St.EffectComposer addPass={pass} >
+        <St.PerspectiveCamera/>   
+        <St.Group bind:group  position = {[0,0,0]} id={'view1'} >
+        <St.Mesh isInterative = {true} on:click={exemplo} group={group}  geometry = {myBox}  position = {[1,1,0]} scale ={3}  material ={chromeMaterial}/>
+        <St.Mesh isInterative = {true} on:click={exemplo} group={group}  geometry = {myBox}  position = {[-1,-1,0]} scale ={1} material ={chromeMaterial}/>
+        <St.DirectionalLight  />
+        </St.Group>
+        <St.OrbitControls />
+        </St.EffectComposer>
+       
 </St.Canvas>
 
     
