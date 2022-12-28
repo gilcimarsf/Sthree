@@ -13,6 +13,7 @@ const RAYCASTER ={}
 const SCROLL = {};
 const SCENES = {};
 const ELEMENTSCENES = {};
+const CAMERAS = {};
 
 export function set_scenes( scenes : ContextCanvas) {
 	setContext(SCENE, scenes);
@@ -57,49 +58,56 @@ export function setupScenes (self : THREE.Scene ) {
     return  {self, contextCanvas};
 }
 
-export function setupElementScene(id : string, self : ElementScene ) {
+export function setElementScene(key : string, elementScene : ElementScene ) {
     const contextCanvas : ContextCanvas  = getContext (SCENE) 
-    if (self){
-        setContext (ELEMENTSCENES, self)
-        contextCanvas.arrayScenes.set (id , self);
+    if (elementScene){
+        setContext ('ELEMENTSCENES'+key, elementScene)
+        contextCanvas.arrayScenes.set (key , elementScene);
         contextCanvas.arrayScenes = contextCanvas.arrayScenes;
     }
-    return  {self, contextCanvas};
-}
-
-export function setupCamera (key : string  , self : Camera ) {
-    const contextCanvas : ContextCanvas  = getContext (SCENE) 
-    const parent:THREE.Scene =  contextCanvas.scene;
-    if (self){
-        setContext (PARENT, self)
-        parent.add (self.target);
-        contextCanvas.camera =self;
-             
-        let value = contextCanvas.arrayScenes.get(key);
-        if (value) {
-            value.camera = self; 
-            value.scene.add(self.target);
-        }               
-    }
-    return  {self, parent , contextCanvas};
+    return  {elementScene, contextCanvas};
 }
 
 export function getElementScene(key : string ) {
-	const contextCanvas : ContextCanvas  = getContext (SCENE); 
-	let elementScene = contextCanvas.arrayScenes.get(key);
+	const contextCanvas : ContextCanvas  = getContext (SCENE);
+	const elementScene : ElementScene = getContext ('ELEMENTSCENES'+key);
+	// let elementScene = contextCanvas.arrayScenes.get(key);
 	return {elementScene , contextCanvas};
 }
 
+
+export function sceneContext (key : string  , scene: THREE.Scene){
+    setContext(('SCENE'+key) , scene);
+	return scene;
+}
+
+
+
+export function setupCamera (key : string  , self : Camera ) {
+    const contextCanvas : ContextCanvas  = getContext (SCENE) 
+    let elementScene = contextCanvas.arrayScenes.get(key);
+    if (elementScene !=null) {
+        setContext('CAMERA'+key, self);
+        const parent : THREE.Scene = getContext(('SCENE'+key)) || elementScene.scene;
+            parent.add(self.target);
+            elementScene.camera = self;
+    }
+    return  {self ,parent, contextCanvas};
+}
+
+export function getCamera(key : string ) {	
+	const elementScene : ElementScene = getContext ('ELEMENTSCENES'+key);
+	const camera : Camera  = getContext ('CAMERA'+key);
+	return {elementScene , camera};
+}
+
+
 export function setupSimplesMesh(key : string , self ) {
     let contextCanvas :ContextCanvas  = getContext (SCENE) 
-    let elementScene;  
-    if (self){
-        //setContext (PARENT, self)
-        elementScene = contextCanvas.arrayScenes.get(key);
-        if (elementScene) {
-            elementScene.scene.add(self);
-        }  
-        
+    let elementScene = contextCanvas.arrayScenes.get(key);
+    if (elementScene !=null){
+        const parent : THREE.Scene = getContext(('SCENE'+key)) || elementScene.scene;
+        parent.add(self);
     }
     return  {self, contextCanvas, elementScene };
 }

@@ -13,8 +13,9 @@ import type {
 
  
 export class ElementScene {
-    scene = new THREE.Scene ();
+    scene : THREE.Scene;
     el: HTMLElement | null = null;
+    canvas: HTMLCanvasElement | THREE.OffscreenCanvas | undefined;
     camera : Camera | null = null ;
     orbitControl : ControlCamera | null = null ; 
     renderer : WebGLRenderer | null = null ;
@@ -26,13 +27,15 @@ export class ElementScene {
     h : number =0;
     devicePixelRatio:number =0;
     id : string;    
-        constructor(id : string) { 
+        constructor(id : string, scene : THREE.Scene ) { 
         this.id = id;
+        this.scene = scene;
         }
     
     setControl = () => {
         if (this.orbitControl && this.camera && this.renderer && this.el )  {
             this.orbitControl.Callback (this.camera.target,this.el)
+            console.log("fui chamado Gil!!!");
         } 
     }
     
@@ -41,6 +44,9 @@ export class ElementScene {
         this.h = h;
         this.devicePixelRatio = w /h ;
         this.camera?.resize (w,h);
+        if (this.composer != null) {
+            this.composer.setSize (w , h);
+        }
     }
     
 }
@@ -86,20 +92,23 @@ export class ContextCanvas {
             this.before_render = [];   
             this.frameloop = frameloop;
         }
+    /*
     update = ( w: number , h : number, devicePixelRatio: number)=> {
     this.w = w;
     this.h = h;
     this.devicePixelRatio = devicePixelRatio; 
     this.camera?.resize (w,h);
       
-    }
+    }*/
+    
+    /*
     setRenderer = (renderer : WebGLRenderer)=>{
         this.renderer = renderer;
         if (this.orbitControl?.set && this.camera) {
             this.orbitControl.set(this.camera.target,this.renderer.domElement );
             
         }
-    }
+    }*/
     setControl = () => {
         if (this.orbitControl?.set && this.camera && this.renderer) {
             this.orbitControl.set(this.camera.target,this.renderer.domElement );

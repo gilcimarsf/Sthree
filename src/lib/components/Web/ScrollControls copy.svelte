@@ -9,9 +9,7 @@ import { useScroll }  from '$lib/components/Web/useScroll'
 import { scroll, ScrollProps} from "$lib/utils/stores";
 import {onFrame } from "$lib/utils/lifecycle"
 
-export let id : string  = "default";
-
-
+const { contextCanvas } = get_scenes();
 let el : HTMLElement;
 let fill : HTMLDivElement;
 let fixed : HTMLDivElement;
@@ -21,9 +19,6 @@ export let pages = 3;
 export let distance = 1;
 export let damping = 4;
 export let infinite : boolean = false;
-
-const { contextCanvas } = get_scenes();
-$: elementScene = contextCanvas.arrayScenes.get(id); 
 
 
 $ScrollProps.horizontal= horizontal;
@@ -57,22 +52,29 @@ let containerLeght : number;
 let scrollLength  : number;
 let scrollThreshold : number;
 
-let fillHeight : string;
-let fillWidth : string;
+
+
 onMount( () => { 
- 
+  fill =  document.createElement('div');
+  fixed =  document.createElement('div');
+  
   el.style[horizontal ? 'overflowX' : 'overflowY'] = 'auto'
   el.style[horizontal ? 'overflowY' : 'overflowX'] = 'hidden'
     
-  /*
+  fixed.style.position = 'sticky';
+  fixed.style.top = '0px';
+  fixed.style.left = '0px';
+  fixed.style.width = '100vw';
+  fixed.style.height = '100vh';
+  fixed.style.overflow = 'hidden';
+  el.appendChild(fixed);
+  
   fill.style.height = horizontal ? '100%' : `${pages * distance * 100}%`;
   fill.style.width = horizontal ? `${pages * distance * 100}%` : '100%';
   fill.style.pointerEvents = 'none';
-  */
-  fillHeight = horizontal ? '100%' : `${pages * distance * 100}%`;
-  fillWidth = horizontal ? `${pages * distance * 100}%` : '100%';
+  el.appendChild(fill);
   
-  if (contextCanvas.el && contextCanvas.container){
+    if (contextCanvas.el && contextCanvas.container){
     containerLeght = contextCanvas.el.clientHeight;
     scrollLength = el[horizontal ? 'scrollWidth' : 'scrollHeight'];
     scrollThreshold = scrollLength  - containerLeght;
@@ -92,11 +94,9 @@ afterUpdate(() => {
 });
 
 
-$: if ($scroll) {}
+$: if ($scroll) {
+}
 
-/**
-
-*/
  
 </script>
 
@@ -108,35 +108,9 @@ $: if ($scroll) {}
     top : 0px;
     left : 0px; 
 }
-.fixed {
-    position : sticky;
-    height: 100vh;
-    width: 100vw;
-    top : 0px;
-    left : 0px; 
-    overflow : hidden;
-}
-.fill {
-   pointer-events : none;
-   height: var(--fill-height);
-   width: var(--fill-Width);
-}
-
-
-
 </style>
 
 <div class="el" bind:this={el} >
-
   <slot/>
-  
-  <div class="fixed" bind:this={fixed} >
-    <slot name="fixed" />
-  </div> 
-  
-  <div class="fill" bind:this={fill} style="--fill-height: {fillHeight}; --fill-Width: {fillWidth} "   >
-    <slot name="fill" />
-  </div> 
-  
 </div>
 

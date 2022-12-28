@@ -7,7 +7,7 @@ import { setupSimplesMesh } from '$lib/utils/context.js';
 import type { Object3d } from '$lib/core/objects.js';
 import { createEventDispatcher } from 'svelte';
 
-
+export let id : string  = "default";
 export let material : THREE.SpriteMaterial = new THREE.SpriteMaterial( { color: '#69f' }) ;
 export let center : THREE.Vector2 = new THREE.Vector2 (0, 0);
 export let isInterative : boolean = false; 
@@ -19,22 +19,24 @@ export let group : THREE.Group | null = null;
 let myObject : Object3d | undefined = undefined;
 
 const dispatch = createEventDispatcher();
-
+$: elementScene = contextCanvas.arrayScenes.get(id); 
 	
-	const { self, contextCanvas, raycaster, parent } = 	setupSimplesMesh (sprite);
+	//const { self, contextCanvas, raycaster, parent } = 	setupSimplesMesh (id , sprite);
+	const { self, contextCanvas } = setupSimplesMesh (id , sprite);
+	$: myObject;
 	
-	$: if (group){
-		let myObject = parent.getObjectById(sprite.id);
-		if (myObject) {
-			myObject.parent =group;
+	$: if (group && elementScene){
+		let objectbyScenes = elementScene.scene.getObjectById(sprite.id);
+		//let myObject = parent.getObjectById(sprite.id);
+		if (objectbyScenes) {
+			objectbyScenes.parent =group;
+		}
+		if (isInterative) {
+			myObject = elementScene.raycaster?.add (self);
 		}
 	}
 				
-	$: if(self) {
-		if (isInterative) {
-			myObject = raycaster.add(self);
-			}
-	}
+	
 	
 	$: if(myObject) {
 	    myObject.target.addEventListener('mouseover', (event) => {
@@ -62,6 +64,6 @@ const dispatch = createEventDispatcher();
 	$: {
 		self.center = center;
 		transform(self, position, rotation, scale);
-		contextCanvas.invalidate();
+		//contextCanvas.invalidate();
 	}
 </script>

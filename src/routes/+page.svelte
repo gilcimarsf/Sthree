@@ -48,6 +48,7 @@
     
     let texture : THREE.Texture;
     let group : THREE.Group;
+    let group1 : THREE.Group;
     
     function exemplo (event : any) {
    console.log ("Clicou");    
@@ -192,15 +193,31 @@ group = {myGroup}
 <St.PerspectiveCamera id= {'view1'}/>   
   <St.Boxes id = {'view2'} isInterative = {true} on:click={exemplo}/>
   
-
+  
+   <svelte:fragment slot="fixed"></svelte:fragment>
+    <svelte:fragment slot="fixed"></svelte:fragment>
+     <svelte:fragment slot="fixed"></svelte:fragment>
+     
+     ////////////////
+     
+     
     
-   */     
-   
-
-    </script>
     
-<St.Canvas frameloop = {'always'}>	
-     <St.View isInterative = {true} id={'view1'} top ={'0%'} left ={'0%'} > 
+        <St.Canvas frameloop = {'always'}>
+        <St.PerspectiveCamera/>   
+        <St.OrbitControls/>
+        <St.Group bind:group={group1}  position = {[1,0,1]} >
+        <St.Mesh  group={group1} isInterative = {true} on:click={exemplo} geometry = {myBox}  position = {[1,1,0]} scale ={3}  material ={chromeMaterial} />
+        <St.Mesh  group={group1} isInterative = {true} on:click={exemplo} geometry = {myBox}  position = {[-1,-1,0]} scale ={1} material ={chromeMaterial} />
+        </St.Group>
+        <St.DirectionalLight/>        
+    </St.Canvas>
+     
+     //////////////
+     <St.Canvas frameloop = {'always'}>
+    <St.ScrollControls>
+     <St.View isInterative = {true} id={'view1'} top ={'0%'} left ={'0%'} position={'relative'} > 
+        <h1>Gilcimar Bonitão</h1>
         <St.EffectComposer addPass={pass} id= {'view1'}>
         <St.Group bind:group  position = {[0,0,0]} id={'view1'} >
         <St.Mesh isInterative = {true} on:click={exemplo} group={group} id= {'view1'} geometry = {myBox}  position = {[1,1,0]} scale ={3}  material ={chromeMaterial}/>
@@ -211,19 +228,23 @@ group = {myGroup}
     </St.EffectComposer> 
     </St.View> 
     
-    <St.View isInterative = {true} id={'view2'} top ={'50%'} left ={'0%'} > 
+    <St.View isInterative = {true} id={'view2'} top ={'50%'} left ={'0%'} position={'relative'} > 
         <St.PerspectiveCamera id= {'view2'}/>   
         <St.Group bind:group  position = {[0,0,0]} id={'view2'} >
+        <St.Environment id={'view2'} files={'royal_esplanade_1k.hdr'} path ={'textures/equirectangular/'} bind:envMap />
         <St.Mesh isInterative = {true} on:click={exemplo} group={group} id= {'view2'} geometry = {myBox}  position = {[1,1,0]} scale ={3}  material ={chromeMaterial}/>
         <St.Mesh isInterative = {true} on:click={exemplo} group={group} id= {'view2'} geometry = {myBox}  position = {[-1,-1,0]} scale ={1} material ={chromeMaterial}/>
         <St.DirectionalLight id={'view2'} />
         </St.Group>
         <St.OrbitControls id= {'view2'}/>
     </St.View> 
+
     
-    <St.View isInterative = {true} id={'view3'} top ={'0%'} left ={'50%'} > 
-        <St.PerspectiveCamera id= {'view3'}/>   
-        <St.Group bind:group  position = {[0,0,0]} id={'view3'} >
+    <St.View isInterative = {true} id={'view3'} top ={'0%'} left ={'50%'} position={'relative'} > 
+        <St.PerspectiveCamera id= {'view3'}/>
+        <St.Environment id={'view3'} preset ={"sunset"} />
+        <St.Group bind:group position = {[0,0,0]} id={'view3'} >
+        
         <St.Mesh isInterative = {true} on:click={exemplo} group={group} id= {'view3'} geometry = {myBox}  position = {[1,1,0]} scale ={3}  material ={chromeMaterial}/>
         <St.Mesh isInterative = {true} on:click={exemplo} group={group} id= {'view3'} geometry = {myBox}  position = {[-1,-1,0]} scale ={1} material ={chromeMaterial}/>
         <St.DirectionalLight id={'view3'} />
@@ -231,19 +252,73 @@ group = {myGroup}
         <St.OrbitControls id= {'view3'}/>
     </St.View> 
    
-    <St.View isInterative = {true} id={'view4'} top ={'50%'} left ={'50%'} > 
+    <St.View isInterative = {true} id={'view4'} top ={'50%'} left ={'50%'}  position={'fixed'} > 
         <St.PerspectiveCamera id= {'view4'}/>   
-        <St.Group bind:group  position = {[0,0,0]} id={'view4'} >
-        <St.Mesh isInterative = {true} on:click={exemplo} group={group} id= {'view4'} geometry = {myBox}  position = {[1,1,0]} scale ={3}  material ={chromeMaterial}/>
-        <St.Mesh isInterative = {true} on:click={exemplo} group={group} id= {'view4'} geometry = {myBox}  position = {[-1,-1,0]} scale ={1} material ={chromeMaterial}/>
+        <St.Group bind:group={group1}  position = {[0,0,0]} id={'view4'} >
+        <St.Sprite id= {'view4'} isInterative = {true} on:click={exemplo} position = {[0,0,5]} group= {group1} />
+        <St.Mesh isInterative = {true} on:click={exemplo} group={group1} id= {'view4'} geometry = {myBox}  position = {[1,1,0]} scale ={3}  material ={chromeMaterial}/>
+        <St.Mesh isInterative = {true} on:click={exemplo} group={group1} id= {'view4'} geometry = {myBox}  position = {[-1,-1,0]} scale ={1} material ={chromeMaterial}/>
         <St.DirectionalLight id={'view4'} />
         </St.Group>
         <St.OrbitControls id= {'view4'}/>
     </St.View> 
    
-     
+    </St.ScrollControls>     
 </St.Canvas>
+   */     
+</script>
+
+<St.Canvas frameloop = {'always'}>
+    <St.ScrollControls>
+     <St.View isInterative = {true} id={'view1'} top ={'0%'} left ={'0%'} position={'relative'} > 
+        <h1>Gilcimar Bonitão</h1>
+        <St.EffectComposer addPass={pass} id= {'view1'}>
+        <St.Group bind:group  position = {[0,0,0]} id={'view1'} >
+        <St.Mesh isInterative = {true} on:click={exemplo} group={group} id= {'view1'} geometry = {myBox}  position = {[1,1,0]} scale ={3}  material ={chromeMaterial}/>
+        <St.Mesh isInterative = {true} on:click={exemplo} group={group} id= {'view1'} geometry = {myBox}  position = {[-1,-1,0]} scale ={1} material ={chromeMaterial}/>
+        <St.DirectionalLight id={'view1'} />
+        </St.Group>
+        <St.OrbitControls id= {'view1'}/>
+    </St.EffectComposer> 
+    </St.View> 
     
+    <St.View isInterative = {true} id={'view2'} top ={'50%'} left ={'0%'} position={'relative'} > 
+        <St.PerspectiveCamera id= {'view2'}/>   
+        <St.Group bind:group  position = {[0,0,0]} id={'view2'} >
+        <St.Environment id={'view2'} files={'royal_esplanade_1k.hdr'} path ={'textures/equirectangular/'} bind:envMap />
+        <St.Mesh isInterative = {true} on:click={exemplo} group={group} id= {'view2'} geometry = {myBox}  position = {[1,1,0]} scale ={3}  material ={chromeMaterial}/>
+        <St.Mesh isInterative = {true} on:click={exemplo} group={group} id= {'view2'} geometry = {myBox}  position = {[-1,-1,0]} scale ={1} material ={chromeMaterial}/>
+        <St.DirectionalLight id={'view2'} />
+        </St.Group>
+        <St.OrbitControls id= {'view2'}/>
+    </St.View> 
+
+    
+    <St.View isInterative = {true} id={'view3'} top ={'0%'} left ={'50%'} position={'relative'} > 
+        <St.PerspectiveCamera id= {'view3'}/>
+        <St.Environment id={'view3'} preset ={"sunset"} />
+        <St.Group bind:group position = {[0,0,0]} id={'view3'} >
+        
+        <St.Mesh isInterative = {true} on:click={exemplo} group={group} id= {'view3'} geometry = {myBox}  position = {[1,1,0]} scale ={3}  material ={chromeMaterial}/>
+        <St.Mesh isInterative = {true} on:click={exemplo} group={group} id= {'view3'} geometry = {myBox}  position = {[-1,-1,0]} scale ={1} material ={chromeMaterial}/>
+        <St.DirectionalLight id={'view3'} />
+        </St.Group>
+        <St.OrbitControls id= {'view3'}/>
+    </St.View> 
+   
+    <St.View isInterative = {true} id={'view4'} top ={'50%'} left ={'50%'}  position={'fixed'} > 
+        <St.PerspectiveCamera id= {'view4'}/>   
+        <St.Group bind:group={group1}  position = {[0,0,0]} id={'view4'} >
+        <St.Sprite id= {'view4'} isInterative = {true} on:click={exemplo} position = {[0,0,5]} group= {group1} />
+        <St.Mesh isInterative = {true} on:click={exemplo} group={group1} id= {'view4'} geometry = {myBox}  position = {[1,1,0]} scale ={3}  material ={chromeMaterial}/>
+        <St.Mesh isInterative = {true} on:click={exemplo} group={group1} id= {'view4'} geometry = {myBox}  position = {[-1,-1,0]} scale ={1} material ={chromeMaterial}/>
+        <St.DirectionalLight id={'view4'} />
+        </St.Group>
+        <St.OrbitControls id= {'view4'}/>
+    </St.View> 
+   
+    </St.ScrollControls>     
+</St.Canvas>
 
     
     <style>

@@ -5,6 +5,8 @@ import { onMount } from "svelte";
 import type { Wrapping, TextureFilter, TextureDataType, TextureEncoding } from 'three/src/constants.js';
 import type { DepthTexture } from 'three/src/textures/DepthTexture.js';
 
+export let id : string  = "default";
+
 export let envMap : THREE.Texture | null = null;
 export let size: number = 512;
 
@@ -31,12 +33,16 @@ stencilBuffer: stencilBuffer, generateMipmaps: generateMipmaps,
 minFilter: minFilter, depthTexture:depthTexture,encoding:encoding } );
 
 const cubeCamera = new THREE.CubeCamera( near, far, cubeRenderTarget );
+
 const { contextCanvas } = get_scenes();
+$: elementScene = contextCanvas.arrayScenes.get(id); 
 
 onMount(async () => {
-    contextCanvas.scene.add( cubeCamera );
-    contextCanvas.addBeforeRender (()=> {if (contextCanvas.renderer) {cubeCamera.update (contextCanvas.renderer, contextCanvas.scene)}});
-    envMap = cubeRenderTarget.texture ;
+        if (elementScene) {
+        elementScene.scene.add( cubeCamera );
+        contextCanvas.addBeforeRender (()=> {if (elementScene.renderer) {cubeCamera.update (elementScene.renderer, elementScene.scene)}});
+        envMap = cubeRenderTarget.texture ;
+        }
     })
 
 $: if (cubeCamera) {

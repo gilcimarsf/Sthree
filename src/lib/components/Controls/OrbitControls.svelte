@@ -43,7 +43,7 @@ export let id : string  = "default";
 	let controls : OrbitControls;
 	
 	const {elementScene, contextCanvas} = getElementScene (id);
-	
+		
 	let control = new ControlCamera (
         function OrbitFunction ( camera:THREE.Camera , canvas:HTMLElement ) {
 		controls = new OrbitControls(camera, canvas);
@@ -55,13 +55,7 @@ export let id : string  = "default";
 	elementScene.setControl();
     contextCanvas.invalidate();
    	}
-    /*
-    let control = new ControlCamera (
-        function OrbitFunction ( camera:THREE.Camera , canvas:HTMLElement ) {
-		controls = new OrbitControls(camera, canvas);
-	})
-	*/
-		
+ 		
 	$: if (controls) {
 	
 		controls.autoRotate = autoRotate;
@@ -90,6 +84,11 @@ export let id : string  = "default";
 		controls.zoomSpeed = zoomSpeed;
 		controls.update();
 		contextCanvas.invalidate();
+		
+	}
+	
+	$: if (elementScene) {
+		elementScene.setControl();
 	}
 	
 	onFrame(() => {
