@@ -29,6 +29,8 @@ $: innerHeight = 0
 $: clientWidth = 0
 $: clientHeight = 0
 
+
+
 const scene = sceneContext (id , new THREE.Scene())
 let  {elementScene, contextCanvas} =  setElementScene (id ,new ElementScene (id, scene ));
 elementScene.renderer = contextCanvas.renderer;
@@ -77,6 +79,8 @@ function onPointerMove( event ) {
 
 function init () {  
     elementScene.el = elElement;
+    elementScene.w = clientWidth * 2 ;
+    elementScene.h = clientHeight * 2 ;
     
     if (elementScene.camera == null) {
     //Camera
@@ -107,7 +111,10 @@ $: if (clientHeight) {
 
 
 function onWindowResize() {
-   
+console.log("object");
+  elementScene.w = clientWidth;
+  elementScene.h = clientHeight;
+  elementScene.update (clientWidth,clientHeight);  
 }
 
 onMount(() => {  
