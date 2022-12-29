@@ -13,19 +13,19 @@ import type {
 
  
 export class ElementScene {
-    scene : THREE.Scene;
-    el?: HTMLElement;
-    canvas: HTMLCanvasElement | THREE.OffscreenCanvas | undefined;
-    camera? : Camera;
-    orbitControl? : ControlCamera ; 
-    renderer? : WebGLRenderer ;
-    composer? : EffectComposer; 
-    onComposer : boolean = false;
-    raycaster?: RaycasterManager;
-    position : THREE.Vector2 = new THREE.Vector2(10000,10000);
-    w : number =0;
-    h : number =0;
-    devicePixelRatio:number =0;
+    scene : THREE.Scene
+    el?: HTMLElement
+    canvas: HTMLCanvasElement | THREE.OffscreenCanvas | undefined
+    camera? : Camera
+    orbitControl? : ControlCamera
+    renderer? : WebGLRenderer
+    composer? : EffectComposer
+    onComposer : boolean = false
+    raycaster?: RaycasterManager
+    position : THREE.Vector2 = new THREE.Vector2(10000,10000)
+    w : number =0
+    h : number =0
+    devicePixelRatio:number =0
     id : string;    
         constructor(id : string, scene : THREE.Scene ) { 
         this.id = id;
@@ -57,28 +57,28 @@ export class ContextCanvas {
     arrayScenes : Map<string,ElementScene> = new Map<string,ElementScene>();
     //arrayScenes = new Map<string,ElementScene >();
     //arrayScenes : {[id: string] : ElementScene; } = {};
-    scene :Scene;
-    scenes :Scene [] = [];
-    camera?: Camera;
-    object3d : Object3d[];
-    object : Object3D [] ;
-    orbitControl? : ControlCamera;
-    renderer? : WebGLRenderer;
-    composer? : EffectComposer;
-    onComposer : boolean = false;
-    manager? : LoadingManager;
-    invalidate :() => void ;
-    before_render : Array <() => void>;
-    frame: number = 0 ;
-    frameloop: 'always' | 'demand' | 'never';
-    el?: HTMLElement;
-    container?: HTMLElement;
-    clock: THREE.Clock  = new THREE.Clock(); 
-    devicePixelRatio: number =0;
-    w: number =0;
-    h: number =0;
-    canvasClientX =0;
-    canvasClientY=0;
+    scene :Scene
+    scenes :Scene [] = []
+    camera?: Camera
+    object3d : Object3d[]
+    object : Object3D []
+    orbitControl? : ControlCamera
+    renderer? : WebGLRenderer
+    composer? : EffectComposer
+    onComposer : boolean = false
+    manager? : LoadingManager
+    invalidate :() => void 
+    before_render : Array <() => void>
+    frame: number = 0 
+    frameloop: 'always' | 'demand' | 'never'
+    el?: HTMLElement
+    container?: HTMLElement
+    clock: THREE.Clock  = new THREE.Clock();
+    devicePixelRatio: number =0
+    w: number =0
+    h: number =0
+    canvasClientX =0
+    canvasClientY=0
         constructor( invalidate : () => void, frameloop: 'always' | 'demand' | 'never') {
             this.scene = new THREE.Scene ();
             this.invalidate = invalidate;

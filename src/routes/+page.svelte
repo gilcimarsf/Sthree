@@ -9,7 +9,6 @@
     import OrbitControls from '$lib/components/Controls/OrbitControls.svelte';
     
     //componentes testes
-  import Base_pos from '$lib/Base/base_pos.svelte';
   import Base_Splits from '$lib/Base/base_Splits2.svelte';
   import Sprite from '$lib/components/Objects/sprite.svelte';
   import Group from '$lib/components/Objects/Group.svelte';

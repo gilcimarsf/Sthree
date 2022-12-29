@@ -4,8 +4,8 @@ import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader.js';
 import { Object3d } from '$lib/core/objects';
 import { loadingManager } from '$lib/utils/loadingManager.js';
 
-let character = null;
-let myObject = null;
+let character = null
+let myObject = null
 
 
 const loadModels = async (urlModel: any ) => {

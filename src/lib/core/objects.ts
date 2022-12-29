@@ -1,7 +1,7 @@
 import { createEventDispatcher } from 'svelte';
 
 export class ControlCamera {
-    Callback : (camera:THREE.Camera , canvas:HTMLElement) => void;
+    Callback : (camera:THREE.Camera , canvas:HTMLElement) => void
     constructor(Callback: (camera:THREE.Camera , canvas:HTMLElement) => void) {
             this.Callback = Callback;            
         } 
@@ -14,7 +14,7 @@ export class ControlCamera {
 
 
 export class Camera {
-    target : THREE.PerspectiveCamera;
+    target : THREE.PerspectiveCamera
     constructor(target: THREE.PerspectiveCamera ) {
             this.target = target;            
         }
@@ -39,13 +39,13 @@ export class Camera {
 
 
  export class Object3d {
-    target : THREE.Mesh | THREE.Object3D | THREE.Group;
-    isInterative : boolean = false;
-    name : string;
-    key : string;
-    intersected: boolean;
-    wasIntersected : boolean = false;
-    distance : number;
+    target : THREE.Mesh | THREE.Object3D | THREE.Group
+    isInterative : boolean = false
+    name : string
+    key : string
+    intersected: boolean
+    wasIntersected : boolean = false
+    distance : number
     callback? : ()=> void;
     constructor (target: THREE.Mesh | THREE.Object3D | THREE.Group ) {
             this.target = target;

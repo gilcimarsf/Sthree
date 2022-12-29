@@ -33,15 +33,15 @@ export type ScrollControlsState = {
 
 export class ScrollControls {
   
-  el?: HTMLElement;
-  eps: number = 0.00001;
-  fill?: HTMLDivElement ;
-  fixed?: HTMLDivElement;
-  horizontal: boolean = false;
-  damping: number = 4;
-  offset: number =0;
-  delta: number = 0;
-  pages: number = 1;
+  el?: HTMLElement
+  eps: number = 0.00001
+  fill?: HTMLDivElement 
+  fixed?: HTMLDivElement
+  horizontal: boolean = false
+  damping: number = 4
+  offset: number =0
+  delta: number = 0
+  pages: number = 1
   constructor( horizontal: boolean, damping: number, pages: number, eps :number ) { 
   this.horizontal = horizontal;
   this.damping = damping;
