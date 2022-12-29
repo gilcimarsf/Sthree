@@ -17,15 +17,15 @@ export type ScrollControlsProps = {
 }
 
 export type ScrollControlsState = {
-  el: HTMLElement | undefined
-  eps: number | undefined
-  fill: HTMLDivElement | undefined
-  fixed: HTMLDivElement | undefined
-  horizontal: boolean | undefined
-  damping: number| undefined
-  offset: number| undefined
-  delta: number| undefined
-  pages: number| undefined
+  el?: HTMLElement
+  eps?: number 
+  fill?: HTMLDivElement 
+  fixed?: HTMLDivElement
+  horizontal?: boolean
+  damping?: number
+  offset?: number
+  delta?: number
+  pages?: number
   range : (from: number, distance: number, margin?: number)=> number
   curve : (from: number, distance: number, margin?: number) => number
   visible : (from: number, distance: number, margin?: number)=> boolean
@@ -33,10 +33,10 @@ export type ScrollControlsState = {
 
 export class ScrollControls {
   
-  el: HTMLElement | undefined;
+  el?: HTMLElement;
   eps: number = 0.00001;
-  fill: HTMLDivElement | undefined;
-  fixed: HTMLDivElement | undefined;
+  fill?: HTMLDivElement ;
+  fixed?: HTMLDivElement;
   horizontal: boolean = false;
   damping: number = 4;
   offset: number =0;

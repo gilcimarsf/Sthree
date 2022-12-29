@@ -9,7 +9,7 @@ export type Props = {
     far?: number
     resolution?: number
     background?: boolean | 'only'
-    map: THREE.Texture | null
+    map?: THREE.Texture 
     files?: string | string[]
     path?: string
     preset?: PresetsType

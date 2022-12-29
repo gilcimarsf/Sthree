@@ -6,14 +6,14 @@ import {Camera , Object3d} from '$lib/core/objects'
 export class RaycasterEvent {
     type: string;
     cancelBubble: boolean;
-    originalEvent: Event | null;
+    originalEvent?: Event;
     
     // Dummy default values
     coords: THREE.Vector2 = new THREE.Vector2(0, 0);
     distance: number = 0;
     intersected: boolean = false;
     
-    constructor(type: string, originalEvent: Event | null = null) {
+    constructor(type: string, originalEvent: Event) {
     this.cancelBubble = false;
     this.type = type;
     this.originalEvent = originalEvent;
@@ -25,23 +25,18 @@ export class RaycasterEvent {
 
 export class RaycasterManager {
     raycaster: THREE.Raycaster;
-    closestObject: Object3d | null;
+    closestObject?: Object3d;
     pointer : THREE.Vector2;
-    canvas :HTMLElement | null ;
-    camera : THREE.Camera | null ;
-    object3d : Object3d[];
-    renderer : THREE.WebGLRenderer| null ; 
+    canvas?:HTMLElement;
+    camera?: THREE.Camera;
+    object3d: Object3d[];
+    renderer? : THREE.WebGLRenderer; 
     
     //currentObjectRaycaster: Object3d | null;
     constructor( ) {
         this.raycaster = new THREE.Raycaster();
-        this.closestObject = null;
         this.pointer = new THREE.Vector2 (0,0);
-        this.canvas = null;
-        this.camera = null;
-        this.object3d = [];
-        this.renderer = null;
-        
+        this.object3d = [];       
     }
     onCanvas = (canvas :HTMLElement, renderer : THREE.WebGLRenderer)=>{
         this.canvas = canvas;

@@ -15,10 +15,10 @@ storeUnsubscribeProps = ScrollProps.subscribe((val) => scrollProps = val);
 //useScroll
 export class ScrollControls {
   
-    el: HTMLElement | undefined;
+    el?: HTMLElement;
     eps: number = scrollProps.eps
-    fill: HTMLDivElement | undefined;
-    fixed: HTMLDivElement | undefined;
+    fill?: HTMLDivElement;
+    fixed?: HTMLDivElement;
     horizontal: boolean = scrollProps.horizontal
     damping: number = scrollProps.damping
     offset: number = Scroll

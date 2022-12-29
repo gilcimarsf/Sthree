@@ -14,14 +14,14 @@ import type {
  
 export class ElementScene {
     scene : THREE.Scene;
-    el: HTMLElement | null = null;
+    el?: HTMLElement;
     canvas: HTMLCanvasElement | THREE.OffscreenCanvas | undefined;
-    camera : Camera | null = null ;
-    orbitControl : ControlCamera | null = null ; 
-    renderer : WebGLRenderer | null = null ;
-    composer : EffectComposer| null =null; 
+    camera? : Camera;
+    orbitControl? : ControlCamera ; 
+    renderer? : WebGLRenderer ;
+    composer? : EffectComposer; 
     onComposer : boolean = false;
-    raycaster: RaycasterManager | null = null ;
+    raycaster?: RaycasterManager;
     position : THREE.Vector2 = new THREE.Vector2(10000,10000);
     w : number =0;
     h : number =0;
@@ -59,20 +59,20 @@ export class ContextCanvas {
     //arrayScenes : {[id: string] : ElementScene; } = {};
     scene :Scene;
     scenes :Scene [] = [];
-    camera : Camera | null ;
+    camera?: Camera;
     object3d : Object3d[];
     object : Object3D [] ;
-    orbitControl : ControlCamera | null;
-    renderer : WebGLRenderer | null;
-    composer : EffectComposer | null = null;
+    orbitControl? : ControlCamera;
+    renderer? : WebGLRenderer;
+    composer? : EffectComposer;
     onComposer : boolean = false;
-    manager : LoadingManager | null;
+    manager? : LoadingManager;
     invalidate :() => void ;
     before_render : Array <() => void>;
-    frame: number | null = 0 ;
+    frame: number = 0 ;
     frameloop: 'always' | 'demand' | 'never';
-    el: HTMLElement | null = null;
-    container: HTMLElement | null = null;
+    el?: HTMLElement;
+    container?: HTMLElement;
     clock: THREE.Clock  = new THREE.Clock(); 
     devicePixelRatio: number =0;
     w: number =0;
@@ -82,12 +82,8 @@ export class ContextCanvas {
         constructor( invalidate : () => void, frameloop: 'always' | 'demand' | 'never') {
             this.scene = new THREE.Scene ();
             this.invalidate = invalidate;
-            this.camera = null;
-            this.orbitControl  = null;
-            this.renderer = null;
             this.object3d = [];
             this.object = [];
-            this.manager = null;
             this.before_render = [];   
             this.frameloop = frameloop;
         }

@@ -111,7 +111,6 @@ $: if (clientHeight) {
 
 
 function onWindowResize() {
-console.log("object");
   elementScene.w = clientWidth;
   elementScene.h = clientHeight;
   elementScene.update (clientWidth,clientHeight);  

@@ -38,8 +38,10 @@ import * as St from 'sthree-js';
   </ul>
   <li><a href="#Objects">Objects</a></li>
   <ul>
+  <li><a href="#Group">Group</a></li>
   <li><a href="#Mesh">Mesh</a></li>
   <li><a href="#Primitive">Primitive</a></li>
+  <li><a href="#Sprite">Sprite</a></li>
   </ul>
   <li><a href="#Raycaster">Raycaster</a></li>
   <ul>
@@ -64,6 +66,18 @@ import * as St from 'sthree-js';
     <li><a href="#Enviroment">Enviroment</a></li>
      <ul>
      <li><a href="#Environment">Environment</a></li>
+     </ul>
+  </ul> 
+  <ul>
+    <li><a href="#Portals">Portals</a></li>
+     <ul>
+     <li><a href="#View">View</a></li>
+     </ul>
+  </ul> 
+  <ul>
+    <li><a href="#Post-Processing">Post-Processing</a></li>
+     <ul>
+     <li><a href="#EffectComposer">EffectComposer</a></li>
      </ul>
   </ul> 
   </td>     
@@ -116,7 +130,18 @@ onMount(async() => {
 });
 ```
 
-# Objects
+# Objects.
+### Group
+A standard [THREE.Group](https://threejs.org/docs/?q=group#api/en/objects/Group) 
+
+```js
+<St.Group bind:group={group1}  position = {[0,0,0]} id={'view4'} >
+        <St.Sprite id= {'view4'} isInterative = {true} on:click={exemplo} position = {[0,0,5]} group= {group1} />
+        <St.Mesh isInterative = {true} on:click={exemplo} group={group1} id= {'view4'} geometry = {myBox}  position = {[1,1,0]} scale ={3}  material ={chromeMaterial}/>
+        <St.Mesh isInterative = {true} on:click={exemplo} group={group1} id= {'view4'} geometry = {myBox}  position = {[-1,-1,0]} scale ={1} material ={chromeMaterial}/>
+        <St.DirectionalLight id={'view4'} />
+</St.Group>
+```
 ### Mesh
 A standard [THREE.Mesh](https://threejs.org/docs/?q=Mesh#api/en/objects/Mesh) 
 
@@ -129,7 +154,14 @@ let Sphere = new THREE.SphereGeometry();
 an easy way to place objects, cameras, light, etc.
 ```js
 <St.Primitive object={model} scale ={1} on:mouseover ={play} isInterative={true} />
+Sprite
 ```
+### Sprite
+ sprite is a plane that always faces towards the camera
+```js
+<St.Sprite isInterative = {true} on:click={exemplo} position = {[1,0,-30]}/>
+```
+
 # Raycaster
 ### Raycaster
 A standard [THREE.Raycaster](https://threejs.org/docs/#api/en/core/Raycaster) 
@@ -185,6 +217,44 @@ The option to activate a GroundProjectedEnv is also available
 <St.Environment ground={true} />
 ```
 
+
+# Portal
+### View
+Used to cut the viewport into segments, each segment has its own div, allowing you to have multiple views with a single screen.
+This resource uses the setScissor method to cut the screen into multiple views.
+
+```js
+<St.Canvas frameloop = {'always'}>
+  <St.View isInterative = {true} id={'view1'} top ={'0%'} left ={'0%'} position={'relative'} > 
+    <St.Mesh isInterative = {true} on:click={exemplo} group={group} id= {'view1'} geometry = {myBox}  position = {[1,1,0]} scale ={3}  material ={chromeMaterial}/>
+    <St.Mesh isInterative = {true} on:click={exemplo} group={group} id= {'view1'} geometry = {myBox}  position = {[-1,-1,0]} scale ={1} material ={chromeMaterial}/>
+  </St.View> 
+    
+  <St.View isInterative = {true} id={'view2'} top ={'50%'} left ={'0%'} position={'relative'} > 
+    <St.PerspectiveCamera id= {'view2'}/>   
+      <St.Mesh isInterative = {true} on:click={exemplo} group={group} id= {'view2'} geometry = {myBox}  position = {[1,1,0]} scale ={3}  material ={chromeMaterial}/>
+  </St.View> 
+ </St.Canvas>
+```
+
+# Post-Processing
+### EffectComposer
+Using a sequence of passes applies the post-processing effect  They are executed in the order they were added in the pass matrix.  The last pass is an automatic process that renders the screen.
+
+first add all your passes in an array:
+```js
+import { GammaCorrectionShader } from 'three/examples/jsm/shaders/GammaCorrectionShader.js';
+let pass : Pass [] = []; 
+pass[0]= new ShaderPass( GammaCorrectionShader );
+```
+transfer this array to EffectComposer:
+```js
+<St.EffectComposer addPass={pass} >
+  <St.Mesh isInterative = {true} on:click={exemplo} group={group} geometry = {myBox}  position = {[-1,-1,0]} scale ={1} material ={chromeMaterial}/>
+  <St.DirectionalLight  />
+  <St.OrbitControls/>
+</St.EffectComposer> 
+```
 <br/>
 <br/>
 

@@ -31,8 +31,7 @@ $: if (elementScene) {
     if (elementScene.composer) {
     elementScene.composer.setPixelRatio( elementScene.w / elementScene.h );
     elementScene.composer.setSize( elementScene.w,  elementScene.h );
-    console.log(elementScene.w, elementScene.h);
-}
+    }
 }
 $: if (elementScene && elementScene.camera ) {
     const target = new THREE.WebGLRenderTarget( elementScene.w , elementScene.h, 

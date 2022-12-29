@@ -90,7 +90,7 @@ group2.add( sprite3 );
 
 
 
-function onPointerMove( event ) {
+function onPointerMove( event : MouseEvent ) {
 	pointer.x = ( event.clientX / innerWidth ) * 2 - 1;
 	pointer.y = - ( event.clientY /innerHeight ) * 2 + 1;
 	

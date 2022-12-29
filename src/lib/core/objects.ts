@@ -24,10 +24,6 @@ export class Camera {
     }
  }
 
-
-
-//não usando.
-//não usando.
 //não usando.
  export class Renderer {
     target : THREE.PerspectiveCamera;
