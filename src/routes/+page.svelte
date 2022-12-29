@@ -214,7 +214,7 @@ group = {myGroup}
     </St.Canvas>
      
      //////////////
-     <St.Canvas frameloop = {'always'}>
+    <St.Canvas frameloop = {'always'}>
     <St.ScrollControls>
      <St.View isInterative = {true} id={'view1'} top ={'0%'} left ={'0%'} position={'relative'} > 
         <h1>Gilcimar Bonitão</h1>
