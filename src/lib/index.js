@@ -28,8 +28,6 @@ export { onFrame } from './utils/lifecycle';
 //ScrollControls
 export { default as ScrollControls } from './components/Web/ScrollControls.svelte';
 
-//useScroll
-export { useScroll} from './components/Web/useScroll'
 
 //postprocesing
 export { default as EffectComposer} from './postprocessing/EffectComposer.svelte'

@@ -8,10 +8,10 @@ import * as THREE from 'three';
 
 export let id : string  = "default";
 export let cameras : THREE.Camera 
-export let composer : EffectComposer;
-export let orbitControl : OrbitControls; 
-export let renderer : THREE.WebGLRenderer;
-export let scene : THREE.Scene; 
+//export let composer : EffectComposer;
+//export let orbitControl : OrbitControls; 
+//export let renderer : THREE.WebGLRenderer;
+//export let scene : THREE.Scene; 
 
 let elementeScene = new ElementScene (id)
 

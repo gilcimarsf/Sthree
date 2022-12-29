@@ -31,7 +31,7 @@ let frame : number | null = null;
 
 const run = (fn) => fn();
 const invalidate = () => {
-  contextCanvas.frame = frame;
+  if (frame !=null) {  contextCanvas.frame = frame; }
   if (frame) return;
    	frame = requestAnimationFrame(() => {
       onWindowResize();

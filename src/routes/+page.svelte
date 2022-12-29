@@ -1,7 +1,7 @@
 <script lang="ts">
     import * as THREE from 'three';
     import * as St from 'sthree-js';
-    import {  useGltf, onFrame, useScroll } from 'sthree-js';
+    import {  useGltf, onFrame } from 'sthree-js';
     import type { GLTF } from 'three/examples/jsm/loaders/GLTFLoader.js';
     import { onMount , afterUpdate } from "svelte";
     //stores
@@ -87,9 +87,7 @@
     
         
     function apertar () {
-        scroll = useScroll();
-        console.log ($ScrollProps)
-        
+        console.log ($ScrollProps)        
     }
     $: if ($ScrollProps) {
         //console.log ($ScrollProps.range(0/4, 1/4))

@@ -20,7 +20,7 @@ export let horizontal = false;
 export let pages = 3;
 export let distance = 1;
 export let damping = 4;
-export let infinite : boolean = false;
+//export let infinite : boolean = false;
 
 const { contextCanvas } = get_scenes();
 $: elementScene = contextCanvas.arrayScenes.get(id); 
