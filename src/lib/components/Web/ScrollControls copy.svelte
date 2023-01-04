@@ -5,7 +5,6 @@ import { get_scenes, set_scroll } from "$lib/utils/context";
 import { ScrollControls } from '$lib/core/ScrollControls'
 import Canvas from "../Canvas.svelte";
 import { writable } from 'svelte/store';
-import { useScroll }  from '$lib/components/Web/useScroll'
 import { scroll, ScrollProps} from "$lib/utils/stores";
 import {onFrame } from "$lib/utils/lifecycle"
 

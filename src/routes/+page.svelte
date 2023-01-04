@@ -83,6 +83,11 @@
         texture.wrapS = THREE.RepeatWrapping;
         texture.wrapT = THREE.RepeatWrapping;
         texture.repeat.set( 4, 4 );
+        
+        let name = "Gil:brasil:casas:dinheiro:familia:filhos"
+        let [directive, rest] = name.split(":")
+        console.log(directive[1])
+        
       });
     
         

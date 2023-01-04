@@ -3,7 +3,8 @@ import { onDestroy, onMount , afterUpdate } from 'svelte';
 import type { Script } from 'svelte/types/compiler/interfaces';
 import * as THREE from 'three';
 import { get_scenes, getElementScene } from "../utils/context";
-import { EffectComposer, Pass } from 'three/examples/jsm/postprocessing/EffectComposer.js';
+import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer.js';
+import type { Pass } from 'three/examples/jsm/postprocessing/Pass.js';
 import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js';
 
 //ADICIONAIS PARA TESTES
