@@ -11,9 +11,6 @@ export type ScrollControlsProps = {
   distance?: number
   damping?: number
   enabled?: boolean
-  
-  //style?: React.CSSProperties
-  //children: React.ReactNode
 }
 
 export type ScrollControlsState = {

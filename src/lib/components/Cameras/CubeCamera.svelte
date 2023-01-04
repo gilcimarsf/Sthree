@@ -26,6 +26,11 @@ export let encoding: TextureEncoding | undefined  =  THREE.sRGBEncoding;
 export let near: number = 1;
 export let far: number = 100000;
 
+export let background: boolean | "only"  = false;
+export let path: string = "";
+export let files: string [] = ['/px.png', '/nx.png', '/py.png', '/ny.png', '/pz.png', '/nz.png'];
+//['/px.png', '/nx.png', '/py.png', '/ny.png', '/pz.png', '/nz.png'];
+
 const cubeRenderTarget = new THREE.WebGLCubeRenderTarget( size, { 
 wrapS:wrapS, wrapT:wrapT, magFilter: magFilter,  
 format: format, type:type, anisotropy:anisotropy, depthBuffer:depthBuffer, 
@@ -37,13 +42,36 @@ const cubeCamera = new THREE.CubeCamera( near, far, cubeRenderTarget );
 const { contextCanvas } = get_scenes();
 $: elementScene = contextCanvas.arrayScenes.get(id); 
 
+function init() { 
+    if (files) { EnvironmentCube (path ,files ); }
+}
+
 onMount(async () => {
         if (elementScene) {
         elementScene.scene.add( cubeCamera );
+        init ();
         contextCanvas.addBeforeRender (()=> {if (elementScene.renderer) {cubeCamera.update (elementScene.renderer, elementScene.scene)}});
         envMap = cubeRenderTarget.texture ;
         }
-    })
+})
+
+
+function EnvironmentCube ( path : string  , files : string[]){
+
+
+const loader = new THREE.CubeTextureLoader();
+loader.setPath(path);
+    const texture = loader.load(files);
+  if (elementScene) {
+  if (background == 'only') {  elementScene.scene.background = texture; }
+    else {        
+    elementScene.scene.background = texture;
+    elementScene.scene.environment = texture;
+    }
+}
+//contextCanvas.invalidate();    
+}  
+
 
 $: if (cubeCamera) {
 }

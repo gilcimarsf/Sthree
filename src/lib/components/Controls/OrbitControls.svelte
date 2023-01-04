@@ -88,6 +88,7 @@ export let id : string  = "default";
 	}
 	
 	$: if (elementScene) {
+		console.log(elementScene.orbitControl)
 		elementScene.setControl();
 	}
 	

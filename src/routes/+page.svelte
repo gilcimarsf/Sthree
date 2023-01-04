@@ -10,7 +10,7 @@
     
     //componentes testes
   import Base_Splits from '$lib/Base/base_Splits2.svelte';
-  import Sprite from '$lib/components/Objects/sprite.svelte';
+  import Sprite from '$lib/components/Objects/Sprite.svelte';
   import Group from '$lib/components/Objects/Group.svelte';
   
    
@@ -24,6 +24,7 @@
     import { GammaCorrectionShader } from 'three/examples/jsm/shaders/GammaCorrectionShader.js';
     import View from '$lib/components/renderers/view.svelte';
     import Boxes from '$lib/components/Objects/boxes.svelte';
+  import CubeCamera from '$lib/components/Cameras/CubeCamera.svelte';
    
        
     
@@ -82,12 +83,7 @@
         texture = new THREE.TextureLoader().load( "textures/kandao3.jpg" );
         texture.wrapS = THREE.RepeatWrapping;
         texture.wrapT = THREE.RepeatWrapping;
-        texture.repeat.set( 4, 4 );
-        
-        let name = "Gil:brasil:casas:dinheiro:familia:filhos"
-        let [directive, rest] = name.split(":")
-        console.log(directive[1])
-        
+        texture.repeat.set( 4, 4 );        
       });
     
         
@@ -320,8 +316,7 @@ group = {myGroup}
    
     </St.ScrollControls>     
 </St.Canvas>
-   */     
-</script>
+
 
 <St.Canvas frameloop = {'always'}>
     <St.ScrollControls>
@@ -376,6 +371,22 @@ group = {myGroup}
  
 </St.Canvas>
 
+<St.Canvas>	
+    <St.PerspectiveCamera />  
+    <St.CubeCamera path ={'textures/cube/pisa'}/>      
+</St.Canvas>
+
+
+   */     
+</script>
+
+<St.Canvas frameloop = {'always'}>	
+    <St.CubeCamera path ={'textures/cube/pisa'}/>     
+    <St.PerspectiveCamera  />        
+    <St.OrbitControls/>
+    <St.Mesh isInterative = {true} on:click={exemplo} geometry = {myBox}   scale ={3} />
+</St.Canvas>
     
-    <style>
-    </style>
+    
+<style>
+</style>

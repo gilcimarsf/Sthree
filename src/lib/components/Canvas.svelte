@@ -33,7 +33,7 @@ let frame : number | null = null;
 
 const run = (fn) => fn();
 const invalidate = () => {
-  //onWindowResize()  
+  onWindowResize()  
   if (frame !=null) {  contextCanvas.frame = frame; }
   if (frame) return;
    	frame = requestAnimationFrame(() => {
@@ -44,12 +44,12 @@ const invalidate = () => {
     
 };
 
-let id = "default";
+const id = "default";
 let SCENES = new ContextCanvas (invalidate , frameloop);
 const contextCanvas = set_scenes(SCENES);
 const scene = sceneContext (id , new THREE.Scene())
 let  {elementScene} =  setElementScene (id ,new ElementScene (id, scene ));
-
+//contextCanvas.scene.background = new THREE.Color( 0xf0f0f0 );
 //contextCanvas.arrayScenes.set(id , elementeScene);
 
 /*
@@ -92,20 +92,26 @@ function onWindowResize() {
 
 
 
-export const createScene = (container : HTMLElement) => {
+export const init = (container : HTMLElement) => {
+contextCanvas.scene.background = new THREE.Color( 0xf0f0f0 );
 renderer = new THREE.WebGLRenderer({ antialias: true, canvas: container });
 elementScene.renderer = renderer;
 elementScene.w = clientWidth;
 elementScene.h = clientHeight;
-contextCanvas.renderer = renderer;
+elementScene.canvas = container;
+//contextCanvas.renderer = renderer;
 
+
+if (elementScene.orbitControl != null) {
+  elementScene.setControl();
+ }
 }
 
 function onPointerMove( event : MouseEvent ) {
     pointer.x = ( event.clientX / innerWidth ) * 2 - 1;
     pointer.y = - ( event.clientY /innerHeight ) * 2 + 1;
-    contextCanvas.canvasClientX = event.clientX;
-    contextCanvas.canvasClientX = event.clientY; 
+    //contextCanvas.canvasClientX = event.clientX;
+    //contextCanvas.canvasClientX = event.clientY; 
     elementScene.position = pointer;
 }
 
@@ -139,10 +145,6 @@ function render() {
         renderer.render (value.scene , value.camera.target);
         } else { 
         value.composer.render(delta);
-        
-          /*if (contextCanvas.onComposer == false){
-              contextCanvas.onComposer = true;        
-          }*/
         }        
         if (value.raycaster != null ) {
           value.raycaster.update (value.position, value.camera.target);
@@ -157,6 +159,7 @@ function render() {
   }    
 }
 
+
 const animate = () => {
 requestAnimationFrame(animate);
   if (contextCanvas.frameloop == "always") {
@@ -167,7 +170,7 @@ requestAnimationFrame(animate);
 function onWindowResize() {
   elementScene.w = clientWidth;
   elementScene.h = clientHeight;
-  console.log (clientWidth, clientHeight)
+  elementScene.update (clientWidth,clientHeight);  
 if (contextCanvas.onComposer) { allUpdate ();}
 else {renderer.setSize( innerWidth, innerHeight );}
 }
@@ -186,20 +189,18 @@ function allUpdate (){
 
 onMount(() => {     
 contextCanvas.setFrameloop(frameloop);
-contextCanvas.container = container;
-createScene(el)
+//contextCanvas.container = container;
+init(el)
  //window.addEventListener( 'resize', onWindowResize );
 animate();
 invalidate();  
-allUpdate () 
+
+
+
 });
 
 
-init();
-function init() {
-  contextCanvas.scene.background = new THREE.Color( 0xf0f0f0 );
-    //raycasterManager = setRaycaster(new RaycasterManager());  
-}
+
 
 $: if (container) {
   elementScene.el = container;
@@ -207,13 +208,15 @@ $: if (container) {
 }
 
 $: if (elementScene) {
+
 //console.log(elementScene.onComposer);
  //allUpdate ()
  }
 
+ 
 </script>
 
-<svelte:window bind:innerWidth bind:outerWidth bind:innerHeight bind:outerHeight on:resize={onWindowResize} />
+<svelte:window bind:innerWidth bind:outerWidth bind:innerHeight bind:outerHeight on:resize={onWindowResize}/>
 
 <div class="container" bind:this={container} bind:clientWidth bind:clientHeight >
 <canvas bind:this={el} on:mousemove={onPointerMove} class="background" />

@@ -77,7 +77,7 @@ function init() {
     
   function EnvironmentCube ( path : string  , files : string[]){
     
-  const loader = new THREE.CubeTextureLoader();
+    const loader = new THREE.CubeTextureLoader();
   loader.setPath(path);
       const texture = loader.load(files);
     if (elementScene) {
@@ -122,10 +122,6 @@ onMount(async () => {
         loader.setPath(path);
         const texture =await loader.loadAsync(files);
   }
-  
-  onFrame(() => {
-  });
-  
   
 </script>
 
