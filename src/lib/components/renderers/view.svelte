@@ -99,8 +99,7 @@ function init () {
     
     if (elementScene.orbitControl != null) {
      elementScene.setControl();
-    }
-         
+    }         
 }
 $: if (clientWidth) {
 //elementScene.w = clientWidth;
@@ -119,9 +118,6 @@ function onWindowResize() {
 onMount(() => {  
     init ();
 });
-
-
-
 
 
 </script>

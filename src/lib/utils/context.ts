@@ -104,12 +104,13 @@ export function getCamera(key : string ) {
 
 export function setupSimplesMesh(key : string , self ) {
     let contextCanvas :ContextCanvas  = getContext (SCENE) 
+    let parent:THREE.Scene | undefined;
     let elementScene = contextCanvas.arrayScenes.get(key);
     if (elementScene !=null){
-        const parent : THREE.Scene = getContext(('SCENE'+key)) || elementScene.scene;
+        parent = getContext(('SCENE'+key)) || elementScene.scene;
         parent.add(self);
     }
-    return  {self, contextCanvas, elementScene };
+    return  {self, contextCanvas, elementScene, parent};
 }
 
 export function setupMesh(key : string , self : Object3d ) {

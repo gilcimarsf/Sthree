@@ -1,8 +1,6 @@
 import * as THREE from 'three';
 import {Camera , Object3d} from '$lib/core/objects'
 
-
-
 export class RaycasterEvent {
     type: string
     cancelBubble: boolean
@@ -41,13 +39,13 @@ export class RaycasterManager {
     onCanvas = (canvas :HTMLElement, renderer : THREE.WebGLRenderer)=>{
         this.canvas = canvas;
         this.renderer = renderer
-        this.canvas.addEventListener('click', this.onMouseClick);    
+        window.addEventListener('click', this.onMouseClick);    
         this.canvas.addEventListener('pointermove', this.onDocumentMouseMove); 
         this.canvas.addEventListener('pointerdown', this.onMouseDown);
         this.canvas.addEventListener('pointerup', this.onMouseUp);
-        //this.canvas.addEventListener('mousemove', this.onDocumentMouseMove);
-        //this.canvas.addEventListener('mousedown', this.onMouseDown);
-        //this.canvas.addEventListener('mouseup', this.onMouseUp);
+        this.canvas.addEventListener('mousemove', this.onDocumentMouseMove);
+        window.addEventListener('mousedown', this.onMouseDown);
+        window.addEventListener('mouseup', this.onMouseUp, true);
         this.canvas.addEventListener('touchstart', this.onTouchStart, {
             passive: true,
         });
@@ -62,10 +60,13 @@ export class RaycasterManager {
     
     dispose = () => {
         if (this.canvas != null) {
-            this.canvas.removeEventListener('click', this.onMouseClick);
+            window.removeEventListener('click', this.onMouseClick);
             this.canvas.ownerDocument.removeEventListener( 'pointermove', this.onDocumentMouseMove );
             this.canvas.removeEventListener('pointerdown', this.onMouseDown);
             this.canvas.removeEventListener('pointerup', this.onMouseUp);
+            this.canvas.removeEventListener('mousemove', this.onDocumentMouseMove);
+            window.removeEventListener('mousedown', this.onMouseDown);
+            window.removeEventListener('mouseup', this.onMouseUp);
             this.canvas.removeEventListener('touchstart', this.onTouchStart);
             this.canvas.removeEventListener('touchmove', this.onTouchMove);
             this.canvas.removeEventListener('touchend', this.onTouchEnd);
@@ -85,7 +86,6 @@ export class RaycasterManager {
         this.pointer = pointer;
         this.camera = camera;
         let direcition = this.camera.getWorldDirection;
-        this.raycaster.setFromCamera (pointer , camera);
         this.raycaster.setFromCamera (pointer , camera);
         if  (this.object3d != null) {
             this.object3d.forEach ((object : Object3d) => {
@@ -146,19 +146,30 @@ export class RaycasterManager {
         }
     };
     
+    onMouseDown = (mouseEvent: MouseEvent | PointerEvent)  => {
+    if (this.camera )
+        this.update(this.pointer ,this.camera );
+        const event = new RaycasterEvent('mousedown', mouseEvent);
+            if (this.object3d !=null){
+                this.object3d.forEach((object) => {
+                    if (object.intersected) {
+                      this.dispatch(object, event);
+                    }
+                });
+            }  
+        };
+    
     onMouseUp = (mouseEvent: MouseEvent | PointerEvent)  => {
     const event = new RaycasterEvent('mouseup', mouseEvent);
         if (this.object3d !=null){
             this.object3d.forEach((object) => {
-                if (object.intersected) {
-                  this.dispatch(object, event);
-                }
+                this.dispatch(object, event);
             });
         }        
     };
     
     onDocumentMouseMove = (mouseEvent: MouseEvent | PointerEvent) => {
-        const event = new RaycasterEvent('mousemove', mouseEvent);
+    const event = new RaycasterEvent('mousemove', mouseEvent);
         if (this.object3d !=null){
             this.object3d.forEach((object) => {
                 if (object.intersected) {
@@ -167,20 +178,7 @@ export class RaycasterManager {
             });
         }  
     };
-    
-    onMouseDown = (mouseEvent: MouseEvent | PointerEvent)  => {
-       // console.log("onMouseDown");
-        const event = new RaycasterEvent('onMouseDown', mouseEvent);
-        if (this.object3d !=null){
-            this.object3d.forEach((object) => {
-                if (object.intersected) {
-                  this.dispatch(object, event);
-                }
-            });
-        }  
-    };
-    
- 
+     
     onTouchMove = (touchEvent: TouchEvent)  => {
        //console.log("onTouchMove");
     };

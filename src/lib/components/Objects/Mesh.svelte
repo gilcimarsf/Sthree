@@ -3,7 +3,6 @@
     import * as defaults from '$lib/utils/defaults.js';
     import { setupSimplesMesh } from '$lib/utils/context';
     import { transform  } from '$lib/utils/utils';
-    import type { Object3d } from '$lib/core/objects';
     import { createEventDispatcher } from 'svelte';
 	import { onDestroy, onMount } from 'svelte';
 	
@@ -18,7 +17,7 @@
 	export let frustumCulled = true;
 	export let renderOrder = 0;
 	
-	//let myObject : Object3d | undefined = undefined;
+	
 	let myMesh = new THREE.Mesh(geometry, material);
 	export let isInterative = false; 
 	export let group : THREE.Group | null = null;
@@ -30,15 +29,16 @@
 			
 			
 	onMount( () => { 
-		if (elementScene?.raycaster && isInterative) {			
+		if (elementScene?.raycaster && isInterative) {		
 		}		
 	});
 		
 	$: if(myObject) {
-			
-	    myObject.target.addEventListener('mouseover', (event) => {
-		//console.log(event);
-		dispatch('mouseover', event);
+	//console.log(myObject.target);
+	
+		myObject.target.addEventListener('mouseover', (event) => {
+			//console.log(event);
+			dispatch('mouseover', event);
 		});            
 		myObject.target.addEventListener('mouseout', (event) => {
 			//console.log(event);
@@ -52,12 +52,15 @@
 			//console.log(event);
 			dispatch('mouseup', event);
 		});
+		
 		myObject.target.addEventListener('click', (event) => {
 			//console.log(event);
 			dispatch('click', event);
 		});
+	
 	}	
 
+	
 	$: {
 		if (self.geometry && geometry !== self.geometry) {
 			self.geometry.dispose();

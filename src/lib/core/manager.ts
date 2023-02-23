@@ -15,7 +15,7 @@ import type {
 export class ElementScene {
     scene : THREE.Scene
     el?: HTMLElement
-    canvas: HTMLCanvasElement | THREE.OffscreenCanvas | undefined
+    canvas: HTMLCanvasElement |  HTMLElement | undefined
     camera? : Camera
     orbitControl? : ControlCamera
     renderer? : WebGLRenderer

@@ -3,10 +3,13 @@ import * as THREE from 'three';
 import { onDestroy, onMount, afterUpdate} from 'svelte';
 import { set_scenes, sceneContext, setElementScene } from '$lib/utils/context.js';
 import { ContextCanvas } from '$lib/core/manager.js';
-import type {RaycasterManager} from '$lib/core/raycaster.js'
+import {RaycasterManager} from '$lib/core/raycaster.js'
 //import { loadingManager } from '$lib/utils/loadingManager.js';
 import { ElementScene } from '$lib/core/manager.js';
-  import { compute_slots } from 'svelte/internal';
+import { compute_slots } from 'svelte/internal';
+
+export let isInterative = false; 
+
 
 $: outerWidth = 0
 $: innerWidth = 0
@@ -93,14 +96,21 @@ function onWindowResize() {
 
 
 export const init = (container : HTMLElement) => {
-contextCanvas.scene.background = new THREE.Color( 0xf0f0f0 );
+//contextCanvas.scene.background = new THREE.Color( 0xf0f0f0 );
 renderer = new THREE.WebGLRenderer({ antialias: true, canvas: container });
 elementScene.renderer = renderer;
 elementScene.w = clientWidth;
 elementScene.h = clientHeight;
 elementScene.canvas = container;
-//contextCanvas.renderer = renderer;
+elementScene.el = el;
 
+//contextCanvas.renderer = renderer;
+if (isInterative  && elementScene.renderer){
+    raycasterManager = new RaycasterManager(); 
+    elementScene.raycaster = raycasterManager; 
+    //raycasterManager.onCanvas (elementScene.el , elementScene.renderer);
+    elementScene.raycaster.onCanvas (elementScene.el , elementScene.renderer);
+}
 
 if (elementScene.orbitControl != null) {
   elementScene.setControl();
@@ -218,7 +228,7 @@ $: if (elementScene) {
 
 <svelte:window bind:innerWidth bind:outerWidth bind:innerHeight bind:outerHeight on:resize={onWindowResize}/>
 
-<div class="container" bind:this={container} bind:clientWidth bind:clientHeight >
+<div class="container" bind:this={container} bind:clientWidth bind:clientHeight  >
 <canvas bind:this={el} on:mousemove={onPointerMove} class="background" />
   {#if elementScene.scene && elementScene.el}
   <slot/>

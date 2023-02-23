@@ -11,6 +11,7 @@ export { default as Primitive } from './components/Objects/Primitive.svelte';
 export { default as Sprite } from './components/Objects/Sprite.svelte';
 export { default as Group } from './components/Objects/Group.svelte';
 export { useGltf } from './loaders/useGLTF';
+export { useAnimations } from './core/useAnimation';
 
 //Enviroment
 export { default as Environment } from './components/environments/Environment.svelte';
