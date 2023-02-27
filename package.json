@@ -1,6 +1,6 @@
 {
 	"name": "sthree-js",
-	"version": "0.0.50",
+	"version": "0.0.51",
 	"scripts": {
 		"dev": "vite dev",
 		"build": "svelte-kit sync && svelte-package",

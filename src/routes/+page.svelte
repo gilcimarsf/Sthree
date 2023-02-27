@@ -53,11 +53,5 @@ function exemplo (event : any) {
 {/if}  
 
 
-
-
-
-
-
-
 <style>
 </style>
