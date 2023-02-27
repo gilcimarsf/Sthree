@@ -21,6 +21,10 @@ export { default as OrbitControls } from './components/Controls/OrbitControls.sv
 
 // lights
 export { default as DirectionalLight } from './components/Light/DirectionalLight.svelte';
+export { default as AmbientLight } from './components/Light/AmbientLight.svelte';
+export { default as HemisphereLight } from './components/Light/HemisphereLight.svelte';
+export { default as PointLight } from './components/Light/PointLight.svelte';
+export { default as SpotLight } from './components/Light/SpotLight.svelte';
 
 // lifecycle
 export { onFrame } from './utils/lifecycle';

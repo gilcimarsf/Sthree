@@ -11,7 +11,14 @@
     export let decay = 1;
     export let position = [0, 0, 0];
     export let target = [0, 0, 0];
+    export let shadow : boolean | THREE.SpotLightShadow = true;
 
+    export let shadowMapSizeWidth = 2048;
+    export let shadowMapSizeHeight = 2048;
+    export let shadowCameraNear = 0.1;
+    export let shadowCameraFar = 1000;
+    export let shadowCameraFov = 30;
+    
     const light = new THREE.SpotLight(color, intensity, distance, angle, penumbra, decay);
     const { self, contextCanvas, elementScene } = setupSimplesMesh(id, light);
 
@@ -24,5 +31,16 @@
         self.decay = decay;
         self.position.set(position[0], position[1], position[2]);
         self.target.position.set(target[0], target[1], target[2]);
+    }
+    
+    $: {
+		if (shadow) {
+            self.castShadow = shadow;
+            self.shadow.mapSize.width = shadowMapSizeWidth;
+            self.shadow.mapSize.height = shadowMapSizeHeight;
+            self.shadow.camera.near = shadowCameraNear;
+            self.shadow.camera.far = shadowCameraFar;
+            self.shadow.camera.fov = shadowCameraFov;
+    	}
     }
 </script>

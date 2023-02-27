@@ -38,13 +38,15 @@ function exemplo (event : any) {
    console.log ("Clicou");    
 }
  
+ //
+ 
 </script>
 
 
 {#if model}
 <St.Canvas frameloop = {'always'} isInterative = {true}>	
     <St.PerspectiveCamera/>  
-    <St.DirectionalLight/>  
+    <St.PointLight position={[0, 3, 6]}/>  
     <St.OrbitControls/>
     <St.Primitive object={model} scale ={0.03} isInterative = {true}  on:click= {play}/>
 </St.Canvas>
