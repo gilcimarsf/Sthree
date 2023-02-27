@@ -7,10 +7,6 @@
     import { browser } from '$app/environment';
     
     
-    interface AnimationDictionary {
-  [name: string]: THREE.AnimationClip;
-    }
-
     let model : THREE.Group | null = null;
     const gltf  : GLTF | null = null;
     let animations : {mixer: THREE.AnimationMixer,names: string[],actions: {[x: string]: THREE.AnimationAction | null}, clips: THREE.AnimationClip[]}
@@ -29,13 +25,11 @@
        animations.actions["Run"]?.play();
     } 
 
-
-
-St.onFrame(() => {     
-if (animations) {
-    animations.mixer.update(clock.getDelta());  
-    }    
-});
+    St.onFrame(() => {     
+    if (animations) {
+        animations.mixer.update(clock.getDelta());  
+        }    
+    });
 
   
 let myBox = new THREE.SphereGeometry();
